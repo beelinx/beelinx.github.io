@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+		<meta charset="UTF-8">
+		<meta name="description" 
+		content="Beelinks fashion items page
+		We make it easier to find the best deal without switching apps."/>
+		<meta name="keywords" 
+		content="Fashion, Compare, Cost"/>
+
+	<title>Beelink | Compare prices across multiple markets</title>
+
+    <style>
+
+		body {
+			margin: 0;
+		}
+		
+		nav ul {
+			display:flex; /*puts content side by side*/
+			align-items: center; /*Used alongside display: flex to align properly*/
+			list-style: none; /*used to remove list bullet points*/
+			gap: 2em;
+		}
+
+		nav a {
+			text-decoration: rgb(0, 0, 0); 
+			color: black;
+			font-weight: 300;
+		} /*Used to  design text in the anchor*/
+
+		nav a:hover{
+			text-decoration: underline;
+		} /*used to design what happens when cusor hovers over text*/
+
+		.products {
+            display:grid;
+            grid-template-columns: repeat(4, 1fr); /*defines grid items arrangement*/
+			margin-top: 1em;
+			margin-bottom: 1em; /*puts space between the top and bottom of the page*/
+			width: 100%; /*lets width stretch to the max screen of device*/
+            gap: 40px;
+		} /*puts items in grid*/
+		@media (max-width: 768px) {
+			.products {
+				grid-template-columns: repeat(2, 1fr);
+				}}
+
+        .product{
+            text-align: center;
+        }
+
+		.clothe-text {
+			margin-top: 100px;
+			font-size: medium;
+		}
+
+		.clothe-image {
+			width: min(300px, 100%); /*used to ensure minimum image and that image is never larger than the screen being displayed on*/
+			border-radius: 20px;
+            height: 250px;
+            object-fit: contain;
+		}
+
+		.buy-button {
+			display: inline-block;
+			text-decoration:dotted; color: rgb(0, 0, 0);
+			border-radius: 10px;
+			width:fit-content;
+			cursor: pointer;
+			align-content: center;
+		}
+
+        .buy-button:hover{
+            text-decoration: underline;
+        }
+
+		.header-section {
+			position: relative;
+			text-align: center;
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+			overflow: hidden;
+		}
+
+		.header-img {
+			width:100vw;
+			height: 300px;
+			margin: 0;
+			padding: 0;
+			background-size: cover;
+		}
+
+		.header-text {
+			position: absolute;
+			color: rgb(255, 255, 255);
+			top: 0;
+			left: 52%;
+			transform: translate(-50%, -50%);
+			margin-top: 50px;  /* Add some space above the heading */
+			text-align: center;
+		}
+
+		@media (max-width: 768px) {
+			.header-text {
+				font-size: small;
+				top: 0;
+			    left: 53%;
+			    transform: translate(-50%, -50%);
+			}}
+
+
+    </style>
+
+    </head>
+
+    <body>
+
+		<header>
+			<nav>
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="index.html">More</a> </li>
+				</ul>
+			</nav>
+
+			<section class="header-section">
+				<img class="header-img" 
+				src="../images fsn/Great legacy/627839a2-2465-477c-8e09-e6d088122392.JPG">
+				<h1 class="header-text">GREAT LEGACY</h1>
+			</section>
+			
+			<div class="products">
+
+                <div class="product">
+                     <img class="clothe-image" src="../images fsn/Great legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg">
+				<p class="clothe-text" ><strong>Great Legacy</strong> 
+					 <a href="https://greatlegacy0.myshopify.com/products/gl-edition?variant=44521678930031"
+					  class="buy-button">
+                      <span class="buy-button">GL EDITION </span></a>
+				</p>
+               </div>
+
+				<div class="product">
+                    <img class="clothe-image" src="../images fsn/Great legacy/cd349fd6-653d-4468-9969-4834e5487689.jpeg">
+				<p class="clothe-text" ><strong>Great Legacy</strong> 
+					<a href="https://greatlegacy0.myshopify.com/products/after-dark-2?variant=44341382938735"
+					  class="buy-button"> 
+                      <span class="buy-button">AFTER DARK 2</span></a>
+				</p>
+                </div>
+                
+				<div class="product">
+                    <img class="clothe-image" src="../images fsn/Great legacy/3799e4e4-f649-4163-b3ef-75ae4607ce49.jpeg">
+				<p class="clothe-text" ><strong>Great Legacy</strong> 
+					<a href="https://greatlegacy0.myshopify.com/products/gl-01-jogger?variant=44092181905519"
+					  class="buy-button">
+                      <span class="buy-button">GL-01 Jogger</span></a>
+				</p>
+                </div>
+
+                <div class="product">
+                    <img class="clothe-image" src="../images fsn/Great legacy/73a66cad-fc92-43fd-9398-529ad4aed776.jpeg">
+				<p class="clothe-text" ><strong>Great Legacy</strong> 
+					<a href="https://greatlegacy0.myshopify.com/products/untitled-jan31_01-21?variant=44242869157999"
+					  class="buy-button"> <span class="buy-button">LEGACY CREST 7</span></a>
+				</p>
+                </div>
+
+			</div>
+
+		</header>
+
+    </body>
+
+</html>
