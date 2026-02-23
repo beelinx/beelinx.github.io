@@ -13,6 +13,8 @@
 		content="Shop, Compare, Cost"/>
 
 	<title>Beelinx | Compare prices across multiple markets</title>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
     
 	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -218,7 +220,9 @@
 	<div class="products-container">
 
             <div class="products">
-				<img class="clothe-image" src="../images fsn/Great legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG">
+				<a href="../images fsn/Great legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images fsn/Great legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" loading="lazy">
+				</a>
 				<p class="clothe-text" >
 					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
 					 AFTER DARK 2
@@ -229,18 +233,22 @@
 			</div>
 
 			<div class="products">
-				<img class="clothe-image" src="../images fsn/Great legacy/IMG_3332.WEBP">
+				<a href="../images fsn/Great legacy/IMG_3332.WEBP" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images fsn/Great legacy/IMG_3332.WEBP" loading="lazy">
+				</a>
 				<p class="clothe-text" >
 					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
 					 LEGACY CROP TEE
 					 <br/>&#8358; 22,000 <br/>
-					<a href="https://greatlegacy0.myshopify.com/products/gl-made-in-ikoyi?variant=44508133326959"> 
+					<a href="https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"> 
 					<button class="buy-button">View Product</button></a>
 				</p>
 			</div>
 
 		    <div class="products">
-				<img class="clothe-image" src="../images fsn/Great legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg">
+				<a href="../images fsn/Great legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images fsn/Great legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" loading="lazy">
+				</a>
 				<p class="clothe-text" >
 					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
 					 GL EDITION 
@@ -271,6 +279,14 @@
 						}
 						}
 
+        </script>
+
+		<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+		<script>
+             const lightbox = GLightbox({
+                touchNavigation: true,
+                loop: true
+                });
         </script>
 			
 	</body>
