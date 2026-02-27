@@ -53,6 +53,16 @@
 			text-decoration: underline;
 		} /*used to design what happens when cusor hovers over text*/
 
+		.logo-link {
+			display: flex;
+            align-items: center;
+		}
+
+		.logo {
+            height: 40px;
+            width: auto;
+		}
+
 		.products img{
 			display: block;
 			margin: 0 auto;       /* centers the image horizontally */
@@ -289,12 +299,20 @@
 
 		<header>
 			<nav>
+
+				<!-- Logo -->
+				<a href="index.html" class="logo-link">
+					<img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo" loading="lazy">
+				</a>
+
+				<!-- Nav Links -->
 				<ul>
 					<li><a href="index.html">Home</a></li>
 					<li><a href="catalogue.html">Catalogue</a></li>
 					<li><a href="about.html">About</a> </li>
 				</ul>
 				
+				<!-- Search Bar -->
 				<div class="search-container">
 					<input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
 					<label for="searchInput">
