@@ -37,41 +37,24 @@
 			z-index: 1000;
 			border-radius: 1px;
 			padding-right: 20px;
-			gap: 20px;
 		}
-
+		
 		nav ul {
 			display:flex; /*puts content side by side*/
 			align-items: center; /*Used alongside display: flex to align properly*/
 			list-style: none; /*used to remove list bullet points*/
-			gap: 1.2em;
-			margin: 0; /* Centers the nav links */
+			gap: 2em;
 		}
 
 		nav a {
 			text-decoration: rgb(0, 0, 0); 
-			color: rgb(255, 253, 253);
+			color: rgb(255, 255, 255);
 			font-weight: 300;
 		} /*Used to  design text in the anchor*/
 
 		nav a:hover{
 			text-decoration: underline;
 		} /*used to design what happens when cusor hovers over text*/
-
-		@media (max-width: 768px) {
-			nav {
-				gap: 10px;
-				padding: 5px 10px;
-				}
-			
-				nav ul {
-				gap: 0.8em;
-				}
-
-				nav a {
-					font-size: 14px;
-				}
-			}
 
 		.logo-link {
 			display: flex;
@@ -300,7 +283,6 @@
 
 				<!-- Nav Links -->
 				<ul>
-					<li><a href="index.html">Home</a></li>
 					<li><a href="catalogue.html">Catalogue</a></li>
 					<li><a href="about.html">About</a> </li>
 				</ul>
