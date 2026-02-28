@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+		<meta charset="UTF-8">
+		<meta name="viewport" 
+		content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" 
+		content="Beelinxs fashion items page
+		We make it easier to find the best deal without switching apps."/>
+		<meta name="keywords" 
+		content="Shop, Compare, Cost"/>
+
+	<title>Beelinx | Compare prices across multiple markets</title>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+    
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	
+	<style>
+
+		body {
+			margin: 0;
+			padding-top: 50px; /* Adjust this value based on the height of your nav bar */
+		}
+
+		nav {
+			display: flex;
+			background-color: #000000;
+			padding: 5px 20px;
+			position: fixed;
+			top: 0;
+			width: 100%;
+			z-index: 1000;
+			border-radius: 1px;
+			padding-right: 20px;
+			gap: 20px;
+		}
+
+		nav ul {
+			display:flex; /*puts content side by side*/
+			align-items: center; /*Used alongside display: flex to align properly*/
+			list-style: none; /*used to remove list bullet points*/
+			gap: 2em;
+		}
+
+		nav a {
+			text-decoration: rgb(0, 0, 0); 
+			color: rgb(255, 253, 253);
+			font-weight: 300;
+		} /*Used to  design text in the anchor*/
+
+		nav a:hover{
+			text-decoration: underline;
+		} /*used to design what happens when cusor hovers over text*/
+
+		h1 {
+			margin-top: 50px;  /* Add some space above the heading */
+			text-align: center;
+			padding-top: 3em; /*defines space between contents in an element*/
+		}
+
+		.motto {
+			font-family: 'Playfair Display', serif;
+			text-align: center;
+			text-decoration: overline;
+			font-weight: lighter;
+			font-style: italic;
+			font-size: medium;
+			letter-spacing: 0px;
+			opacity: 0.6;
+			padding-bottom: 2em;
+		}
+
+		@media (max-width: 768px) {
+			.motto {
+				font-size: small;
+				}}
+
+		.buy-button {
+			display: inline-block;
+			border-radius: 10px;
+			width:fit-content;
+			cursor: pointer;
+			align-content: center;
+			border-color: #000000;
+			padding: 10px 15px;
+			align-items: center;
+			text-decoration: none;
+			color: #ffffff;
+			background-color: #000000;
+		}
+
+		.buy-button:hover{
+			background-color: #e1dede;
+			color: #000000;
+		}
+
+		.products img{
+			display: block;
+			margin: 0 auto;       /* centers the image horizontally */
+            width: 230px;      /* optional: makes image responsive */
+            height: 230px;
+		}
+
+		@media (max-width: 768px) {
+			.products img {
+				width: 170px;
+				height: 170px;
+				}}
+		
+		.products-container {
+			margin-top: 1em;
+			margin-bottom: 1em; /*puts space between the top and bottom of the page*/
+			width: 100%; /*lets width stretch to the max screen of device*/
+			display:grid;
+			grid-template-columns: repeat(3, 1fr); /*defines grid items arrangement*/
+			align-items: center;
+		} /*puts items in grid*/
+
+		@media (max-width: 768px) {
+			.products-container {
+				grid-template-columns: repeat(2, 1fr);
+				}}
+
+		.clothe-text {
+			margin: 0;
+			text-align: center;
+		}
+
+		@media (max-width: 768px) {
+			.clothe-text {
+				font-size: smaller;
+				}}
+
+		.clothe-image {
+			width: min(300px, 100%); /*used to ensure minimum image and that image is never larger than the screen being displayed on*/
+			border-radius: 20px;
+			height: 250px;
+            object-fit: contain;
+		}
+
+		.brand-page-link{
+			text-decoration: none;
+			color: #020202;
+		}
+
+		.brand-page-link:hover{
+			text-decoration: underline;
+		}
+		
+		.search-container{
+			position: relative;
+			margin-left: auto; /* Pushes the search container to the right */
+			margin-right: 50px; /* Adds some space between the search container and the right edge */
+			margin-top: 13px;
+		}
+
+		.search-input{
+			width: 0;
+			padding: 0;
+			border: none;
+			outline: none;
+			transition: width 0.4s ease, padding 0.4s ease;
+			font-size: 17px;
+		}
+
+		.search-input:focus {
+			width: 200px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+
+		@media (max-width: 768px) {
+            .search-input:focus {
+            position: fixed;
+			border-radius: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+			height: 35px;
+            padding: 15px;
+            background: white;
+			z-index: 1001; /* Ensure the search input appears above other elements */
+			}}
+
+		.search-btn {
+			cursor: pointer;
+			color: #ffffff;
+		}
+
+	</style>
+	
+    </head>
+
+    <body>
+		<header>
+			<nav>
+				<ul>
+					<li><a href="catalogue.html">Catalogue</a></li>
+					<li><a href="about.html">About</a> </li>
+				</ul>
+				
+				<div class="search-container">
+					<input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
+					<label for="searchInput">
+						<i class="fas fa-search search-btn"></i>
+					</label>
+				</div>
+
+			</nav>
+		
+		</header>
+
+		<h1>Beelinx</h1>
+		<h2 class="motto">Compare markets without switching apps.</h2>
+
+	<div class="products-container">
+
+            <div class="products">
+				<a href="../images-fsn/great-legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" alt="AFTER DARK 2" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>great-legacy</strong></a>
+					 AFTER DARK 2
+					 <br/> &#8358; 28,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/after-dark-2?variant=44341382938735"> 
+					  <button class="buy-button">View Product</button></a>
+				</p>
+			</div>
+
+			<div class="products">
+				<a href="../images-fsn/great-legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3332.WEBP" alt="LEGACY CROP TEE" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>great-legacy</strong></a>
+					 LEGACY CROP TEE
+					 <br/>&#8358; 22,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"> 
+					<button class="buy-button">View Product</button></a>
+				</p>
+			</div>
+			
+		    <div class="products">
+				<a href="../images-fsn/great-legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" alt="GL EDITION" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>great-legacy</strong></a>
+					 GL EDITION 
+					 <br/> &#8358; 29,000 <br/>
+					 <a href="https://greatlegacy0.myshopify.com/products/gl-edition?variant=44521678930031">
+						<button class="buy-button">View Product</button></a>
+				</p>
+			</div>
+
+		</div>
+
+			<footer></footer>
+
+		<script>
+
+        function searchFunction() {
+			let input = document.getElementById("searchInput");
+            let filter = input.value.toLowerCase();
+            let products = document.getElementsByClassName("products");
+			
+			for (let i = 0; i < products.length; i++) {
+				let text = products[i].textContent.toLowerCase();
+				if (text.includes(filter)) {
+					products[i].style.display = "";
+					} else {
+						products[i].style.display = "none";
+						}
+						}
+						}
+
+        </script>
+
+		<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+		<script>
+             const lightbox = GLightbox({
+                touchNavigation: true,
+                loop: true
+                });
+        </script>
+			
+	</body>
+</html>
