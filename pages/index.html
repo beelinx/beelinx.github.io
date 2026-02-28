@@ -42,9 +42,13 @@
         .nav-center {
 			position: absolute;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-70%);
 		}
-    
+
+		@media (max-width: 768px) {
+			.nav-center {
+				transform: translateX(-75%);
+			}}
 
         .hamburger {
             font-size: 22px;
