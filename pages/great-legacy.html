@@ -25,7 +25,8 @@
 		}
 
 		nav {
-			display: flex;
+			display: grid;
+			grid-template-columns: 1fr auto 1fr auto; /* Adjust the column sizes as needed */
 			background-color: #000000;
 			padding: 5px 20px;
 			position: fixed;
@@ -58,9 +59,13 @@
             align-items: center;
 		}
 
-		.logo {
-            height: 40px;
+		.logo-img {
+            height: 50px;
             width: auto;
+		}
+
+		.logo{
+			text-align: center;
 		}
 
 		.products img{
@@ -300,16 +305,18 @@
 		<header>
 			<nav>
 
-				<!-- Logo -->
-				<a href="index.html" class="logo-link">
-					<img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo" loading="lazy">
-				</a>
-
 				<!-- Nav Links -->
-				<ul>
+				<ul class="nav-left">
 					<li><a href="catalogue.html">Catalogue</a></li>
 					<li><a href="about.html">About</a> </li>
 				</ul>
+
+				<div class="logo>">
+					<!-- Logo -->
+				<a href="index.html" class="logo-link">
+					<img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo-img" loading="lazy">
+				</a>
+				</div>
 				
 				<!-- Search Bar -->
 				<div class="search-container">
