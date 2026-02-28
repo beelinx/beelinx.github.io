@@ -28,17 +28,67 @@
 			padding-top: 50px; /* Adjust this value based on the height of your nav bar */
 		}
 
-		nav {
-			display: grid;
-			grid-template-columns: 1fr auto 1fr auto; /* Adjust the column sizes as needed */
-			background-color: #000000;
-			padding: 5px 20px;
+		.navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000000;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+		}
+
+        .nav-center {
+			position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+		}
+    
+
+        .hamburger {
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
+		}
+
+        .side-menu { 
+		    position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: black;
+            padding-top: 80px;
+            transition: 0.3s ease;
+            z-index: 1001;
+		}
+
+        .side-menu a {
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+		}
+
+        .side-menu a:hover {
+            background: #111;
+		}
+
+
+		.side-menu.active {
+			left: 0;
 			position: fixed;
-			top: 0;
-			width: 100%;
-			z-index: 1000;
-			border-radius: 1px;
-			padding-right: 20px;
+		}
+
+		.close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
 		}
 		
 		nav ul {
@@ -153,30 +203,38 @@
 
     <body>
 		<header>
-			<nav>
+			<nav class="navbar">
+                <!-- Hamburger -->
+                <div class="hamburger" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
 
-				<!-- Nav Links -->
-				<ul class="nav-left">
-					<li><a href="catalogue.html">Catalogue</a></li>
-					<li><a href="about.html">About</a> </li>
-				</ul>
+                <!-- Logo -->
+	            <div class="nav-center">
+                    <a href="index.html" class="logo-link">
+                        <img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo-img">
+                    </a>
+                </div>
 
-				<div class="logo>">
-					<!-- Logo -->
-				<a href="index.html" class="logo-link">
-					<img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo-img" loading="lazy">
-				</a>
-				</div>
-				
-				<!-- Search Bar -->
-				<div class="search-container">
-					<input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
-					<label for="searchInput">
-						<i class="fas fa-search search-btn"></i>
-					</label>
-				</div>
-
+                <!-- Search -->
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
+                        <label for="searchInput">
+                        <i class="fas fa-search search-btn"></i>
+                        </label>
+                </div>
 			</nav>
+
+			<!-- Side Menu -->
+			<div id="sideMenu" class="side-menu">
+
+            <div class="close-btn" onclick="closeMenu()">
+                <i class="fas fa-times"></i>
+            </div>
+            <a href="catalogue.html">Catalogue</a>
+            <a href="about.html">About</a>
+
+            </div>
 		
 		</header>
 
@@ -259,6 +317,15 @@
 						}
 						}
 
+        </script>
+
+		<script>
+        function toggleMenu() {
+            document.getElementById("sideMenu").classList.add("active");
+		}
+        function closeMenu() {
+            document.getElementById("sideMenu").classList.remove("active");
+			}
         </script>
 
 	</body>
