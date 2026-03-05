@@ -21,6 +21,10 @@
 	
 	<style>
 
+		body, html {
+			height: 100%;
+		}
+
 		body {
 			margin: 0;
 			padding-top: 50px; /* Adjust this value based on the height of your nav bar */
@@ -130,27 +134,7 @@
 			text-align: center;
 		}
 
-		.welcome-section {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 50px; /* Adjust the height as needed */
-			background-color: #000000; /* Optional: Add a background color */
-		}
-
-		.welcome-section a {
-			text-decoration: none; /* Underline the text */
-		}
-
-		.welcome-section p {
-			color: #ffffff; /* Set the text color */
-			font-size: 24px; /* Adjust the font size as needed */
-			font-weight: 500; /* Adjust the font weight as needed */
-			margin: 0; /* Remove default margin */
-			text-decoration: none;
-			opacity: 70%;
-		
-		}
+		/* Header Featureed Section */
 
 		.featured-product {
 			width: 100vw;
@@ -162,7 +146,28 @@
 			justify-content: center;
 			width: 100%;
 			background-color: #000000;
+			position: relative;
+			overflow: hidden;
 		}
+
+		.featured-slide{
+            grid-column: 1 / -1;
+            display: grid;
+			grid-template-columns: repeat(2,1fr);
+			position: absolute;
+			width: 100%;
+			opacity: 0;
+			transition: opacity 1s ease-in-out;
+        }
+
+		.featured-slide.active{
+            opacity: 1;
+            position: relative;
+        }
+
+        .featured-slide:not(.active){
+            display: none;
+        }
 
 		@media (max-width: 768px) {
 			.featured-product {
@@ -176,7 +181,6 @@
 			.featured-product-info {
 				font-size: small;
 				}}
-
 
 		.featured-product-link {
 			text-decoration: none;
@@ -211,6 +215,168 @@
 			opacity: 70%;
 		}
 
+		.slider-dots{
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dot{
+            height: 8px;
+            width: 8px;
+            margin: 0 5px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dot.active{
+            background: white;
+        }
+
+		.header-arrow{
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            background:rgba(0,0,0,0.5);
+            color:white;
+            border:none;
+            font-size:24px;
+            padding:10px 15px;
+            cursor:pointer;
+            z-index:10;
+            opacity:0;
+            transition:opacity 0.3s ease;
+        }
+
+        .header-arrow.left{
+            left:10px;
+        }
+
+        .header-arrow.right{
+            right:10px;
+        }
+
+        .featured-product:hover .header-arrow{
+            opacity:1;
+        }
+
+		/* Footer Featured Section */
+
+		.featured-slide-footer{
+            display:none;
+        }
+
+		.featured-product-footer-slider {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            text-align: center;
+            background-color: #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+		.featured-slide-footer{
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+        }
+
+        .featured-slide-footer:not(.active){
+            display: none;
+        }
+
+        .featured-slide-footer.active{
+            display:grid;
+        }
+
+		.footer-slider-dots{
+            position:absolute;
+            bottom:15px;
+            width:100%;
+            text-align:center;
+        }
+
+        .footer-dot{
+            height:8px;
+            width:8px;
+            margin:0 5px;
+            background:rgba(255,255,255,0.5);
+            border-radius:50%;
+            display:inline-block;
+            cursor:pointer;
+            transition:background 0.3s ease;
+        }
+
+        .footer-dot.active{
+            background:white;
+        }
+
+		.footer-arrow{
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            background:rgba(0,0,0,0.5);
+            color:white;
+            border:none;
+            font-size:24px;
+            padding:10px 15px;
+            cursor:pointer;
+            z-index:10;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+        }
+
+        .footer-arrow.left{
+            left:10px;
+        }
+
+        .footer-arrow.right{
+            right:10px;
+        }
+
+        .footer-arrow:hover{
+            background:black;
+        }
+
+		.featured-product-footer-slider:hover .footer-arrow{
+            opacity:1;
+        }
+
+		/* Footer Featured Section Ends */
+
+		.collection-name:hover {
+			text-decoration: underline;
+		}
+
+		.welcome-section {
+			grid-column: 1 / -1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 50px; /* Adjust the height as needed */
+			background-color: #000000; /* Optional: Add a background color */
+		}
+
+		.welcome-section a {
+			text-decoration: none; /* Underline the text */
+		}
+
+		.welcome-section p {
+			color: #ffffff; /* Set the text color */
+			font-size: 24px; /* Adjust the font size as needed */
+			font-weight: 500; /* Adjust the font weight as needed */
+			margin: 0; /* Remove default margin */
+			text-decoration: none;
+			opacity: 70%;
+		
+		}
+
 		h1 {
 			margin-top: 10px;  /* Add some space above the heading */
 			text-align: center;
@@ -243,15 +409,23 @@
 			cursor: pointer;
 			align-content: center;
 			border-color: #000000;
-			padding: 10px 15px;
+			padding: 5px 10px;
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
 			background-color: #000000;
+			font-size: smaller;
+		}
+
+		@media (max-width: 768px) {
+			.buy-button {
+				padding: 3px 5px;
+				font-size: smaller;
+			}
 		}
 
 		.buy-button:hover{
-			background-color: #e1dede;
+			background-color: #ffffff;
 			color: #000000;
 		}
 
@@ -297,6 +471,10 @@
 			border-radius: 20px;
 			height: 250px;
             object-fit: contain;
+		}
+
+		.clothe-image:hover {
+			opacity: 70%;
 		}
 
 		.brand-page-link{
@@ -389,49 +567,99 @@
 		
 		</header>
 
-		<div class="featured-section">
-		
-		<div class="welcome-section">
-		    <a href="great-legacy.html" class="logo-link">
-				<p> GREAT LEGACY COLLECTION</p>
-			</a>
-		</div>
+		<!-- Featured Section -->
+		<div class="featured-section-container">
 
 		<section class="featured-product">
-				<a href="../images-fsn/great-legacy/IMG_3445.PNG" class="glightbox" data-gallery="featured">
-				<img class = "clothe-image" src="../images-fsn/great-legacy/IMG_3445.PNG" alt="Featured great-legacy Product" loading="lazy">
+			<button class="header-arrow left" onclick="prevSlide()">&#10094;</button>
+            <button class="header-arrow right" onclick="nextSlide()">&#10095;</button>
+
+			<div class="featured-slide active">
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3445.PNG" class="glightbox" data-gallery="featured">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3445.PNG" alt="Featured great-legacy Product" loading="lazy">
                 </a>
+				<!---->
 				<p class="featured-text" >
-					<a class="brand-page-link" href="great-legacy.html">
-						<strong></strong> <span class="featured-product-name"> LEGACY JORST </span> </a>
-					<br/>
-					<br/> <span class="featured-product-info"> At &#8358;28,000 
+						<span class="featured-product-name"> LEGACY JORST </span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;28,000 
 					 The LEGACY JORST is a modern take on classic denim. Cut from durable, mid-weight jean fabric with a relaxed fit, it’s built for everyday wear without losing its edge. Subtle detailing and a structured silhouette give it a standout look that works effortlessly with tees, hoodies, or layered fits.
-					 </span>
-					 <br/>
-					 <br/>
+					</span>
+					<br/><br/>
 					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/legacy-jorst?variant=44552514338927"> 
 					  View Product
 					</a>
 				</p>
+			</div>
+
+			<div class="featured-slide">
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">NEW GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3720.PNG" class="glightbox">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3720.PNG">
+                </a>
+				<!---->
+                <p class="featured-text" >
+						<span class="featured-product-name"> LEGACY SKULL CAP </span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;16,000 
+					 Built for everyday presence, the Legacy Skull Cap blends minimal design with timeless identity. Crafted from soft, durable knit, it delivers warmth, comfort, and a clean silhouette that fits effortlessly into any look. Subtle detailing keeps the focus on the legacy you carry.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/legacy-skull-capp?variant=44521672474735"> 
+					View Product
+					</a>
+				</p>
+            </div>
+
+			<div class="slider-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+            </div>
+
 		</section>
 
 		</div>
 		
+		<!-- Products Section -->
+
 		<h1 class="motto">Compare markets without switching apps.</h1>
 
 	<div class="products-container">
 
-			<div class="products">
-				<a href="../images-fsn/great-legacy/IMG_3332.WEBP" class="glightbox" data-gallery="products">
-				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3332.WEBP" alt="Great Legacy LEGACY CROP TEE" loading="lazy">
+		<div class="products">
+				<a href="../images-fsn/great-legacy/IMG_3037.WEBP" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3037.WEBP" alt="Great Legacy GL-01 SET" loading="lazy">
 				</a>
 				<p class="clothe-text" >
 					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
-					 LEGACY CROP TEE
-					 <br/>&#8358; 22,000 <br/>
-					<a href="https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"> 
+					 GL-01 SET
+					 <br/> &#8358; 29,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/v?variant=44503018504303"> 
 					<button class="buy-button">View Product</button></a>
+				</p>
+			</div>
+
+			<div class="products">
+				<a href="../images-fsn/great-legacy/4f3cc3b7-99a3-48a6-85ec-13d9f4792fd7.JPG" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/4f3cc3b7-99a3-48a6-85ec-13d9f4792fd7.JPG" alt="Great Legacy Legacy Monarch" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
+					 LEGACY MONARCH
+					 <br/> &#8358; 31,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/legacy-monarch?variant=44525883228271"> 
+					  <button class="buy-button">View Product</button></a>
 				</p>
 			</div>
 
@@ -449,24 +677,98 @@
 			</div>
 
 			<div class="products">
-				<a href="../images-fsn/great-legacy/IMG_3330.WEBP" class="glightbox" data-gallery="products">
-				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3330.WEBP" alt="Great Legacy Legacy Denim" loading="lazy">
+				<a href="../images-fsn/great-legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" alt="Great Legacy After Dark 2" loading="lazy">
 				</a>
 				<p class="clothe-text" >
 					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
-					 LEGACY DENIM
-					 <br/> &#8358; 30,000 <br/>
-					<a href="https://greatlegacy0.myshopify.com/products/legacy-denim?variant=44530914394223"> 
-					<button class="buy-button">View Product</button></a>
+					 AFTER DARK 2
+					 <br/> &#8358; 28,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/after-dark-2?variant=44341382938735"> 
+					  <button class="buy-button">View Product</button></a>
 				</p>
 			</div>
 
 		</div>
 
-			<footer></footer>
+			<footer>
 
+				<!-- Footer Featured Section -->
+
+				<div class="featured-section-container">
+
+		<section class="featured-product-footer-slider">
+
+			<button class="footer-arrow left" onclick="prevFooterSlide()">&#10094;</button>
+            <button class="footer-arrow right" onclick="nextFooterSlide()">&#10095;</button>
+
+			<div class="featured-slide-footer active">
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3467.PNG" class="glightbox" data-gallery="featured">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3467.PNG" alt="Featured great-legacy Product" loading="lazy">
+                </a>
+				<!---->
+				<p class="featured-text" >
+						<span class="featured-product-name"> LEGACY CROP TEE </span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;22,000 
+					 The Legacy Crop Tee brings a modern edge to a timeless idea. With its cropped silhouette and refined construction, it offers a confident, effortless look that pairs easily with both casual and elevated styles. Built to stand out while staying true to the legacy.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"> 
+					  View Product
+					</a>
+				</p>
+			</div>
+
+			<div class="featured-slide-footer">
+
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">NEW GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3723.PNG" class="glightbox">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3723.PNG">
+                </a>
+				<!---->
+                <p class="featured-text" >
+						<span class="featured-product-name"> GL APEX TEE</span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;31,000 
+					 The GL Apex Tee represents the peak of the Great Legacy collection. Designed with a structured fit and premium cotton feel, it balances comfort with bold identity. The centerpiece graphic reflects ambition and elevation — made for those moving with purpose.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/untitled-jan29_18-57?variant=44202474242159"> 
+					View Product
+					</a>
+				</p>
+            </div>
+
+        <div class="footer-slider-dots">
+            <span class="footer-dot active" onclick="goToFooterSlide(0)"></span>
+            <span class="footer-dot" onclick="goToFooterSlide(1)"></span>
+        </div>
+
+		</section>
+
+		</div>
+
+		        <!-- Footer Featured Section Ends-->
+
+			</footer>
+
+
+
+        <!-- JAVA SCRIPT -->
+        <!-- Search Functionality -->
 		<script>
-
         function searchFunction() {
 			let input = document.getElementById("searchInput");
             let filter = input.value.toLowerCase();
@@ -481,10 +783,12 @@
 						}
 						}
 						}
-
         </script>
 
+        <!-- GLightbox Script -->
 		<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+        <!-- Initialize GLightbox -->
 		<script>
              const lightbox = GLightbox({
                 touchNavigation: true,
@@ -492,6 +796,7 @@
                 });
         </script>
 
+        <!-- Menu Toggle Script -->
 		<script>
         function toggleMenu() {
             document.getElementById("sideMenu").classList.add("active");
@@ -500,6 +805,201 @@
             document.getElementById("sideMenu").classList.remove("active");
 			}
         </script>
+
+        <!-- featured slides header-->
+        <script>
+		  let slides = document.querySelectorAll(".featured-slide");
+            let dots = document.querySelectorAll(".dot");
+            let index = 0;
+
+        function showSlides(){
+
+        slides.forEach(slide => slide.classList.remove("active"));
+        dots.forEach(dot => dot.classList.remove("active"));
+
+        index++;
+
+        if(index >= slides.length){
+            index = 0;
+        }
+
+        slides[index].classList.add("active");
+        dots[index].classList.add("active");
+        }
+
+        function goToSlide(n){
+            slides.forEach(slide => slide.classList.remove("active"));
+            dots.forEach(dot => dot.classList.remove("active"));
+
+            index = n;
+
+        slides[index].classList.add("active");
+        dots[index].classList.add("active");
+        }
+
+        let headerSlider = setInterval(showSlides, 5000);
+    </script>
+     
+	<script>
+	    let startX = 0;
+
+        const slider = document.querySelector(".featured-product");
+
+        slider.addEventListener("touchstart", function(e){
+            startX = e.touches[0].clientX;
+            });
+
+        slider.addEventListener("touchend", function(e){
+            let endX = e.changedTouches[0].clientX;
+
+        if(startX - endX > 50){
+            showSlides();
+        }
+
+        if(endX - startX > 50){
+            index -= 2;
+
+            if(index < -1){
+                index = slides.length - 2;
+                }
+
+            showSlides();
+            }
+                });
+    </script>
+
+	<script>
+		function nextSlide(){
+            showSlides();
+        }
+
+        function prevSlide(){
+
+            slides.forEach(slide => slide.classList.remove("active"));
+            dots.forEach(dot => dot.classList.remove("active"));
+
+            index--;
+
+            if(index < 0){
+                index = slides.length - 1;
+                }
+
+            slides[index].classList.add("active");
+            dots[index].classList.add("active");
+        }
+	</script>
+
+	<script>
+		const headerContainer = document.querySelector(".featured-product");
+
+        headerContainer.addEventListener("mouseenter", function(){
+            clearInterval(headerSlider);
+                });
+
+        headerContainer.addEventListener("mouseleave", function(){
+            headerSlider = setInterval(showSlides, 5000);
+     	});
+	</script>
+
+    <!--featured slides footer-->
+	<script>
+	    let footerSlides = document.querySelectorAll(".featured-slide-footer");
+            let footerDots = document.querySelectorAll(".footer-dot");
+            let footerIndex = 0;
+
+        function showFooterSlides(){
+
+            footerSlides.forEach(slide => slide.classList.remove("active"));
+            footerDots.forEach(dot => dot.classList.remove("active"));
+
+            footerIndex++;
+
+            if(footerIndex >= footerSlides.length){
+                footerIndex = 0;
+                }
+
+            footerSlides[footerIndex].classList.add("active"); 
+            footerDots[footerIndex].classList.add("active");
+        }
+
+    function goToFooterSlide(n){
+
+        footerSlides.forEach(slide => slide.classList.remove("active"));
+        footerDots.forEach(dot => dot.classList.remove("active"));
+
+        footerIndex = n;
+
+        footerSlides[footerIndex].classList.add("active");
+        footerDots[footerIndex].classList.add("active");
+    }
+
+    let footerSliderInterval = setInterval(showFooterSlides, 5000);
+    </script>
+
+
+	<script>
+		let footerStartX = 0;
+
+        const footerSlider = document.querySelector(".featured-product-footer-slider");
+
+        footerSlider.addEventListener("touchstart", function(e){
+            footerStartX = e.touches[0].clientX;
+            });
+
+        footerSlider.addEventListener("touchend", function(e){
+
+        let footerEndX = e.changedTouches[0].clientX;
+
+        if(footerStartX - footerEndX > 50){
+            showFooterSlides();
+            }
+
+        if(footerEndX - footerStartX > 50){
+
+        footerIndex -= 2;
+
+        if(footerIndex < -1){
+            footerIndex = footerSlides.length - 2;
+        }
+
+        showFooterSlides();
+            }
+        });
+	</script>
+
+
+	<script>
+		function nextFooterSlide(){
+            showFooterSlides();
+        }
+
+        function prevFooterSlide(){
+
+            footerSlides.forEach(slide => slide.classList.remove("active"));
+            footerDots.forEach(dot => dot.classList.remove("active"));
+
+            footerIndex--;
+
+            if(footerIndex < 0){
+                footerIndex = footerSlides.length - 1;
+            }
+
+            footerSlides[footerIndex].classList.add("active");
+            footerDots[footerIndex].classList.add("active");
+        }
+	</script>
+
+	<script>
+		const footerContainer = document.querySelector(".featured-product-footer-slider");
+
+        footerContainer.addEventListener("mouseenter", function(){
+            clearInterval(footerSliderInterval);
+        });
+
+        footerContainer.addEventListener("mouseleave", function(){
+            footerSliderInterval = setInterval(showFooterSlides, 5000);
+        });
+	</script>
 			
 	</body>
 </html>
