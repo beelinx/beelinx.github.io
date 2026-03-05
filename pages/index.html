@@ -150,6 +150,11 @@
 			overflow: hidden;
 		}
 
+		@media (max-width: 768px) {
+			.featured-product {
+				min-height: 420px;
+				}}
+
 		.featured-slide{
             grid-column: 1 / -1;
             display: grid;
@@ -244,13 +249,19 @@
             background:rgba(0,0,0,0.5);
             color:white;
             border:none;
-            font-size:24px;
-            padding:10px 15px;
+            font-size:14px;
+            padding:4px 6px;
             cursor:pointer;
             z-index:10;
             opacity:0;
             transition:opacity 0.3s ease;
         }
+
+		@media (max-width: 768px) {
+			.header-arrow {
+				font-size: 8px;
+				padding: 6px 10px
+			}}
 
         .header-arrow.left{
             left:10px;
@@ -280,6 +291,11 @@
             position: relative;
             overflow: hidden;
         }
+
+		@media (max-width: 768px) {
+			.featured-product-footer-slider {
+				min-height: 420px;
+				}}
 
 		.featured-slide-footer{
             grid-column: 1 / -1;
@@ -324,8 +340,8 @@
             background:rgba(0,0,0,0.5);
             color:white;
             border:none;
-            font-size:24px;
-            padding:10px 15px;
+            font: size 14px;
+            padding:4px 6px;
             cursor:pointer;
             z-index:10;
 			opacity: 0;
@@ -349,6 +365,11 @@
         }
 
 		/* Footer Featured Section Ends */
+
+		.collection-name{
+			padding-top: 1em;
+			padding-bottom: 1em;
+		}
 
 		.collection-name:hover {
 			text-decoration: underline;
@@ -837,7 +858,7 @@
         dots[index].classList.add("active");
         }
 
-        let headerSlider = setInterval(showSlides, 5000);
+        let headerSlider = setInterval(showSlides, 7000);
     </script>
      
 	<script>
@@ -933,7 +954,7 @@
         footerDots[footerIndex].classList.add("active");
     }
 
-    let footerSliderInterval = setInterval(showFooterSlides, 5000);
+    let footerSliderInterval = setInterval(showFooterSlides, 10000);
     </script>
 
 
