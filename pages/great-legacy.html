@@ -19,6 +19,10 @@
 
     <style>
 
+		body, html {
+			height: 100%;
+		}
+
 		body {
 			margin: 0;
 			padding-top: 50px; /* Adjust this value based on the height of your nav bar */
@@ -167,6 +171,10 @@
             object-fit: contain;
 		}
 
+		.clothe-image:hover {
+			opacity: 70%;
+		}
+
 		.buy-button {
 			display: inline-block;
 			border-radius: 10px;
@@ -174,11 +182,19 @@
 			cursor: pointer;
 			align-content: center;
 			border-color: #000000;
-			padding: 10px 15px;
+			padding: 5px 10px;
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
 			background-color: #000000;
+			font-size: smaller;
+		}
+
+		@media (max-width: 768px) {
+			.buy-button {
+				padding: 3px 5px;
+				font-size: smaller;
+			}
 		}
 
 		.buy-button:hover{
@@ -398,6 +414,19 @@
 			</section>
 
 		<div class="products-container">
+
+			<div class="products">
+				<a href="../images-fsn/great-legacy/IMG_3464.WEBP" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3464.WEBP" alt="Great Legacy Legacy Grip Tee" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
+					 LEGACY REAPER
+					 <br/> &#8358; 26,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/legacy-reaper?variant=52747046387823"> 
+					  <button class="buy-button">View Product</button></a>
+				</p>
+			</div>
 
 			<div class="products">
 				<a href="../images-fsn/great-legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg" class="glightbox" data-gallery="products">
