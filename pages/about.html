@@ -174,15 +174,17 @@
 			letter-spacing: 1px;
 		}
 
-		.about-Beelinx {
-			
+		.about-beelinx {
 			padding-bottom: 3em;
 			max-width: 800px;
 			margin: 0 auto;
 			line-height: 1.8;
+			max-width: 800px;
+			padding: 20px;
+			margin:auto;
 		}
 
-		.about-Beelinx h3 {
+		.about-beelinx h3 {
 			text-transform: uppercase;
 			display: block;
 			font-size: 18px;
@@ -193,7 +195,7 @@
 			text-align: center;
 		}
 
-		.about-Beelinx p {
+		.about-beelinx p {
 			color: #555;
 			font-size: 15px;
 			margin-bottom: 30px;
@@ -201,22 +203,23 @@
 			border-bottom: 1px solid #000000;
 		}
 
-		button {
-			display: inline-block;
-			border-radius: 10px;
-			width:fit-content;
-			cursor: pointer;
-			align-content: center;
-			border-color: #000000;
-			padding: 10px 15px;
+		.about-beelinx a {
+			text-decoration: none;
+		}
+
+		.open-catalogue {
 			text-decoration: none;
 			color: #ffffff;
 			background-color: #000000;
+			padding: 10px 20px;
+			border-radius: 10px;
 		}
 
-		button:hover {
+		.open-catalogue:hover {
 			background-color: #ffffff;
-		    color: #000000; 
+		    color: #000000;
+			text-decoration: underline;
+			font-style: italic;
 		}
 
 		.catalogue-link {
@@ -229,6 +232,14 @@
 		.catalogue-link:hover {
 			transform: translateY(-3px);
 		}
+
+		.site-footer{
+            text-align:center;
+            padding:20px;
+            background:rgb(255, 255, 255);
+            color:rgb(0, 0, 0);
+            font-size:14px;
+            }
 
     </style>
 
@@ -274,7 +285,7 @@
 
 		<h1>About Beelinx</h1>
 	
-	<div class="about-Beelinx">
+	<div class="about-beelinx">
 
 
 		<h3>What is Beelinx?</h3>
@@ -300,9 +311,15 @@
 			Our vision is to become the go-to destination for market comparisons, making shopping smarter and more enjoyable for everyone.
 		</p>
 
-		<a href="catalogue.html" class="catalogue-link"> <button>Explore the Catalogue</button></a>
+		<a href="catalogue.html" class="catalogue-link"> <span class="open-catalogue">Explore The Catalogue</span></a>
 
 	</div>
+
+	<footer>
+		<footer class="site-footer">
+            <p>© 2026 Beelinx — Compare prices across markets</p>
+        </footer>
+	</footer>
 
 	<script>
 
