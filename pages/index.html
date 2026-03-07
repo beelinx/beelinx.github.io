@@ -144,10 +144,10 @@
 			align-items: center;
 			text-align: center;
 			justify-content: center;
-			width: 100%;
 			background-color: #000000;
 			position: relative;
 			overflow: hidden;
+			min-height: 420px;
 		}
 
 		@media (max-width: 768px) {
@@ -225,8 +225,8 @@
         }
 
         .dot{
-            height: 8px;
-            width: 8px;
+            height: 5px;
+            width: 5px;
             margin: 0 5px;
             background: rgba(255,255,255,0.5);
             border-radius: 50%;
@@ -274,12 +274,10 @@
 
 		/* Footer Featured Section */
 
-		.featured-slide-footer{
-            display:none;
-        }
+		
 
 		.featured-product-footer-slider {
-            width: 100%;
+            width: 100vw;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             align-items: center;
@@ -287,6 +285,7 @@
             background-color: #000000;
             position: relative;
             overflow: hidden;
+			min-height: 420px;
         }
 
 		@media (max-width: 768px) {
@@ -318,8 +317,8 @@
         }
 
         .footer-dot{
-            height:8px;
-            width:8px;
+            height:5px;
+            width:5px;
             margin:0 5px;
             background:rgba(255,255,255,0.5);
             border-radius:50%;
@@ -428,13 +427,14 @@
 			width:fit-content;
 			cursor: pointer;
 			align-content: center;
-			border-color: #000000;
 			padding: 5px 10px;
 			align-items: center;
 			text-decoration: none;
 			color: #ffffff;
-			background-color: #000000;
+			font-weight: bolder;
 			font-size: smaller;
+			background-color: #000000;
+			
 		}
 
 		@media (max-width: 768px) {
@@ -447,7 +447,16 @@
 		.buy-button:hover{
 			background-color: #ffffff;
 			color: #000000;
+			font-style: italic;
 		}
+
+		.products{
+            transition: transform 0.2s ease;
+            }
+
+        .products:hover{
+            transform: translateY(-5px);
+            }
 
 		.products img{
 			display: block;
@@ -469,6 +478,8 @@
 			display:grid;
 			grid-template-columns: repeat(3, 1fr); /*defines grid items arrangement*/
 			align-items: center;
+			gap: 30px;
+			max-width: 1200px;
 		} /*puts items in grid*/
 
 		@media (max-width: 768px) {
@@ -546,6 +557,14 @@
 			color: #ffffff;
 		}
 
+		.site-footer{
+            text-align:center;
+            padding:20px;
+            background:black;
+            color:white;
+            font-size:14px;
+            }
+
 	</style>
 	
     </head>
@@ -602,7 +621,7 @@
 		        </div>
 				<!---->
                 <a href="../images-fsn/great-legacy/IMG_3445.PNG" class="glightbox" data-gallery="featured">
-                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3445.PNG" alt="Featured great-legacy Product" loading="lazy">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3445.PNG" alt="Featured great-legacy Product" >
                 </a>
 				<!---->
 				<p class="featured-text" >
@@ -666,7 +685,7 @@
 					 GL-01 SET
 					 <br/> &#8358; 29,000 <br/>
 					<a href="https://greatlegacy0.myshopify.com/products/v?variant=44503018504303"> 
-					<button class="buy-button">View Product</button></a>
+					<span class="buy-button">View Product </span></a>
 				</p>
 			</div>
 
@@ -679,7 +698,7 @@
 					 LEGACY MONARCH
 					 <br/> &#8358; 31,000 <br/>
 					<a href="https://greatlegacy0.myshopify.com/products/legacy-monarch?variant=44525883228271"> 
-					  <button class="buy-button">View Product</button></a>
+					  <span class="buy-button">View Product</span></a>
 				</p>
 			</div>
 
@@ -692,7 +711,7 @@
 					 GL - WARMER
 					 <br/> &#8358; 23,000 <br/>
 					<a href="https://greatlegacy0.myshopify.com/products/gl-warmer?variant=44536435736687"> 
-					<button class="buy-button">View Product</button></a>
+					<span class="buy-button">View Product</span></a>
 				</p>
 			</div>
 
@@ -705,7 +724,7 @@
 					 AFTER DARK 2
 					 <br/> &#8358; 28,000 <br/>
 					<a href="https://greatlegacy0.myshopify.com/products/after-dark-2?variant=44341382938735"> 
-					  <button class="buy-button">View Product</button></a>
+					  <span class="buy-button">View Product</span></a>
 				</p>
 			</div>
 
@@ -730,7 +749,7 @@
 		        </div>
 				<!---->
                 <a href="../images-fsn/great-legacy/IMG_3467.PNG" class="glightbox" data-gallery="featured">
-                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3467.PNG" alt="Featured great-legacy Product" loading="lazy">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3467.PNG" alt="Featured great-legacy Product" >
                 </a>
 				<!---->
 				<p class="featured-text" >
@@ -779,6 +798,10 @@
 		</section>
 
 		</div>
+
+		        <footer class="site-footer">
+                    <p>© 2026 Beelinx — Compare prices across markets</p>
+                </footer>
 
 		        <!-- Footer Featured Section Ends-->
 
