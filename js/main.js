@@ -55,10 +55,25 @@ function closeMenu() {
 
 if (typeof GLightbox !== "undefined") {
 
-	const lightbox = GLightbox({
-		touchNavigation: true,
-		loop: true
+let scrollPosition = 0;
+
+const lightbox = GLightbox({
+	touchNavigation: true,
+	loop: true
+});
+
+/* save scroll position when opening */
+lightbox.on('open', () => {
+	scrollPosition = window.scrollY;
+});
+
+/* restore scroll position when closing */
+lightbox.on('close', () => {
+	window.scrollTo({
+		top: scrollPosition,
+		behavior: "instant"
 	});
+});
 
 }
 
@@ -142,6 +157,38 @@ function prevSlide() {
 
 if (slides.length) {
 	headerSlider = setInterval(showSlides, 7000);
+}
+
+
+/* =============================
+   TRACKPAD SWIPE (HEADER)
+============================= */
+
+const headerSliderTrackpad = document.querySelector(".featured-product");
+
+if (headerSliderTrackpad) {
+
+let lastScrollTime = 0;
+
+headerSliderTrackpad.addEventListener("wheel", function(e){
+
+    const now = Date.now();
+
+    if(now - lastScrollTime < 700) return; // prevents rapid firing
+
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){
+
+        if(e.deltaX > 0){
+            nextSlide();
+        } else {
+            prevSlide();
+        }
+
+        lastScrollTime = now;
+    }
+
+});
+
 }
 
 
@@ -266,6 +313,37 @@ function prevFooterSlide() {
 
 if (footerSlides.length) {
 	footerSliderInterval = setInterval(showFooterSlides, 10000);
+}
+
+/* =============================
+   TRACKPAD SWIPE (FOOTER)
+============================= */
+
+const footerTrackpad = document.querySelector(".featured-product-footer-slider");
+
+if (footerTrackpad) {
+
+let lastScrollTime = 0;
+
+footerTrackpad.addEventListener("wheel", function(e){
+
+    const now = Date.now();
+
+    if(now - lastScrollTime < 700) return;
+
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){
+
+        if(e.deltaX > 0){
+            nextFooterSlide();
+        } else {
+            prevFooterSlide();
+        }
+
+        lastScrollTime = now;
+    }
+
+});
+
 }
 
 
