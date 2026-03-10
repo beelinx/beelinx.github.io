@@ -716,7 +716,7 @@
             .header-text {
 				font-size: medium;
 				left: 15%;
-				top: 35%;
+				top: 50%;
 			}
 
 			.header-top {
@@ -799,7 +799,7 @@
 			    left: 53%;
 				opacity: 70%;
 			    transform: translate(-50%, -50%);
-				font-size: 14px;
+				font-size: 8px;
 			}
 
             .social-icons {
