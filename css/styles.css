@@ -129,12 +129,14 @@
 			position: absolute;
 			width: 100%;
 			opacity: 0;
-			transition: opacity 0.8s ease-in-out;
+			transform: translateX(40px);
+			transition: opacity 0.6s ease, transform 0.6s ease;
 			pointer-events: none;
         }
 
 		.featured-slide.active{
             opacity: 1;
+			transform:translateX(0);
             pointer-events: auto;
         }
 
@@ -186,11 +188,13 @@
             border-radius: 50%;
             display: inline-block;
             cursor: pointer;
-            transition: background 0.3s ease;
+			transform:scale(1);
+            transition:all 0.3s ease;
         }
 
         .dot.active{
             background: white;
+			transform:scale(1.4);
         }
 
 		.header-arrow{
@@ -241,12 +245,14 @@
 			position: absolute;
 			width: 100%;
 			opacity: 0;
+			transform:translateX(40px);
+            transition:opacity 0.6s ease, transform 0.6s ease;
 			pointer-events: none;
-			transition: opacity 0.8s ease-in-out;
         }
 
         .featured-slide-footer.active{
             opacity: 1;
+			transform:translateX(0);
 			pointer-events: auto;
         }
 
@@ -265,11 +271,13 @@
             border-radius:50%;
             display:inline-block;
             cursor:pointer;
-            transition:background 0.3s ease;
+            transform:scale(1);
+            transition:all 0.3s ease;
         }
 
         .footer-dot.active{
             background:white;
+            transform:scale(1.4);
         }
 
 		.footer-arrow{
@@ -343,7 +351,7 @@
 			text-decoration: none;
 			font-weight: lighter;
 			font-style: italic;
-			font-size: medium;
+			font-size: large;
 			letter-spacing: 0px;
 			opacity: 0.6;
 			padding-bottom: 2em;
@@ -423,6 +431,10 @@
 			color: #020202;
 		}
 
+		.brand-section-container {
+			padding: 20px;
+		}
+
 		.brand-page-link:hover{
 			text-decoration: underline;
 		}
@@ -454,23 +466,6 @@
 			color: #ffffff;
 		}
 
-		    .site-footer-home{
-            text-align:center;
-            padding:20px;
-            background:black;
-            color:white;
-            font-size:14px;
-            }
-            .site-footer{
-            text-align:center;
-            padding-bottom:20px;
-            background:rgb(255, 255, 255);
-            color:rgb(0, 0, 0);
-            font-size:14px;
-            }
-
-
-
         /* Great Legacy Page */
 
 		.header-section {
@@ -485,7 +480,7 @@
 
 		.header-img {
 			width:100vw;
-			height: 500px;
+			height: 400px;
 			margin: 0;
 			padding: 0;
 			background-size: cover;
@@ -495,11 +490,16 @@
             position: absolute;
 			color: rgb(255, 255, 255);
             text-decoration: overline;
-            opacity: 50%;
+            opacity: 70%;
             font-weight: bolder;
-            top: 65%;
-			left: 50%;
+            top: 45%;
+			left: 15%;
 			transform: translate(-50%, -50%)
+		}
+
+		.header-top {
+			font-size: 24px;
+			font-weight: bold;
 		}
 
 			.footer-section {
@@ -521,7 +521,7 @@
 
 		.footer-text {
 			position: absolute;
-			top: 75%;
+			top: 55%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			margin-top: 50px;  /* Add some space above the heading */
@@ -529,12 +529,13 @@
 			color: white;
 			text-decoration: overline;
 			font-style: italic;
+			font-size: 20px;
             z-index: 1;
 		}
 
             .social-icons {
 				position: absolute;
-				top: 75%;
+				top: 60%;
 			    left: 49%;
 				transform: translate(-50%, -50%);
                 color: rgb(255, 246, 246);
@@ -553,6 +554,38 @@
 
             .social-icons a:hover {
                 color: gray;
+            }
+
+			.site-footer-home{
+            text-align:center;
+            padding:20px;
+            background:black;
+            color:white;
+            font-size:14px;
+            }
+			
+            .site-footer-section{
+			position: absolute;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			color: rgb(255, 255, 255);
+			font-style: italic;
+            z-index: 1;
+			top: 95%;
+			font-size: 12px;
+            }
+
+			.site-footer{
+			position: absolute;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			color: rgb(9, 9, 9);
+			font-style: italic;
+            z-index: 1;
+			padding: 20px;
+			font-size: 12px;
             }
 
 		.center {
@@ -677,11 +710,17 @@
             }
 
             .header-img {
-				height: 400px;
+				height: 250px;
 			}
 
             .header-text {
-				font-size: small;
+				font-size: medium;
+				left: 15%;
+				top: 35%;
+			}
+
+			.header-top {
+				font-size: medium;
 			}
 
             .header-arrow {
@@ -756,16 +795,29 @@
 
             .footer-text {
 				font-size: medium;
-				top: 70%;
+				top: 50%;
 			    left: 53%;
 				opacity: 70%;
 			    transform: translate(-50%, -50%);
+				font-size: 14px;
 			}
 
             .social-icons {
-					top: 75%;
+					top: 60%;
 			        left: 50%;
 				    transform: translate(-50%, -50%);
+					font-size: 16px;
+					margin: 0 15px;
+			}
+
+			.site-footer-section {
+				font-size: 8px;
+				font-weight: bold;
+			}
+
+			.site-footer {
+				font-size: 8px;
+				font-weight: bold;
 			}
 
             .brand-section-container {
