@@ -62,17 +62,24 @@ const lightbox = GLightbox({
 	loop: true
 });
 
-/* save scroll position when opening */
+/* save scroll position BEFORE opening */
 lightbox.on('open', () => {
+
 	scrollPosition = window.scrollY;
+
+	setTimeout(() => {
+		window.scrollTo(0, scrollPosition);
+	}, 10);
+
 });
 
-/* restore scroll position when closing */
+/* restore again when closing */
 lightbox.on('close', () => {
-	window.scrollTo({
-		top: scrollPosition,
-		behavior: "instant"
-	});
+
+	setTimeout(() => {
+		window.scrollTo(0, scrollPosition);
+	}, 10);
+
 });
 
 }
