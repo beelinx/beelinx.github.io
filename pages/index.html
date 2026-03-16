@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+		<meta charset="UTF-8">
+		<meta name="viewport" 
+		content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" 
+		content="Beelinxs fashion items page
+		We make it easier to find the best deal without switching apps."/>
+		<meta name="keywords" 
+		content="Shop, Compare, Cost"/>
+
+	<title>Beelinx | Compare prices across multiple markets</title>
+	
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="../css/styles.css">
+	
+    </head>
+
+    <body>
+		<header>
+			<nav class="navbar">
+                <!-- Hamburger -->
+                <div class="hamburger" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
+
+                <!-- Logo -->
+	            <div class="nav-center">
+                    <a href="index.html" class="logo-link">
+                        <img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo-img">
+                    </a>
+                </div>
+
+                <!-- Search -->
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
+                        <label for="searchInput">
+                        <i class="fas fa-search search-btn"></i>
+                        </label>
+                </div>
+			</nav>
+
+			<!-- Side Menu -->
+			<div id="sideMenu" class="side-menu">
+
+            <div class="close-btn" onclick="closeMenu()">
+                <i class="fas fa-times"></i>
+            </div>
+
+			<a href="index.html">Home</a>
+            <a href="catalogue.html">Catalogue</a>
+            <a href="about.html">About</a>
+
+            </div>
+		
+		</header>
+
+		<!-- Featured Section -->
+		<div class="featured-section-container">
+
+		<section class="featured-product">
+			<button class="header-arrow left" onclick="prevSlide()">&#10094;</button>
+            <button class="header-arrow right" onclick="nextSlide()">&#10095;</button>
+
+			<div class="featured-slide active">
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3445.PNG" class="glightbox" data-gallery="featured">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3445.PNG" alt="Featured great-legacy Product" loading="lazy">
+                </a>
+				<!---->
+				<p class="featured-text" >
+						<span class="featured-product-name"> LEGACY JORST </span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;28,000 
+					 The LEGACY JORST is a modern take on classic denim. Cut from durable, mid-weight jean fabric with a relaxed fit, it’s built for everyday wear without losing its edge. Subtle detailing and a structured silhouette give it a standout look that works effortlessly with tees, hoodies, or layered fits.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/legacy-jorst?variant=44552514338927"> 
+					  View Product
+					</a>
+				</p>
+			</div>
+
+			<div class="featured-slide">
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">NEW GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3720.PNG" class="glightbox">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3720.PNG" alt="Featured great-legacy Product" loading="lazy">
+                </a>
+				<!---->
+                <p class="featured-text" >
+						<span class="featured-product-name"> LEGACY SKULL CAP </span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;16,000 
+					 Built for everyday presence, the Legacy Skull Cap blends minimal design with timeless identity. Crafted from soft, durable knit, it delivers warmth, comfort, and a clean silhouette that fits effortlessly into any look. Subtle detailing keeps the focus on the legacy you carry.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/legacy-skull-capp?variant=44521672474735"> 
+					View Product
+					</a>
+				</p>
+            </div>
+
+			<div class="slider-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+            </div>
+
+		</section>
+
+		</div>
+		
+		<!-- Products Section -->
+
+		<h1 class="motto">Everything in one place.</h1>
+
+	<div class="products-container">
+
+		<div class="products">
+				<a href="../images-fsn/great-legacy/IMG_3037.WEBP" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3037.WEBP" alt="Great Legacy GL-01 SET" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
+					 GL-01 SET
+					 <br/> &#8358; 29,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/v?variant=44503018504303"> 
+					<span class="buy-button">View Product </span></a>
+				</p>
+			</div>
+
+			<div class="products">
+				<a href="../images-fsn/great-legacy/4f3cc3b7-99a3-48a6-85ec-13d9f4792fd7.JPG" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/4f3cc3b7-99a3-48a6-85ec-13d9f4792fd7.JPG" alt="Great Legacy Legacy Monarch" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
+					 LEGACY MONARCH
+					 <br/> &#8358; 31,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/legacy-monarch?variant=44525883228271"> 
+					  <span class="buy-button">View Product</span></a>
+				</p>
+			</div>
+
+			<div class="products">
+				<a href="../images-fsn/great-legacy/IMG_3331.WEBP" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/IMG_3331.WEBP" alt="Great Legacy GL - WARMER" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
+					 GL - WARMER
+					 <br/> &#8358; 23,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/gl-warmer?variant=44536435736687"> 
+					<span class="buy-button">View Product</span></a>
+				</p>
+			</div>
+
+			<div class="products">
+				<a href="../images-fsn/great-legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" class="glightbox" data-gallery="products">
+				<img class="clothe-image" src="../images-fsn/great-legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG" alt="Great Legacy After Dark 2" loading="lazy">
+				</a>
+				<p class="clothe-text" >
+					<a class="brand-page-link" href="great-legacy.html"> <strong>Great Legacy</strong></a>
+					 AFTER DARK 2
+					 <br/> &#8358; 28,000 <br/>
+					<a href="https://greatlegacy0.myshopify.com/products/after-dark-2?variant=44341382938735"> 
+					  <span class="buy-button">View Product</span></a>
+				</p>
+			</div>
+
+		</div>
+
+			<footer>
+
+				<!-- Footer Featured Section -->
+
+				<div class="featured-section-container">
+
+		<section class="featured-product-footer-slider">
+
+			<button class="footer-arrow left" onclick="prevFooterSlide()">&#10094;</button>
+            <button class="footer-arrow right" onclick="nextFooterSlide()">&#10095;</button>
+
+			<div class="featured-slide-footer active">
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3467.PNG" class="glightbox" data-gallery="featured">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3467.PNG" alt="Featured great-legacy Product" loading="lazy">
+                </a>
+				<!---->
+				<p class="featured-text" >
+						<span class="featured-product-name"> LEGACY CROP TEE </span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;22,000 
+					 The Legacy Crop Tee brings a modern edge to a timeless idea. With its cropped silhouette and refined construction, it offers a confident, effortless look that pairs easily with both casual and elevated styles. Built to stand out while staying true to the legacy.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"> 
+					  View Product
+					</a>
+				</p>
+			</div>
+
+			<div class="featured-slide-footer">
+
+				<div class="welcome-section">
+		            <a href="great-legacy.html" class="logo-link">
+				        <p class="collection-name">NEW GREAT LEGACY COLLECTION</p>
+			        </a>
+		        </div>
+				<!---->
+                <a href="../images-fsn/great-legacy/IMG_3723.PNG" class="glightbox">
+                    <img class="clothe-image" src="../images-fsn/great-legacy/IMG_3723.PNG" loading="lazy" alt="GL APEX TEE">
+                </a>
+				<!---->
+                <p class="featured-text" >
+						<span class="featured-product-name"> GL APEX TEE</span>
+					<br/><br/>
+					<span class="featured-product-info"> At &#8358;31,000 
+					 The GL Apex Tee represents the peak of the Great Legacy collection. Designed with a structured fit and premium cotton feel, it balances comfort with bold identity. The centerpiece graphic reflects ambition and elevation — made for those moving with purpose.
+					</span>
+					<br/><br/>
+					<a class="featured-product-link" href="https://greatlegacy0.myshopify.com/products/untitled-jan29_18-57?variant=44202474242159"> 
+					View Product
+					</a>
+				</p>
+            </div>
+
+        <div class="footer-slider-dots">
+            <span class="footer-dot active" onclick="goToFooterSlide(0)"></span>
+            <span class="footer-dot" onclick="goToFooterSlide(1)"></span>
+        </div>
+
+		</section>
+
+		</div>
+
+		        <div class="copyrights-gen-home">
+                    <p>© 2026 Beelinx — Compare prices across markets</p>
+				</div>
+
+		        <!-- Footer Featured Section Ends-->
+
+			</footer>
+
+
+
+        <!-- JAVA SCRIPT -->
+		<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+		<script src="../js/main.js"></script>
+			
+	</body>
+</html>
