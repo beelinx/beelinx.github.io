@@ -502,18 +502,15 @@
 			transform: translate(-50%, -50%)
 		}
 
-		.header-top {
-			font-size: 24px;
+		.brand-name-h {
+			font-size: 40px;
 			font-weight: bold;
 		}
 
-			.footer-section {
+		.footer-section {
 			position: relative;
 			text-align: center;
-			padding: 0;
-			margin: 0;
-			box-sizing: border-box;
-			overflow: hidden;
+			padding: 40px 20px;
 		}
 
 		.footer-img {
@@ -525,35 +522,28 @@
 		}
 
 		.footer-text {
-			position: absolute;
-			top: 55%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			margin-top: 50px;  /* Add some space above the heading */
 			text-align: center;
-			color: white;
+			color: rgb(0, 0, 0);
 			text-decoration: overline;
 			font-style: italic;
-			font-size: 20px;
-            z-index: 1;
+			font-size: 16px;
+			margin-bottom: 15px;
 		}
 
             .social-icons {
-				position: absolute;
-				top: 60%;
-			    left: 49%;
-				transform: translate(-50%, -50%);
-                color: rgb(255, 246, 246);
+				display: flex;
+				justify-content: center;
+                color: rgb(0, 0, 0);
 				opacity: 90%;
-                font-size: 24px;
-                margin: 0 15px;
+                font-size: 20px;
                 text-decoration: none;
-                z-index: 10;
+				gap: 5px;
+				margin-bottom: 0;
             }
 
 			.social-icons a {
-				color: rgb(255, 246, 246);
-				margin: 0 10px;
+				color: rgb(0, 0, 0);
+				padding: 5px;
 				text-decoration: none;
 			}
 
@@ -561,7 +551,7 @@
                 color: gray;
             }
 
-			.site-footer-home{
+			.copyrights-gen-home{
             text-align:center;
             padding:20px;
             background:black;
@@ -569,19 +559,15 @@
             font-size:14px;
             }
 			
-            .site-footer-section{
-			position: absolute;
-			left: 50%;
-			transform: translate(-50%, -50%);
+            .copyrights{
+			padding-top: 20px;
 			text-align: center;
-			color: rgb(255, 255, 255);
+			color: rgb(0, 0, 0);
 			font-style: italic;
-            z-index: 1;
-			top: 95%;
 			font-size: 12px;
             }
 
-			.site-footer{
+			.copyrights-gen{
 			position: absolute;
 			left: 50%;
 			transform: translate(-50%, -50%);
@@ -593,9 +579,10 @@
 			font-size: 12px;
             }
 
-		.center {
+		.brand-web-link {
 			text-align: center;
-			padding: 50px;
+			padding-top: 50px;
+			padding-bottom: 10px;
 		}
 
 		.website-link {
@@ -715,7 +702,7 @@
             }
 
             .header-img {
-				height: 250px;
+				height: 450px;
 			}
 
             .header-text {
@@ -724,8 +711,8 @@
 				top: 50%;
 			}
 
-			.header-top {
-				font-size: large;
+			.brand-name-h {
+				font-size: 28px;
 			}
 
             .header-arrow {
@@ -800,28 +787,27 @@
 
             .footer-text {
 				font-size: medium;
-				top: 50%;
-			    left: 53%;
-				opacity: 70%;
-			    transform: translate(-50%, -50%);
-				font-size: 8px;
+				opacity: 90%;
+				font-size: 10px;
+			}
+
+			.brand-web-link {
+				font-size: 10px;
+				padding-bottom: 6px;
 			}
 
             .social-icons {
-					top: 60%;
-			        left: 50%;
-				    transform: translate(-50%, -50%);
-					font-size: 16px;
-					margin: 0 15px;
+					font-size: 14px;
+					gap: 2px;
 			}
 
-			.site-footer-section {
-				font-size: 6px;
+			.copyrights {
+				font-size: 8px;
 				font-weight: bold;
 			}
 
-			.site-footer {
-				font-size: 6px;
+			.copyrights-gen {
+				font-size: 8px;
 				font-weight: bold;
 			}
 
