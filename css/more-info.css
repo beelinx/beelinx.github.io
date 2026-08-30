@@ -1,0 +1,266 @@
+*{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+        }
+
+body.glightbox-open{
+	    position: fixed;
+	    width: 100%;
+        }
+
+body, html {
+		height: 100%;
+	}
+
+body {
+		margin: 0;
+		padding-top: 50px; /* Adjust this value based on the height of your nav bar */
+		overflow-x: hidden;
+	}
+
+.navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000000;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+		}
+
+        .nav-center {
+			position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+		}
+
+        nav ul {
+			display:flex; /*puts content side by side*/
+			align-items: center; /*Used alongside display: flex to align properly*/
+			list-style: none; /*used to remove list bullet points*/
+			gap: 2em;
+		}
+
+		nav a {
+			color: rgb(255, 255, 255);
+			font-weight: 300;
+		} /*Used to  design text in the anchor*/
+
+		nav a:hover{
+			text-decoration: underline;
+		} /*used to design what happens when cusor hovers over text*/
+
+        .hamburger {
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
+		}
+
+        .side-menu { 
+		    position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: black;
+            padding-top: 80px;
+            transition: 0.3s ease;
+            z-index: 1001;
+		}
+
+        .side-menu a {
+            display: block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+		}
+
+        .side-menu a:hover {
+            background: #111;
+		}
+
+
+		.side-menu.active {
+			left: 0;
+			position: fixed;
+		}
+
+		.close-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
+		}
+
+		.logo-link {
+			display: flex;
+            align-items: center;
+		}
+
+		.logo-img {
+            height: 50px;
+            width: auto;
+		}
+
+		.logo{
+			text-align: center;
+		}
+
+        .search-container{
+			position: relative;
+			margin-left: auto; /* Pushes the search container to the right */
+			margin-right: 4px; /* Adds some space between the search container and the right edge */
+			margin-top: 14px;
+		}
+
+		.search-input{
+			width: 0;
+			padding: 0;
+			border: none;
+			outline: none;
+			transition: width 0.4s ease, padding 0.4s ease;
+			font-size: 17px;
+		}
+
+		.search-input:focus {
+			width: 200px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+
+		.search-btn {
+			cursor: pointer;
+			color: #ffffff;
+		}
+
+.social-icons {
+				display: flex;
+				justify-content: center;
+                color: rgb(0, 0, 0);
+				opacity: 90%;
+                font-size: 20px;
+                text-decoration: none;
+				gap: 5px;
+				margin-bottom: 0;
+                margin-top: 20px;
+            }
+
+			.social-icons a {
+				color: rgb(0, 0, 0);
+				padding: 5px;
+				text-decoration: none;
+			}
+
+            .social-icons a:hover {
+                color: gray;
+            }
+
+.brand-product-logo{
+			display: block;
+			margin: 0 auto;
+			margin-top: 80px;
+            margin-bottom: 50px;
+			width: 150px;
+			height: 150px;
+			border-radius: 150px;
+		}
+
+.brand-product-logo:hover {
+    transition: transform 0.2s ease;
+    transform: scale(1.1);
+}
+
+.products {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            max-width: 1100px;
+            padding: 60px 40px;
+            }
+
+.clothe-image {
+			display: block;
+			margin: 0 auto;       /* centers the image horizontally */
+            width: max-content;     /* optional: makes image responsive */
+            height: 500px;        /* optional: maintains aspect ratio */
+		}
+
+.products img:hover {
+    transition: transform 0.2s ease;
+}
+
+.product-description {
+    text-align: center;
+    font-size: larger;
+}
+
+.clothes-text {
+    flex: 1;
+    text-align: center;
+}
+
+.price {
+    color: grey;    
+    text-align: center;
+}
+
+.order-link {
+    text-align: center;
+    display: inline-block;
+    color: white;
+    background-color: black;
+    border-radius: 30%;
+    padding: 12px 70px;
+    text-decoration: none;
+    margin-top: 20px;
+    font: bolder;
+    transition: transform 0.2s ease;
+}
+
+.order-link:hover {
+    font: italic;
+    transform: translateY(-5px);
+   
+}
+
+
+@media (max-width: 768px) {
+    .products {
+        gap: 20px;
+        padding: 30px 20x;
+    }
+
+    .clothe-image {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+    }
+
+    .clothes-text {
+        text-align: center;
+    }
+
+    .brand-product-logo{
+			margin-top: 100px;
+            margin-bottom: 30px;
+			width: 60px;
+			height: 60px;
+			border-radius: 80px;
+		}
+
+    .product-description {
+        font-size: small;
+    }
+
+    .order-link {
+        padding: 10px 30px;
+        font-size: smaller;
+    }
+}

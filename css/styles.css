@@ -1,838 +1,2135 @@
-        *{
-            box-sizing:border-box;
-            margin:0;
-            padding:0;
-        } /*This makes padding stay inside the width, so width:100% elements don’t overflow.*/
-
-		body.glightbox-open{
-	    position: fixed;
-	    width: 100%;
-        }
-
-		body, html {
-			height: 100%;
-		}
-
-		body {
-			margin: 0;
-			padding-top: 50px; /* Adjust this value based on the height of your nav bar */
-			overflow-x: hidden;
-		}
-
-		.navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #000000;
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-		}
-
-        .nav-center {
-			position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-		}
-
-        nav ul {
-			display:flex; /*puts content side by side*/
-			align-items: center; /*Used alongside display: flex to align properly*/
-			list-style: none; /*used to remove list bullet points*/
-			gap: 2em;
-		}
-
-		nav a {
-			color: rgb(255, 255, 255);
-			font-weight: 300;
-		} /*Used to  design text in the anchor*/
-
-		nav a:hover{
-			text-decoration: underline;
-		} /*used to design what happens when cusor hovers over text*/
-
-        .hamburger {
-            font-size: 22px;
-            color: white;
-            cursor: pointer;
-		}
-
-        .side-menu { 
-		    position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background: black;
-            padding-top: 80px;
-            transition: 0.3s ease;
-            z-index: 1001;
-		}
-
-        .side-menu a {
-            display: block;
-            padding: 15px 25px;
-            color: white;
-            text-decoration: none;
-		}
-
-        .side-menu a:hover {
-            background: #111;
-		}
-
-
-		.side-menu.active {
-			left: 0;
-			position: fixed;
-		}
-
-		.close-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 22px;
-            color: white;
-            cursor: pointer;
-		}
-
-		.logo-link {
-			display: flex;
-            align-items: center;
-		}
-
-		.logo-img {
-            height: 50px;
-            width: auto;
-		}
-
-		.logo{
-			text-align: center;
-		}
-
-		/* Header Featured Section */
-
-		.featured-product {
-			width: 100%;
-			display: grid;
-			margin-bottom: 2em;
-			grid-template-columns: repeat(2, 1fr); /*defines grid items arrangement*/
-			align-items: center;
-			text-align: center;
-			justify-content: center;
-			background-color: #000000;
-			position: relative;
-			overflow: hidden;
-			min-height: 420px;
-		}
-
-		.featured-slide{
-            grid-column: 1 / -1;
-            display: grid;
-			grid-template-columns: repeat(2,1fr);
-			position: absolute;
-			width: 100%;
-			opacity: 0;
-			transform: translateX(40px);
-			transition: opacity 0.6s ease, transform 0.6s ease;
-			pointer-events: none;
-        }
-
-		.featured-slide.active{
-            opacity: 1;
-			transform:translateX(0);
-            pointer-events: auto;
-        }
-
-		.featured-product-link {
-			text-decoration: none;
-			color: #ffffff;
-			font-weight: 300;
-			font-style: italic;
-			text-decoration: overline;
-		}
-
-		.featured-product-link:hover {
-			text-decoration: underline;
-		}
-
-		.featured-text {
-			color: #ffffff;
-			opacity: 70%;
-		}
-
-		.featured-text strong {
-			color: #ffffff;
-			opacity: 70%;
-		}
-
-		.featured-text strong:hover {
-			text-decoration: underline;
-		}
-
-		.featured-product-name {
-			font-size: larger;
-			font-weight: 500;
-			color: #ffffff;
-			opacity: 70%;
-		}
-
-		.slider-dots{
-            position: absolute;
-            bottom: 15px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .dot{
-            height: 5px;
-            width: 5px;
-            margin: 0 5px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 50%;
-            display: inline-block;
-            cursor: pointer;
-			transform:scale(1);
-            transition:all 0.3s ease;
-        }
-
-        .dot.active{
-            background: white;
-			transform:scale(1.4);
-        }
-
-		.header-arrow{
-            position:absolute;
-            top:50%;
-            transform:translateY(-50%);
-            background:transparent;
-            color:white;
-            border:none;
-            font-size:14px;
-            padding:4px 6px;
-            cursor:pointer;
-            z-index:10;
-            opacity:0;
-            transition:opacity 0.3s ease;
-        }
-
-        .header-arrow.left{
-            left:10px;
-        }
-
-        .header-arrow.right{
-            right:10px;
-        }
-
-        .featured-product:hover .header-arrow{
-            opacity:1;
-        }
-
-		/* Footer Featured Section */
-
-		.featured-product-footer-slider {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            align-items: center;
-            text-align: center;
-            background-color: #000000;
-            position: relative;
-            overflow: hidden;
-			min-height: 420px;
-        }
-
-		.featured-slide-footer{
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(2,1fr);
-			position: absolute;
-			width: 100%;
-			opacity: 0;
-			transform:translateX(40px);
-            transition:opacity 0.6s ease, transform 0.6s ease;
-			pointer-events: none;
-        }
-
-        .featured-slide-footer.active{
-            opacity: 1;
-			transform:translateX(0);
-			pointer-events: auto;
-        }
-
-		.footer-slider-dots{
-            position:absolute;
-            bottom:15px;
-            width:100%;
-            text-align:center;
-        }
-
-        .footer-dot{
-            height:5px;
-            width:5px;
-            margin:0 5px;
-            background:rgba(255,255,255,0.5);
-            border-radius:50%;
-            display:inline-block;
-            cursor:pointer;
-            transform:scale(1);
-            transition:all 0.3s ease;
-        }
-
-        .footer-dot.active{
-            background:white;
-            transform:scale(1.4);
-        }
-
-		.footer-arrow{
-            position:absolute;
-            top:50%;
-            transform:translateY(-50%);
-            background:transparent;
-            color:white;
-            border:none;
-            font-size: 14px;
-            padding:4px 6px;
-            cursor:pointer;
-            z-index:10;
-			opacity: 0;
-			transition: opacity 0.3s ease;
-        }
-
-        .footer-arrow.left{
-            left:10px;
-        }
-
-        .footer-arrow.right{
-            right:10px;
-        }
-
-        .footer-arrow:hover{
-            opacity: 70%;
-        }
-
-		.featured-product-footer-slider:hover .footer-arrow{
-            opacity:1;
-        }
-
-		/* Footer Featured Section Ends */
-
-		.collection-name{
-			padding-top: 1em;
-			padding-bottom: 1em;
-		}
-
-		.collection-name:hover {
-			text-decoration: underline;
-		}
-
-		.welcome-section {
-			grid-column: 1 / -1;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 50px; /* Adjust the height as needed */
-			background-color: #000000; /* Optional: Add a background color */
-		}
-
-		.welcome-section a {
-			text-decoration: none; /* Underline the text */
-		}
-
-		.welcome-section p {
-			color: #ffffff; /* Set the text color */
-			font-size: 24px; /* Adjust the font size as needed */
-			font-weight: 500; /* Adjust the font weight as needed */
-			margin: 0; /* Remove default margin */
-			text-decoration: none;
-			opacity: 70%;
-		
-		}
-
-		.motto {
-			font-family: 'Playfair Display', serif;
-			text-align: center;
-			text-decoration: none;
-			font-weight: lighter;
-			font-style: italic;
-			font-size: large;
-			letter-spacing: 0px;
-			opacity: 0.6;
-			padding-bottom: 2em;
-			color: #000000;
-		}
-
-		.price {
-			text-align: center;
-			font-weight: bolder;
-			padding-top: 4px;
-		}
-
-		.buy-button {
-			display: inline-block;
-			border-radius: 10px;
-			width: 200px;
-			cursor: pointer;
-			align-content: center;
-			padding: 5px 10px;
-			align-items: center;
-			text-decoration: none;
-			color: #ffffff;
-			font-weight: bolder;
-			font-size: smaller;
-			background-color: #ffffff;
-			
-		}
-
-		.buy-button:hover{
-			background-color: #ffffff;
-			color: #000000;
-			font-style: italic;
-		}
-
-		.product-logo{
-			display: block;
-			margin: 0 auto;
-			margin-top: 100px;
-			width: 100px;
-			height: 100px;
-			border-radius: 100px;
-			
-		}
-
-		.products{
-            transition: transform 0.2s ease;
-            }
-
-        .products:hover{
-            transform: translateY(-5px);
-            }
-
-		.products img{
-			display: block;
-			margin: 0 auto;       /* centers the image horizontally */
-            width: 230px;      /* optional: makes image responsive */
-            height: 230px;
-		}
-		
-		.products-container {
-			margin-top: 1em;
-			margin-bottom: 1em; /*puts space between the top and bottom of the page*/
-			width: 100%; /*lets width stretch to the max screen of device*/
-			display:grid;
-			grid-template-columns: repeat(3, 1fr); /*defines grid items arrangement*/
-			align-items: center;
-			gap: 30px;
-			margin:1em auto;
-			max-width: 1200px;
-		} /*puts items in grid*/
-
-		.clothe-text {
-			margin: 0;
-			text-align: center;
-		}
-
-		.clothe-image {
-			width: min(300px, 100%); /*used to ensure minimum image and that image is never larger than the screen being displayed on*/
-			border-radius: 20px;
-			height: 250px;
-            object-fit: contain;
-			padding-bottom: 10px;
-			transition: transform 0.3s ease;
-		}
-
-		.clothe-image:hover {
-			opacity: 70%;
-			transform: translateY(-6px) scale(1.02);
-		}
-
-		.brand-page-link{
-			text-decoration: none;
-			color: #020202;
-		}
-
-		.brand-section-container {
-			padding: 20px;
-		}
-
-		.brand-page-link:hover{
-			text-decoration: underline;
-		}
-		
-		.search-container{
-			position: relative;
-			margin-left: auto; /* Pushes the search container to the right */
-			margin-right: 4px; /* Adds some space between the search container and the right edge */
-			margin-top: 14px;
-		}
-
-		.search-input{
-			width: 0;
-			padding: 0;
-			border: none;
-			outline: none;
-			transition: width 0.4s ease, padding 0.4s ease;
-			font-size: 17px;
-		}
-
-		.search-input:focus {
-			width: 200px;
-			padding: 5px;
-			border-radius: 5px;
-		}
-
-		.search-btn {
-			cursor: pointer;
-			color: #ffffff;
-		}
-
-        /* Great Legacy Page */
-
-		.header-section {
-			position: relative;
-			text-align: center;
-			padding: 0;
-            font-size: 16px;
-			margin: 0;
-			box-sizing: border-box;
-			overflow: hidden;
-		}
-
-		.header-img {
-			width:100vw;
-			height: 400px;
-			margin: 0;
-			padding: 0;
-			background-size: cover;
-		}
-
-		.header-text {
-            position: absolute;
-			color: rgb(255, 255, 255);
-            text-decoration: overline;
-            opacity: 70%;
-            font-weight: bolder;
-            top: 45%;
-			left: 15%;
-			transform: translate(-50%, -50%)
-		}
-
-		.brand-name-h {
-			font-size: 40px;
-			font-weight: bold;
-			padding-top: 0;
-		}
-
-		.footer-section {
-			position: relative;
-			text-align: center;
-			padding: 40px 20px;
-		}
-
-		.footer-img {
-			width:100vw;
-			height: 300px;
-			margin: 0;
-			padding: 0;
-			background-size: cover;
-		}
-
-		.footer-text {
-			text-align: center;
-			color: rgb(0, 0, 0);
-			text-decoration: overline;
-			font-style: italic;
-			font-size: 16px;
-			margin-bottom: 15px;
-		}
-
-            .social-icons {
-				display: flex;
-				justify-content: center;
-                color: rgb(0, 0, 0);
-				opacity: 90%;
-                font-size: 20px;
-                text-decoration: none;
-				gap: 5px;
-				margin-bottom: 0;
-            }
-
-			.social-icons a {
-				color: rgb(0, 0, 0);
-				padding: 5px;
-				text-decoration: none;
-			}
-
-            .social-icons a:hover {
-                color: gray;
-            }
-
-			.copyrights-gen-home{
-            text-align:center;
-            padding:20px;
-            background:black;
-            color:white;
-            font-size:14px;
-            }
-			
-            .copyrights{
-			padding-top: 20px;
-			text-align: center;
-			color: rgb(0, 0, 0);
-			font-style: italic;
-			font-size: 12px;
-            }
-
-			.copyrights-gen{
-			position: absolute;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			text-align: center;
-			color: rgb(9, 9, 9);
-			font-style: italic;
-            z-index: 1;
-			padding: 20px;
-			font-size: 12px;
-            }
-
-		.brand-web-link {
-			text-align: center;
-			padding-top: 50px;
-			padding-bottom: 10px;
-		}
-
-		.website-link {
-			text-decoration: none;
-			text-align: center;
-			font-style: italic;
-			color: #000000;
-			padding-bottom:20px;
-		}
-
-		.website-link:hover {
-			text-decoration: underline;
-		}
-
-		.logo-align {
-			text-align: center;
-		}
-
-		.brand-section-container {
-			margin-top: 1em;
-			margin-bottom: 1em; /*puts space between the top and bottom of the page*/
-			width: 100%; /*lets width stretch to the max screen of device*/
-			display:grid;
-			grid-template-columns: repeat(3, 1fr); /*defines grid items arrangement*/
-		} /*puts items in grid*/
-
-		.brand-section{
-            transition: transform 0.2s ease;
-            }
-
-        .brand-section:hover{
-            transform: translateY(-5px);
-            }
-
-		.brand-logo {
-			width: min(250px, 100%); /*used to ensure minimum image and that image is never larger than the screen being displayed on*/
-			height: 250px;
-			padding: 15px;
-		}
-
-		.brand-logo:hover {
-			opacity: 70%;
-		}
-
-		h1 {
-			margin-top: 50px;  /* Add some space above the heading */
-			text-align: center;
-			padding: 2em; /*defines space between contents in an element*/
-			font-weight: 500;
-			letter-spacing: 1px;
-            color: #000;
-		}
-
-		.about-beelinx {
-			padding-bottom: 3em;
-			max-width: 800px;
-			margin: 0 auto;
-			line-height: 1.8;
-			padding: 20px;
-			margin:auto;
-		}
-
-		.about-beelinx h3 {
-			text-transform: uppercase;
-			display: block;
-			font-size: 18px;
-			font-weight: 500;
-			letter-spacing: 0.5px;
-			margin-top: 40px;
-			margin-bottom: 10px;
-			text-align: center;
-		}
-
-		.about-beelinx p {
-			color: #555;
-			font-size: 15px;
-			margin-bottom: 30px;
-			padding-bottom: 20px;
-			border-bottom: 1px solid #000000;
-			text-align: center;
-		}
-
-		.about-beelinx a {
-			text-decoration: none;
-		}
-
-		.open-catalogue {
-			text-decoration: none;
-			color: #ffffff;
-			background-color: #000000;
-			padding: 10px 20px;
-			border-radius: 10px;
-		}
-
-		.open-catalogue:hover {
-			background-color: #ffffff;
-		    color: #000000;
-			text-decoration: underline;
-			font-style: italic;
-		}
-
-		.catalogue-link {
-			transition: all 0.3s ease;
-            display: block;
-            width: fit-content;
-            margin: 40px auto;
-		}
-
-		.catalogue-link:hover {
-			transform: translateY(-3px);
-		}
-
-        @media (max-width: 768px) {
-
-            .header-section {
-                font-size: medium;
-            }
-
-            .header-img {
-				height: 450px;
-			}
-
-            .header-text {
-				font-size: medium;
-				left: 20%;
-				top: 50%;
-			}
-
-			.product-logo {
-				margin-top: 70px;
-			}
-
-			.brand-name-h {
-				font-size: 28px;
-			}
-
-            .header-arrow {
-				font-size: 8px;
-				padding: 6px 10px
-			}
-
-			.nav-center {
-				transform: translateX(-50%);
-			}
-            
-            .brand-logo {
-				width: min(150px, 100%);
-				height: 150px;
-			}
-            
-            .logo-img {
-				height: 40px;
-			}
-
-            .featured-product {
-				min-height: 420px;
-				grid-template-columns: repeat(2, 1fr);
-				align-items: center;
-				justify-content: center;
-				text-align: center;
-			}
-
-            .featured-product-info {
-				font-size: small;
-			}
-
-            .featured-product-footer-slider {
-				min-height: 420px;
-			}
-
-            .motto {
-				font-size: small;
-			}
-
-            .buy-button {
-				padding: 3px 5px;
-				font-size: 10px;
-				border-color: #000;
-				width: 70px;
-			}
-
-            .products img {
-				width: 170px;
-				height: 170px;
-			}
-
-            .products-container {
-				grid-template-columns: repeat(2, 1fr);
-			}
-
-            .clothe-text {
-				font-size: smaller;
-			}
-
-            .search-input:focus {
-            position: fixed;
-			border-radius: 0;
-            top: 0;
-            left: 0;
-            width: 100%;
-			height: 35px;
-            padding: 15px;
-            background: white;
-			z-index: 1001; /* Ensure the search input appears above other elements */
-			}
-
-            .footer-text {
-				font-size: medium;
-				opacity: 90%;
-				font-size: 10px;
-			}
-
-			.brand-web-link {
-				font-size: 10px;
-				padding-bottom: 6px;
-			}
-
-            .social-icons {
-					font-size: 14px;
-					gap: 2px;
-			}
-
-			.copyrights {
-				font-size: 8px;
-				font-weight: bold;
-			}
-
-			.copyrights-gen {
-				font-size: 8px;
-				font-weight: bold;
-			}
-
-            .brand-section-container {
-				grid-template-columns: repeat(2, 1fr);
-			}
-        }
+/* =========================================================
+   BEELINX GLOBAL STYLES
+   ========================================================= */
+
+
+/* =========================================================
+   1. GLOBAL RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding-top: 50px;
+
+    /* Prevent the website itself from scrolling horizontally.
+       Individual carousels can still scroll horizontally. */
+    overflow-x: hidden;
+}
+
+body.glightbox-open {
+    position: fixed;
+    width: 100%;
+}
+
+
+/* =========================================================
+   2. NAVIGATION / HEADER
+   ========================================================= */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #000000;
+
+    padding: 10px 20px;
+
+    position: fixed;
+    top: 0;
+    width: 100%;
+
+    z-index: 1000;
+}
+
+
+/* Center the Beelinx logo */
+
+.nav-center {
+    position: absolute;
+    left: 50%;
+
+    transform: translateX(-50%);
+}
+
+
+/* General navigation links */
+
+nav ul {
+    display: flex;
+    align-items: center;
+
+    list-style: none;
+
+    gap: 2em;
+}
+
+nav a {
+    color: rgb(255, 255, 255);
+    font-weight: 300;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* Hamburger */
+
+.hamburger {
+    font-size: 22px;
+    color: white;
+
+    cursor: pointer;
+}
+
+
+/* Logo */
+
+.logo-link {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+}
+
+.logo {
+    text-align: center;
+}
+
+
+/* =========================================================
+   3. SIDE MENU
+   ========================================================= */
+
+.side-menu {
+    position: fixed;
+
+    top: 0;
+    left: -250px;
+
+    width: 250px;
+    height: 100%;
+
+    background: black;
+
+    padding-top: 80px;
+
+    transition: 0.3s ease;
+
+    z-index: 1001;
+}
+
+.side-menu.active {
+    left: 0;
+    position: fixed;
+}
+
+.side-menu a {
+    display: block;
+
+    padding: 15px 25px;
+
+    color: white;
+
+    text-decoration: none;
+}
+
+.side-menu a:hover {
+    background: #111;
+}
+
+
+/* Close button */
+
+.close-btn {
+    position: absolute;
+
+    top: 20px;
+    left: 20px;
+
+    font-size: 22px;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   4. SEARCH
+   ========================================================= */
+
+.search-container {
+    position: relative;
+
+    margin-left: auto;
+    margin-right: 4px;
+    margin-top: 14px;
+}
+
+.search-input {
+    width: 0;
+
+    padding: 0;
+
+    border: none;
+    outline: none;
+
+    transition: width 0.4s ease,
+                padding 0.4s ease;
+
+    font-size: 17px;
+}
+
+.search-input:focus {
+    width: 200px;
+
+    padding: 5px;
+
+    border-radius: 5px;
+}
+
+.search-btn {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   5. HOMEPAGE HERO CAROUSEL
+   =========================================================
+
+   This is the Jumia-style horizontal card carousel.
+
+   IMPORTANT:
+   .featured-track = the horizontal scrolling area
+   .featured-slide = individual cards
+
+   The cards are NOT absolute positioned anymore.
+   This allows multiple cards to exist beside each other.
+   ========================================================= */
+
+
+/* Outer container */
+
+.featured-section-container {
+    width: 100%;
+
+    background: white;
+
+    overflow: hidden;
+}
+
+
+/* Visible carousel area */
+
+.featured-product {
+    width: 100%;
+
+    display: block;
+
+    padding: 15px 0 10px;
+
+    margin-bottom: 0;
+
+    background: white;
+
+    overflow: hidden;
+
+    position: relative;
+
+    min-height: 0;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   6. HERO HORIZONTAL TRACK
+   ========================================================= */
+
+.featured-track {
+    display: flex;
+
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    gap: 16px;
+
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 0 16px;
+
+    /* Smooth touch scrolling */
+    -webkit-overflow-scrolling: touch;
+
+    /* Snap each card into position */
+    scroll-snap-type: x mandatory;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+}
+
+.featured-track::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   7. HERO CARDS
+   ========================================================= */
+
+.featured-slide,
+.featured-slide.active {
+
+    /*
+       IMPORTANT:
+       Cards must remain in normal document flow.
+
+       The old version used:
+       position: absolute;
+       opacity: 0;
+       transform: translateX(...);
+
+       Those rules belonged to the old one-card-at-a-time
+       slider and conflicted with the new horizontal design.
+    */
+
+    position: relative;
+
+    opacity: 1;
+
+    transform: none;
+
+    pointer-events: auto;
+
+    grid-column: auto;
+
+    /*
+       Desktop card width.
+
+       This leaves enough space for the next card to
+       become visible.
+    */
+    flex: 0 0 72vw;
+
+    width: 72vw;
+
+    min-height: 330px;
+
+    background: #000000;
+
+    color: #ffffff;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    scroll-snap-align: start;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   8. HERO COLLECTION TITLE
+   ========================================================= */
+
+.featured-slide .welcome-section {
+
+    position: absolute;
+
+    top: 15px;
+    left: 20px;
+
+    width: auto;
+    height: auto;
+
+    display: block;
+
+    background: transparent;
+
+    z-index: 2;
+}
+
+.featured-slide .collection-name {
+
+    padding: 0;
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 13px;
+
+    line-height: 1.3;
+}
+
+.collection-name:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   9. HERO PRODUCT IMAGE
+   ========================================================= */
+
+.featured-slide > .glightbox {
+
+    width: 45%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.featured-slide .clothe-image {
+
+    width: 100%;
+    height: 260px;
+
+    object-fit: contain;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 0;
+}
+
+
+/* =========================================================
+   10. HERO PRODUCT TEXT
+   ========================================================= */
+
+.featured-slide .featured-text {
+
+    width: 55%;
+
+    margin: 0;
+
+    padding: 45px 18px 20px 5px;
+
+    color: white;
+
+    opacity: 1;
+
+    text-align: center;
+}
+
+
+/* Product name */
+
+.featured-slide .featured-product-name {
+
+    display: block;
+
+    font-size: 20px;
+
+    margin-bottom: 12px;
+
+    color: white;
+
+    opacity: 1;
+}
+
+
+/* Product information */
+
+.featured-slide .featured-product-info {
+
+    display: block;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    color: #dddddd;
+}
+
+
+/* Product link */
+
+.featured-slide .featured-product-link {
+
+    display: inline-block;
+
+    margin-top: 14px;
+
+    color: white;
+
+    text-decoration: underline;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   11. HERO SLIDER DOTS
+   =========================================================
+
+   Dots are deliberately OUTSIDE .featured-track.
+
+   This means they stay underneath the carousel instead
+   of becoming another horizontally scrolling element.
+   ========================================================= */
+
+.slider-dots {
+
+    position: static;
+
+    width: 100%;
+
+    text-align: center;
+
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.dot {
+
+    display: inline-block;
+
+    width: 6px;
+    height: 6px;
+
+    margin: 0 5px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    cursor: pointer;
+
+    transform: scale(1);
+
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+
+    background: #000000;
+
+    transform: scale(1.4);
+}
+
+
+/*
+   The dots are outside .featured-track.
+
+   This rule prevents accidental styling if a dot container
+   is ever placed inside the track again.
+*/
+
+.featured-track .slider-dots {
+    display: none;
+}
+
+
+/* =========================================================
+   12. HOMEPAGE HERO ARROWS
+   ========================================================= */
+
+.header-arrow {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: transparent;
+
+    color: white;
+
+    border: none;
+
+    font-size: 14px;
+
+    padding: 4px 6px;
+
+    cursor: pointer;
+
+    z-index: 10;
+
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+}
+
+.header-arrow.left {
+    left: 10px;
+}
+
+.header-arrow.right {
+    right: 10px;
+}
+
+.featured-product:hover .header-arrow {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   13. FOOTER FEATURED SLIDER
+   =========================================================
+
+   This is intentionally kept as its OWN slider.
+
+   Do not combine this with the homepage hero carousel.
+   ========================================================= */
+
+.featured-product-footer-slider {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    align-items: center;
+
+    text-align: center;
+
+    background-color: #000000;
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 420px;
+}
+
+
+.featured-slide-footer {
+
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    position: absolute;
+
+    width: 100%;
+
+    opacity: 0;
+
+    transform: translateX(40px);
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+
+    pointer-events: none;
+}
+
+.featured-slide-footer.active {
+
+    opacity: 1;
+
+    transform: translateX(0);
+
+    pointer-events: auto;
+}
+
+
+/* Footer dots */
+
+.footer-slider-dots {
+
+    position: absolute;
+
+    bottom: 15px;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+.footer-dot {
+
+    height: 5px;
+    width: 5px;
+
+    margin: 0 5px;
+
+    background: rgba(255,255,255,0.5);
+
+    border-radius: 50%;
+
+    display: inline-block;
+
+    cursor: pointer;
+
+    transform: scale(1);
+
+    transition: all 0.3s ease;
+}
+
+.footer-dot.active {
+
+    background: white;
+
+    transform: scale(1.4);
+}
+
+
+/* Footer arrows */
+
+.footer-arrow {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: transparent;
+
+    color: white;
+
+    border: none;
+
+    font-size: 14px;
+
+    padding: 4px 6px;
+
+    cursor: pointer;
+
+    z-index: 10;
+
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+}
+
+.footer-arrow.left {
+    left: 10px;
+}
+
+.footer-arrow.right {
+    right: 10px;
+}
+
+.footer-arrow:hover {
+    opacity: 70%;
+}
+
+.featured-product-footer-slider:hover .footer-arrow {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   14. GENERAL COLLECTION TITLE
+   ========================================================= */
+
+.collection-name {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.collection-name:hover {
+    text-decoration: underline;
+}
+
+
+/*
+   General welcome-section styling.
+
+   The homepage hero has its own more specific
+   .featured-slide .welcome-section rule above.
+*/
+
+.welcome-section {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #000000;
+
+    height: 50px;
+}
+
+.welcome-section a {
+    text-decoration: none;
+}
+
+.welcome-section p {
+
+    color: #ffffff;
+
+    font-size: 24px;
+
+    font-weight: 500;
+
+    margin: 0;
+
+    text-decoration: none;
+
+    opacity: 70%;
+}
+
+
+/* =========================================================
+   15. HOMEPAGE MOTTO
+   ========================================================= */
+
+.motto {
+
+    font-family: 'Playfair Display', serif;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-weight: lighter;
+
+    font-style: italic;
+
+    font-size: large;
+
+    letter-spacing: 0;
+
+    opacity: 0.6;
+
+    padding-bottom: 2em;
+
+    color: #000000;
+}
+
+
+/* =========================================================
+   16. PRODUCT PRICES / BUTTONS
+   ========================================================= */
+
+.price {
+
+    text-align: center;
+
+    font-weight: bolder;
+
+    padding-top: 4px;
+}
+
+
+.buy-button {
+
+    display: inline-block;
+
+    border-radius: 10px;
+
+    width: 200px;
+
+    cursor: pointer;
+
+    align-content: center;
+
+    padding: 5px 10px;
+
+    align-items: center;
+
+    text-decoration: none;
+
+    color: #ffffff;
+
+    font-weight: bolder;
+
+    font-size: smaller;
+
+    background-color: #ffffff;
+}
+
+.buy-button:hover {
+
+    background-color: #ffffff;
+
+    color: #000000;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   17. PRODUCT GRID
+   ========================================================= */
+
+.products-container {
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    align-items: center;
+
+    gap: 30px;
+
+    margin: 1em auto;
+
+    max-width: 1200px;
+}
+
+
+.products {
+
+    transition: transform 0.2s ease;
+}
+
+.products:hover {
+
+    transform: translateY(-5px);
+}
+
+
+.products img {
+
+    display: block;
+
+    margin: 0 auto;
+
+    width: 230px;
+
+    height: 230px;
+}
+
+
+.clothe-text {
+
+    margin: 0;
+
+    text-align: center;
+}
+
+
+.clothe-image {
+
+    width: min(300px, 100%);
+
+    border-radius: 20px;
+
+    height: 250px;
+
+    object-fit: contain;
+
+    padding-bottom: 10px;
+
+    transition: transform 0.3s ease;
+}
+
+.clothe-image:hover {
+
+    opacity: 70%;
+
+    transform: translateY(-6px) scale(1.02);
+}
+
+
+.brand-page-link {
+
+    text-decoration: none;
+
+    color: #020202;
+}
+
+.brand-page-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   18. BRAND SECTION
+   ========================================================= */
+
+.brand-section-container {
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.brand-section-container {
+    padding: 20px;
+}
+
+
+.brand-section {
+
+    transition: transform 0.2s ease;
+}
+
+.brand-section:hover {
+
+    transform: translateY(-5px);
+}
+
+
+.brand-logo {
+
+    width: min(250px, 100%);
+
+    height: 250px;
+
+    padding: 15px;
+
+    border-radius: 50px;
+}
+
+.brand-logo:hover {
+    opacity: 70%;
+}
+
+
+.brand-product-logo {
+
+    display: block;
+
+    margin: 0 auto;
+
+    margin-top: 100px;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 300px;
+}
+
+
+/* =========================================================
+   19. GENERAL H1
+   ========================================================= */
+
+h1 {
+
+    margin-top: 50px;
+
+    text-align: center;
+
+    padding: 2em;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
+    color: #000;
+}
+
+
+/* =========================================================
+   20. GREAT LEGACY PAGE
+   ========================================================= */
+
+.header-section {
+
+    position: relative;
+
+    text-align: center;
+
+    padding: 0;
+
+    font-size: 16px;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+
+.header-img {
+
+    width: 100vw;
+
+    height: 400px;
+
+    margin: 0;
+    padding: 0;
+
+    background-size: cover;
+}
+
+
+.header-text {
+
+    position: absolute;
+
+    color: rgb(255, 255, 255);
+
+    text-decoration: overline;
+
+    opacity: 70%;
+
+    font-weight: bolder;
+
+    top: 45%;
+
+    left: 15%;
+
+    transform: translate(-50%, -50%);
+}
+
+
+.brand-name-h {
+
+    font-size: 40px;
+
+    font-weight: bold;
+
+    padding-top: 0;
+}
+
+
+/* =========================================================
+   21. GENERAL FOOTER
+   ========================================================= */
+
+.footer-section {
+
+    position: relative;
+
+    text-align: center;
+
+    padding: 40px 20px;
+}
+
+
+.footer-img {
+
+    width: 100vw;
+
+    height: 300px;
+
+    margin: 0;
+    padding: 0;
+
+    background-size: cover;
+}
+
+
+.footer-text {
+
+    text-align: center;
+
+    color: rgb(0, 0, 0);
+
+    text-decoration: overline;
+
+    font-style: italic;
+
+    font-size: 16px;
+
+    margin-bottom: 15px;
+}
+
+
+/* =========================================================
+   22. SOCIAL ICONS
+   ========================================================= */
+
+.social-icons {
+
+    display: flex;
+
+    justify-content: center;
+
+    color: rgb(0, 0, 0);
+
+    opacity: 90%;
+
+    font-size: 20px;
+
+    text-decoration: none;
+
+    gap: 5px;
+
+    margin-bottom: 0;
+}
+
+.social-icons a {
+
+    color: rgb(0, 0, 0);
+
+    padding: 5px;
+
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    color: gray;
+}
+
+
+/* =========================================================
+   23. COPYRIGHT
+   ========================================================= */
+
+.copyrights-gen-home {
+
+    text-align: center;
+
+    padding: 20px;
+
+    background: black;
+
+    color: white;
+
+    font-size: 14px;
+}
+
+
+.copyrights {
+
+    padding-top: 20px;
+
+    text-align: center;
+
+    color: rgb(0, 0, 0);
+
+    font-style: italic;
+
+    font-size: 12px;
+}
+
+
+.copyrights-gen {
+
+    position: absolute;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+
+    color: rgb(9, 9, 9);
+
+    font-style: italic;
+
+    z-index: 1;
+
+    padding: 20px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   24. BRAND WEBSITE LINK
+   ========================================================= */
+
+.brand-web-link {
+
+    text-align: center;
+
+    padding-top: 50px;
+
+    padding-bottom: 10px;
+}
+
+
+.website-link {
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-style: italic;
+
+    color: #000000;
+
+    padding-bottom: 20px;
+}
+
+.website-link:hover {
+    text-decoration: underline;
+}
+
+
+.logo-align {
+    text-align: center;
+}
+
+
+/* =========================================================
+   25. ABOUT PAGE
+   ========================================================= */
+
+.about-beelinx {
+
+    padding-bottom: 3em;
+
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    line-height: 1.8;
+
+    padding: 20px;
+}
+
+
+.about-beelinx h3 {
+
+    text-transform: uppercase;
+
+    display: block;
+
+    font-size: 18px;
+
+    font-weight: 500;
+
+    letter-spacing: 0.5px;
+
+    margin-top: 40px;
+
+    margin-bottom: 10px;
+
+    text-align: center;
+}
+
+
+.about-beelinx p {
+
+    color: #555;
+
+    font-size: 15px;
+
+    margin-bottom: 30px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #000000;
+
+    text-align: center;
+}
+
+
+.about-beelinx a {
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   26. CATALOGUE BUTTON
+   ========================================================= */
+
+.open-catalogue {
+
+    text-decoration: none;
+
+    color: #ffffff;
+
+    background-color: #000000;
+
+    padding: 10px 20px;
+
+    border-radius: 10px;
+}
+
+.open-catalogue:hover {
+
+    background-color: #ffffff;
+
+    color: #000000;
+
+    text-decoration: underline;
+
+    font-style: italic;
+}
+
+
+.catalogue-link {
+
+    transition: all 0.3s ease;
+
+    display: block;
+
+    width: fit-content;
+
+    margin: 40px auto;
+}
+
+.catalogue-link:hover {
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   27. TABLET
+   =========================================================
+
+   Applies to tablets and smaller laptops.
+
+   The hero remains horizontal, but cards become smaller.
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    /* -----------------------------------------------------
+       OTHER PAGES
+       ----------------------------------------------------- */
+
+    .header-section {
+        font-size: medium;
+    }
+
+    .header-img {
+        height: 450px;
+    }
+
+    .header-text {
+        font-size: medium;
+
+        left: 20%;
+        top: 50%;
+    }
+
+    .brand-product-logo {
+        margin-top: 70px;
+    }
+
+    .brand-name-h {
+        font-size: 28px;
+    }
+
+    .header-arrow {
+        font-size: 8px;
+        padding: 6px 10px;
+    }
+
+    .nav-center {
+        transform: translateX(-50%);
+    }
+
+    .brand-logo {
+        width: min(150px, 100%);
+        height: 150px;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+
+
+    /* -----------------------------------------------------
+       HERO CAROUSEL
+       ----------------------------------------------------- */
+
+    .featured-product {
+        min-height: 0;
+
+        display: block;
+
+        text-align: center;
+    }
+
+
+    /*
+       Make the cards slightly smaller on tablets.
+
+       This gives the next card a visible edge.
+    */
+
+    .featured-slide,
+    .featured-slide.active {
+
+        flex: 0 0 78vw;
+
+        width: 78vw;
+
+        min-height: 350px;
+    }
+
+
+    .featured-slide .clothe-image {
+
+        height: 260px;
+    }
+
+
+    .featured-slide .featured-product-name {
+
+        font-size: 19px;
+    }
+
+
+    .featured-slide .featured-product-info {
+
+        font-size: 12px;
+
+        line-height: 1.5;
+    }
+
+
+    /* -----------------------------------------------------
+       PRODUCT GRID
+       ----------------------------------------------------- */
+
+    .products-container {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    .products img {
+
+        width: 170px;
+        height: 170px;
+    }
+
+
+    .clothe-text {
+        font-size: smaller;
+    }
+
+
+    /* -----------------------------------------------------
+       SEARCH
+       ----------------------------------------------------- */
+
+    .search-input:focus {
+
+        position: fixed;
+
+        border-radius: 0;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+
+        height: 35px;
+
+        padding: 15px;
+
+        background: white;
+
+        z-index: 1001;
+    }
+
+
+    /* -----------------------------------------------------
+       FOOTER
+       ----------------------------------------------------- */
+
+    .featured-product-footer-slider {
+
+        min-height: 420px;
+    }
+
+    .footer-text {
+
+        font-size: 10px;
+
+        opacity: 90%;
+    }
+
+    .brand-web-link {
+
+        font-size: 10px;
+
+        padding-bottom: 6px;
+    }
+
+    .social-icons {
+
+        font-size: 14px;
+
+        gap: 2px;
+    }
+
+    .copyrights {
+
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+    .copyrights-gen {
+
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+
+    .brand-section-container {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   28. MOBILE HERO CAROUSEL
+   =========================================================
+
+   This is the important part for phones.
+
+   The card is NOT 100% of the screen.
+
+   86vw means:
+       phone width × 0.86
+
+   On a 375px phone:
+       375 × 0.86 = 322.5px
+
+   That leaves enough room for the next card to peek in
+   while still giving the current card enough width for
+   readable text.
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+
+    /* -----------------------------------------------------
+       CAROUSEL OUTER AREA
+       ----------------------------------------------------- */
+
+    .featured-section-container {
+
+        width: 100%;
+
+        overflow: hidden;
+    }
+
+
+    .featured-product {
+
+        width: 100%;
+
+        padding: 10px 0 8px;
+
+        overflow: hidden;
+    }
+
+
+    /* -----------------------------------------------------
+       HORIZONTAL TRACK
+       ----------------------------------------------------- */
+
+    .featured-track {
+
+        display: flex;
+
+        flex-direction: row;
+
+        flex-wrap: nowrap;
+
+        gap: 12px;
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        overflow-y: hidden;
+
+        padding: 0 12px;
+
+        /*
+           Allows the user to swipe naturally on a phone.
+        */
+
+        -webkit-overflow-scrolling: touch;
+
+        scroll-snap-type: x mandatory;
+
+        scrollbar-width: none;
+
+        /*
+           Prevent accidental vertical page movement
+           while swiping directly across the carousel.
+        */
+
+        overscroll-behavior-x: contain;
+    }
+
+    .featured-track::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE CARD SIZE
+       ----------------------------------------------------- */
+
+    .featured-slide,
+    .featured-slide.active {
+
+        /*
+           THIS is what creates the Jumia-style effect.
+
+           The card is smaller than the phone screen,
+           allowing part of the next card to remain visible.
+        */
+
+        flex: 0 0 86vw;
+
+        width: 86vw;
+
+        min-width: 86vw;
+
+        height: 400px;
+
+        min-height: 400px;
+
+        max-height: 400px;
+
+        /*
+           Keep image and text beside each other.
+        */
+
+        display: flex;
+
+        flex-direction: row;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 14px;
+
+        overflow: hidden;
+
+        scroll-snap-align: start;
+    }
+
+
+    /* -----------------------------------------------------
+       COLLECTION TITLE
+       ----------------------------------------------------- */
+
+    .featured-slide .welcome-section {
+
+        position: absolute;
+
+        top: 14px;
+        left: 0;
+
+        width: 100%;
+
+        height: auto;
+
+        display: block;
+
+        background: transparent;
+
+        text-align: center;
+
+        padding: 0;
+
+        z-index: 2;
+    }
+
+
+    .featured-slide .collection-name {
+
+        font-size: 13px;
+
+        line-height: 1.3;
+
+        padding: 0;
+
+        margin: 0;
+
+        width: 100%;
+    }
+
+
+    /* -----------------------------------------------------
+       IMAGE AREA
+       ----------------------------------------------------- */
+
+    .featured-slide > .glightbox {
+
+        width: 42%;
+
+        height: 100%;
+
+        flex-shrink: 0;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding-top: 20px;
+    }
+
+
+    .featured-slide .clothe-image {
+
+        width: 100%;
+
+        height: 210px;
+
+        max-width: 100%;
+
+        object-fit: contain;
+
+        padding: 0;
+
+        margin: 0;
+
+        border-radius: 0;
+    }
+
+
+    /* -----------------------------------------------------
+       TEXT AREA
+       ----------------------------------------------------- */
+
+    .featured-slide .featured-text {
+
+        width: 58%;
+
+        margin: 0;
+
+        padding: 48px 15px 20px 5px;
+
+        text-align: center;
+
+        color: white;
+
+        opacity: 1;
+
+        overflow: hidden;
+    }
+
+
+    /* Product name */
+
+    .featured-slide .featured-product-name {
+
+        display: block;
+
+        font-size: 18px;
+
+        line-height: 1.2;
+
+        margin-bottom: 10px;
+
+        color: white;
+
+        opacity: 1;
+    }
+
+
+    /* Product description */
+
+    .featured-slide .featured-product-info {
+
+        display: block;
+
+        font-size: 11px;
+
+        line-height: 1.5;
+
+        color: #dddddd;
+    }
+
+
+    /* View product */
+
+    .featured-slide .featured-product-link {
+
+        display: inline-block;
+
+        margin-top: 12px;
+
+        font-size: 13px;
+
+        color: white;
+
+        text-decoration: underline;
+
+        font-style: italic;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE DOTS
+       ----------------------------------------------------- */
+
+    .slider-dots {
+
+        position: static;
+
+        width: 100%;
+
+        text-align: center;
+
+        padding-top: 12px;
+
+        padding-bottom: 5px;
+    }
+
+
+    .dot {
+
+        width: 6px;
+
+        height: 6px;
+
+        margin: 0 5px;
+
+        background: rgba(0, 0, 0, 0.35);
+    }
+
+
+    .dot.active {
+
+        background: #000000;
+
+        transform: scale(1.4);
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE ARROWS
+       -----------------------------------------------------
+
+       On a phone, swiping is the intended interaction.
+       Don't put arrows over the card content.
+       ----------------------------------------------------- */
+
+    .featured-product .header-arrow {
+
+        display: none;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE MOTTO
+       ----------------------------------------------------- */
+
+    .motto {
+
+        font-size: small;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE BUY BUTTON
+       ----------------------------------------------------- */
+
+    .buy-button {
+
+        padding: 3px 5px;
+
+        font-size: 10px;
+
+        border-color: #000;
+
+        width: 70px;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE PRODUCT GRID
+       ----------------------------------------------------- */
+
+    .products img {
+
+        width: 170px;
+
+        height: 170px;
+    }
+
+
+    .products-container {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    .clothe-text {
+
+        font-size: smaller;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE SEARCH
+       ----------------------------------------------------- */
+
+    .search-input:focus {
+
+        position: fixed;
+
+        border-radius: 0;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+
+        height: 35px;
+
+        padding: 15px;
+
+        background: white;
+
+        z-index: 1001;
+    }
+
+
+    /* -----------------------------------------------------
+       MOBILE FOOTER
+       ----------------------------------------------------- */
+
+    .footer-text {
+
+        font-size: 10px;
+
+        opacity: 90%;
+    }
+
+    .brand-web-link {
+
+        font-size: 10px;
+
+        padding-bottom: 6px;
+    }
+
+    .social-icons {
+
+        font-size: 14px;
+
+        gap: 2px;
+    }
+
+    .copyrights {
+
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+    .copyrights-gen {
+
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+
+    .brand-section-container {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   29. VERY SMALL PHONES
+   =========================================================
+
+   For phones around 320px wide.
+
+   We make the card a little wider relative to the viewport
+   so the text doesn't become unnecessarily cramped.
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .featured-slide,
+    .featured-slide.active {
+
+        flex: 0 0 88vw;
+
+        width: 88vw;
+
+        min-width: 88vw;
+
+        height: 390px;
+
+        min-height: 390px;
+
+        max-height: 390px;
+    }
+
+
+    .featured-slide > .glightbox {
+
+        width: 40%;
+    }
+
+
+    .featured-slide .featured-text {
+
+        width: 60%;
+
+        padding-right: 12px;
+    }
+
+
+    .featured-slide .clothe-image {
+
+        height: 190px;
+    }
+
+
+    .featured-slide .featured-product-name {
+
+        font-size: 17px;
+    }
+
+
+    .featured-slide .featured-product-info {
+
+        font-size: 10.5px;
+
+        line-height: 1.45;
+    }
+
+
+    .featured-slide .featured-product-link {
+
+        font-size: 12px;
+    }
+
+}
