@@ -412,3 +412,50 @@ if (footerContainer) {
 	});
 
 }
+
+/* =============================
+   TEMPLATE FUNCTIONS
+============================= */
+
+const products = {
+
+    "gl-01": {
+        name: "GREAT LEGACY'SS GL-01 SET",
+        price: "₦ 29,000",
+        image: "../images-fsn/great-legacy/IMG_3037.WEBP",
+        logo: "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
+        orderLink: "https://your-order-link-here.com"
+    },
+
+    "gl-02": {
+        name: "GREAT LEGACY'SS GL-02 SET",
+        price: "₦ 32,000",
+        image: "../images-fsn/great-legacy/gl-02.webp",
+        logo: "../images-fsn/great-legacy/logo.jpg",
+        orderLink: "https://your-order-link-here.com"
+    }
+
+};
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+const product = products[productId];
+
+if (product) {
+
+    document.getElementById("product-image").src = product.image;
+
+    document.getElementById("product-image").alt = product.name;
+
+    document.getElementById("product-image-link").href = product.image;
+
+    document.getElementById("product-name").textContent = product.name;
+
+    document.getElementById("product-price").textContent = product.price;
+
+    document.getElementById("brand-logo").src = product.logo;
+
+    document.getElementById("order-link").href = product.orderLink;
+
+}

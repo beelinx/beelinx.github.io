@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+		<meta charset="UTF-8">
+		<meta name="viewport" 
+		content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" 
+		content="Beelinxs fashion items page
+		We make it easier to find the best deal without switching apps."/>
+		<meta name="keywords" 
+		content="Shop, Compare, Cost"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="../../css/more-info.css">
+
+    </head>
+
+    <body>
+
+        <header>
+			<nav class="navbar">
+                <!-- Hamburger -->
+                <div class="hamburger" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
+
+                <!-- Logo -->
+	            <div class="nav-center">
+                    <a href="../../pages/index.html" class="logo-link">
+                        <img src="../../beelinx_logo.png" alt="Beelinx Logo" class="logo-img">
+                    </a>
+                </div>
+
+                <!-- Search -->
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
+                        <label for="searchInput">
+                        <i class="fas fa-search search-btn"></i>
+                        </label>
+                </div>
+			</nav>
+
+			<!-- Side Menu -->
+			<div id="sideMenu" class="side-menu">
+
+            <div class="close-btn" onclick="closeMenu()">
+                <i class="fas fa-times"></i>
+            </div>
+
+			<a href="../../pages/index.html">Home</a>
+            <a href="../../pages/catalogue.html">Catalogue</a>
+            <a href="../../pages/about.html">About</a>
+
+            </div>
+		
+		</header>
+
+        
+    <div class="products">
+
+                <a class="clothe-image glightbox" href="../../images-fsn/great-legacy/IMG_3037.WEBP">
+				<img class="clothe-image" 
+                src="../../images-fsn/great-legacy/IMG_3037.WEBP" 
+                alt="Great Legacy GL-01 SET" loading="lazy">
+				</a>
+
+			<div class="clothe-text" >
+
+                <a href="../../pages/great-legacy.html">
+                    <img class="brand-product-logo" src="../../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG">
+                </a>
+
+                <p class="product-description">
+                    GREAT LEGACY'SS GL-01 SET <br/><br/>    
+                    <span class="price">&#8358; 29,000 </span>
+                </p> <br/>
+
+
+				<a class="order-link" href="great-legacy.html">
+                Find Order</a>
+
+            </div>		
+
+    </div>
+
+        <!-- JAVA SCRIPT -->
+		<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+		<script src="../../js/main.js"></script>
+
+    </body>
+
+</html>

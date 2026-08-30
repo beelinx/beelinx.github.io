@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Beelinx fashion item">
+
+    <meta name="keywords"
+          content="Shop, Compare, Cost">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="../css/more-info.css">
+
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="navbar">
+
+            <!-- Hamburger -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+
+
+            <!-- Logo -->
+            <div class="nav-center">
+
+                <a href="../pages/index.html" class="logo-link">
+
+                    <img src="../beelinx_logo.png"
+                         alt="Beelinx Logo"
+                         class="logo-img">
+
+                </a>
+
+            </div>
+
+
+            <!-- Search -->
+            <div class="search-container">
+
+                <input type="text"
+                       class="search-input"
+                       id="searchInput"
+                       placeholder="Search..."
+                       onkeyup="searchFunction()">
+
+                <label for="searchInput">
+                    <i class="fas fa-search search-btn"></i>
+                </label>
+
+            </div>
+
+        </nav>
+
+
+        <!-- Side Menu -->
+        <div id="sideMenu" class="side-menu">
+
+            <div class="close-btn" onclick="closeMenu()">
+                <i class="fas fa-times"></i>
+            </div>
+
+            <a href="../pages/index.html">Home</a>
+            <a href="../pages/catalogue.html">Catalogue</a>
+            <a href="../pages/about.html">About</a>
+
+        </div>
+
+    </header>
+
+
+    <!-- PRODUCT -->
+
+    <div class="products">
+
+        <a id="product-image-link"
+           class="clothe-imgae glightbox"
+           href="">
+
+            <img id="product-image"
+                 class="clothe-image"
+                 src=""
+                 alt=""
+                 loading="lazy">
+
+        </a>
+
+
+        <div class="clothe-text">
+
+            <a id="brand-link" href="">
+
+                <img id="brand-logo"
+                     class="brand-product-logo"
+                     src=""
+                     alt="Brand Logo">
+
+            </a>
+
+
+            <p class="product-description">
+
+                <span id="product-name"></span>
+
+                <br><br>
+
+                <span id="product-price"
+                      class="price"></span>
+
+            </p>
+
+            <br>
+
+
+            <a id="order-link"
+               class="order-link"
+               href="">
+
+                Find Order
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+    <script src="../js/main.js"></script>
+
+</body>
+
+</html>

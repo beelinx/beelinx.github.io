@@ -1,0 +1,20 @@
+ HEADER IMAGE SECTION
+
+<section class="header-section">
+	        <img class="header-img" src="..."
+		<h1 class="header-text">GREAT LEGACY</h1>
+</section>
+
+FOOTER SECTION 
+
+<img class="footer-img" src="...">
+
+
+https://greatlegacy0.myshopify.com/products/v?variant=44503018504303
+
+
+.products {
+        flex-direction: column;
+        gap: 20px;
+        padding: 30px 20x;
+    }
