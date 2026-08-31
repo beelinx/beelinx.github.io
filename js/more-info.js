@@ -197,6 +197,54 @@ if (
 
 
 /* =========================================
+   BRAND WEBSITE + SLOGAN
+========================================= */
+
+const brandWebsite =
+    document.getElementById("productBrandWebsite");
+
+const brandSlogan =
+    document.getElementById("productBrandSlogan");
+
+
+if (brand) {
+
+    /* -----------------------------------------
+       Official brand website
+    ----------------------------------------- */
+
+    if (
+        brandWebsite &&
+        brand.website
+    ) {
+
+        brandWebsite.href =
+            brand.website;
+
+        brandWebsite.textContent =
+            `${brand.name} Official Website`;
+
+    }
+
+
+    /* -----------------------------------------
+       Brand-specific slogan
+    ----------------------------------------- */
+
+    if (
+        brandSlogan &&
+        brand.slogan
+    ) {
+
+        brandSlogan.textContent =
+            brand.slogan;
+
+    }
+
+}
+
+
+/* =========================================
    BRAND SOCIAL MEDIA
 ========================================= */
 

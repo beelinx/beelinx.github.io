@@ -212,6 +212,9 @@ const brands = {
         website:
             "https://gtl-great-legacy539.labeld.app/",
 
+        slogan:
+            "Elevate your style",
+
         social: {
 
             instagram:
