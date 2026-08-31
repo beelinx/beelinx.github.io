@@ -1,1653 +1,247 @@
 /* =========================================================
-BEELINX GLOBAL STYLES
+   BEELINX GLOBAL STYLES
 ========================================================= */
 
-/* =========================================================
 
-1. GLOBAL RESET
-   ========================================================= */
+/* =========================================================
+   1. GLOBAL RESET
+========================================================= */
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  }
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 html,
 body {
-width: 100%;
-min-height: 100%;
+    width: 100%;
+    min-height: 100%;
 }
 
 html {
-overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 body {
-margin: 0;
-padding-top: 50px;
-overflow-x: hidden;
+    margin: 0;
+    padding-top: 50px;
+    overflow-x: hidden;
 }
 
 body.glightbox-open {
-position: fixed;
-width: 100%;
+    position: fixed;
+    width: 100%;
 }
 
+
 /* =========================================================
-2. NAVIGATION / HEADER
+   2. NAVIGATION / HEADER
 ========================================================= */
 
 .navbar {
-display: flex;
-justify-content: space-between;
-align-items: center;
-
-  
-background-color: #000000;
-
-padding: 10px 20px;
-
-position: fixed;
-top: 0;
-left: 0;
-
-width: 100%;
-height: 50px;
-
-z-index: 1000;
-  
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000000;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 1000;
 }
 
 .nav-center {
-position: absolute;
-left: 50%;
-transform: translateX(-50%);
-}
-
-nav ul {
-display: flex;
-align-items: center;
-list-style: none;
-gap: 2em;
-}
-
-nav a {
-color: rgb(255, 255, 255);
-font-weight: 300;
-}
-
-nav a:hover {
-text-decoration: underline;
-}
-
-/* =========================================================
-HAMBURGER
-========================================================= */
-
-.hamburger {
-font-size: 22px;
-color: white;
-cursor: pointer;
-}
-
-/* =========================================================
-LOGO
-========================================================= */
-
-.logo-link {
-display: flex;
-align-items: center;
-}
-
-.logo-img {
-height: 50px;
-width: auto;
-}
-
-.logo {
-text-align: center;
-}
-
-/* =========================================================
-3. SIDE MENU
-========================================================= */
-
-.side-menu {
-position: fixed;
-
-  
-top: 0;
-left: -250px;
-
-width: 250px;
-height: 100%;
-
-background: black;
-
-padding-top: 80px;
-
-transition: 0.3s ease;
-
-z-index: 1001;
-  
-
-}
-
-.side-menu.active {
-left: 0;
-}
-
-.side-menu a {
-display: block;
-
-  
-padding: 15px 25px;
-
-color: white;
-
-text-decoration: none;
-  
-
-}
-
-.side-menu a:hover {
-background: #111;
-}
-
-/* =========================================================
-CLOSE BUTTON
-========================================================= */
-
-.close-btn {
-position: absolute;
-
-  
-top: 20px;
-left: 20px;
-
-font-size: 22px;
-
-color: white;
-
-cursor: pointer;
-  
-
-}
-
-/* =========================================================
-4. SEARCH
-========================================================= */
-
-.search-container {
-position: relative;
-
-  
-margin-left: auto;
-margin-right: 4px;
-margin-top: 14px;
-  
-
-}
-
-.search-input {
-width: 0;
-
-  
-padding: 0;
-
-border: none;
-
-outline: none;
-
-transition:
-    width 0.4s ease,
-    padding 0.4s ease;
-
-font-size: 17px;
-  
-
-}
-
-.search-input:focus {
-width: 200px;
-
-  
-padding: 5px;
-
-border-radius: 5px;
-  
-
-}
-
-.search-btn {
-cursor: pointer;
-color: #ffffff;
-}
-
-/* =========================================================
-5. HOMEPAGE HERO CAROUSEL
-========================================================= */
-
-.featured-section-container {
-width: 100%;
-
-  
-background: white;
-
-overflow: hidden;
-  
-
-}
-
-.featured-product {
-width: 100%;
-
-  
-display: block;
-
-padding: 15px 0 10px;
-
-margin-bottom: 0;
-
-background: white;
-
-overflow: hidden;
-
-position: relative;
-
-min-height: 0;
-
-text-align: center;
-  
-
-}
-
-/* =========================================================
-6. HERO HORIZONTAL TRACK
-========================================================= */
-
-.featured-track {
-display: flex;
-
-  
-flex-direction: row;
-
-flex-wrap: nowrap;
-
-gap: 16px;
-
-width: 100%;
-
-overflow-x: auto;
-overflow-y: hidden;
-
-padding: 0 16px;
-
--webkit-overflow-scrolling: touch;
-
-scroll-snap-type: x mandatory;
-
-scrollbar-width: none;
-
-overscroll-behavior-x: contain;
-
-touch-action: pan-x;
-  
-
-}
-
-.featured-track::-webkit-scrollbar {
-display: none;
-}
-
-/* =========================================================
-7. HERO CARDS
-========================================================= */
-
-.featured-slide,
-.featured-slide.active {
-position: relative;
-
-  
-opacity: 1;
-
-transform: none;
-
-pointer-events: auto;
-
-flex: 0 0 72vw;
-
-width: 72vw;
-
-min-height: 330px;
-
-background: #000000;
-
-color: #ffffff;
-
-border-radius: 14px;
-
-overflow: hidden;
-
-display: flex;
-
-flex-direction: row;
-
-align-items: center;
-
-scroll-snap-align: start;
-
-scroll-snap-stop: always;
-  
-
-}
-
-/* =========================================================
-8. HERO COLLECTION TITLE
-========================================================= */
-
-.featured-slide .welcome-section {
-position: absolute;
-
-  
-top: 15px;
-left: 20px;
-
-width: auto;
-height: auto;
-
-display: block;
-
-background: transparent;
-
-z-index: 2;
-  
-
-}
-
-.featured-slide .collection-name {
-padding: 0;
-margin: 0;
-
-  
-color: white;
-
-font-size: 13px;
-
-line-height: 1.3;
-  
-
-}
-
-.collection-name:hover {
-text-decoration: underline;
-}
-
-/* =========================================================
-9. HERO PRODUCT IMAGE
-========================================================= */
-
-.featured-slide > .glightbox {
-width: 45%;
-height: 100%;
-
-  
-display: flex;
-
-align-items: center;
-justify-content: center;
-
-flex-shrink: 0;
-  
-
-}
-
-.featured-slide .clothe-image {
-width: 100%;
-height: 260px;
-
-  
-object-fit: contain;
-
-padding: 0;
-margin: 0;
-
-border-radius: 0;
-  
-
-}
-
-/* =========================================================
-10. HERO PRODUCT TEXT
-========================================================= */
-
-.featured-slide .featured-text {
-width: 55%;
-
-  
-margin: 0;
-
-padding: 45px 18px 20px 5px;
-
-color: white;
-
-opacity: 1;
-
-text-align: center;
-  
-
-}
-
-.featured-slide .featured-product-name {
-display: block;
-
-  
-font-size: 20px;
-
-margin-bottom: 12px;
-
-color: white;
-
-opacity: 1;
-  
-
-}
-
-.featured-slide .featured-product-info {
-display: block;
-
-  
-font-size: 12px;
-
-line-height: 1.55;
-
-color: #dddddd;
-  
-
-}
-
-.featured-slide .featured-product-link {
-display: inline-block;
-
-  
-margin-top: 14px;
-
-color: white;
-
-text-decoration: underline;
-
-font-style: italic;
-  
-}
-
-.featured-slide .featured-product-link:hover {
-    text-decoration: overline;
-}
-
-/* =========================================================
-11. HOMEPAGE HERO ARROWS
-========================================================= */
-
-.header-arrow {
-position: absolute;
-
-  
-top: 50%;
-
-transform: translateY(-50%);
-
-background: transparent;
-
-color: white;
-
-border: none;
-
-font-size: 14px;
-
-padding: 4px 6px;
-
-cursor: pointer;
-
-z-index: 10;
-
-opacity: 0;
-
-transition: opacity 0.3s ease;
-  
-
-}
-
-.header-arrow.left {
-left: 10px;
-}
-
-.header-arrow.right {
-right: 10px;
-}
-
-.featured-product:hover .header-arrow {
-opacity: 1;
-}
-
-/* =========================================================
-12. FULL-WIDTH BRAND AD SLIDER
-========================================================= */
-
-.brand-ad-slider {
-position: relative;
-
-  
-width: 100%;
-max-width: 100vw;
-
-display: flex;
-
-flex-direction: row;
-
-flex-wrap: nowrap;
-
-gap: 0;
-
-overflow-x: auto;
-overflow-y: hidden;
-
-margin: 0;
-padding: 0;
-
-background: transparent;
-
-scroll-snap-type: x mandatory;
-
-scroll-behavior: smooth;
-
--webkit-overflow-scrolling: touch;
-
-scrollbar-width: none;
-
-overscroll-behavior-x: contain;
-
-touch-action: pan-x;
-  
-
-}
-
-.brand-ad-slider::-webkit-scrollbar {
-display: none;
-}
-
-/* =========================================================
-BRAND AD SLIDES
-========================================================= */
-
-.brand-ad-slide {
-position: relative;
-
-  
-flex: 0 0 100vw;
-
-width: 100vw;
-
-min-width: 100vw;
-
-height: 500px;
-
-margin: 0;
-padding: 0;
-
-overflow: hidden;
-
-scroll-snap-align: start;
-
-scroll-snap-stop: always;
-
-flex-shrink: 0;
-  
-
-}
-
-/* =========================================================
-BRAND AD LINK
-========================================================= */
-
-.brand-ad-slide > a {
-position: relative;
-
-  
-display: block;
-
-width: 100%;
-height: 100%;
-
-margin: 0;
-padding: 0;
-
-text-decoration: none;
-  
-
-}
-
-/* =========================================================
-BRAND AD IMAGE
-========================================================= */
-
-.brand-ad-slide img {
-display: block;
-
-  
-width: 100%;
-height: 100%;
-
-margin: 0;
-padding: 0;
-
-object-fit: cover;
-
-object-position: center;
-  
-
-}
-
-/* =========================================================
-BRAND AD TEXT
-========================================================= */
-
-.brand-ad-content {
-position: absolute;
-
-  
-left: 0;
-bottom: 0;
-
-width: 100%;
-
-padding: 30px 20px;
-
-text-align: center;
-
-background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.65),
-    rgba(0, 0, 0, 0)
-);
-
-color: white;
-
-pointer-events: none;
-  
-
-}
-
-.brand-ad-title {
-font-size: 24px;
-
-  
-font-weight: 600;
-
-margin-bottom: 6px;
-  
-
-}
-
-.brand-ad-subtitle {
-font-size: 13px;
-
-  
-letter-spacing: 1px;
-  
-
-}
-
-/* =========================================================
-BRAND AD ARROWS
-========================================================= */
-
-.brand-ad-arrow {
-display: none !important;
-}
-
-/* =========================================================
-13. GENERAL COLLECTION TITLE
-========================================================= */
-
-.collection-name {
-padding-top: 1em;
-padding-bottom: 1em;
-}
-
-.collection-name:hover {
-text-decoration: underline;
-}
-
-.welcome-section {
-display: flex;
-
-  
-justify-content: center;
-align-items: center;
-
-background-color: #000000;
-
-height: 50px;
-  
-
-}
-
-.welcome-section a {
-text-decoration: none;
-}
-
-.welcome-section p {
-color: #ffffff;
-
-  
-font-size: 24px;
-
-font-weight: 500;
-
-margin: 0;
-
-text-decoration: none;
-
-opacity: 70%;
-  
-
-}
-
-/* =========================================================
-14. HOMEPAGE MOTTO
-========================================================= */
-
-.motto {
-font-family: 'Playfair Display', serif;
-
-  
-text-align: center;
-
-text-decoration: none;
-
-font-weight: lighter;
-
-font-style: italic;
-
-font-size: large;
-
-letter-spacing: 0;
-
-opacity: 0.6;
-
-padding-bottom: 2em;
-
-color: #000000;
-  
-
-}
-
-/* =========================================================
-15. PRODUCT PRICES / BUTTONS
-========================================================= */
-
-.price {
-text-align: center;
-
-  
-font-weight: bolder;
-
-padding-top: 4px;
-  
-
-}
-
-.buy-button {
-display: inline-block;
-
-  
-border-radius: 10px;
-
-width: 200px;
-
-cursor: pointer;
-
-align-content: center;
-
-padding: 5px 10px;
-
-align-items: center;
-
-text-decoration: none;
-
-color: #ffffff;
-
-font-weight: bolder;
-
-font-size: smaller;
-
-background-color: #ffffff;
-  
-
-}
-
-.buy-button:hover {
-background-color: #ffffff;
-
-  
-color: #000000;
-
-font-style: italic;
-  
-
-}
-
-/* =========================================================
-16. PRODUCT GRID
-========================================================= */
-
-.products-container {
-margin-top: 1em;
-margin-bottom: 1em;
-
-  
-width: 100%;
-
-display: grid;
-
-grid-template-columns: repeat(4, 1fr);
-
-align-items: center;
-
-gap: 30px;
-
-margin: 1em auto;
-
-max-width: 1200px;
-  
-
-}
-
-.products {
-transition: transform 0.2s ease;
-}
-
-.products:hover {
-transform: translateY(-5px);
-}
-
-.products img {
-display: block;
-
-  
-margin: 0 auto;
-
-width: 230px;
-height: 230px;
-  
-
-}
-
-.clothe-text {
-margin: 0;
-
-  
-text-align: center;
-  
-
-}
-
-.clothe-image {
-width: min(300px, 100%);
-
-  
-border-radius: 20px;
-
-height: 250px;
-
-object-fit: contain;
-
-padding-bottom: 10px;
-
-transition: transform 0.3s ease;
-  
-
-}
-
-.clothe-image:hover {
-opacity: 70%;
-
-  
-transform: translateY(-6px) scale(1.02);
-  
-
-}
-
-.brand-page-link {
-text-decoration: none;
-
-  
-color: #020202;
-  
-
-}
-
-.brand-page-link:hover {
-text-decoration: underline;
-}
-
-/* =========================================================
-17. BRAND SECTION
-========================================================= */
-
-.brand-section-container {
-margin-top: 1em;
-margin-bottom: 1em;
-
-  
-width: 100%;
-
-display: grid;
-
-grid-template-columns: repeat(3, 1fr);
-
-padding: 20px;
-  
-
-}
-
-.brand-section {
-transition: transform 0.2s ease;
-}
-
-.brand-section:hover {
-transform: translateY(-5px);
-}
-
-.brand-logo {
-width: min(250px, 100%);
-
-  
-height: 250px;
-
-padding: 15px;
-
-border-radius: 50px;
-  
-
-}
-
-.brand-logo:hover {
-opacity: 70%;
-}
-
-.brand-product-logo {
-display: block;
-
-  
-margin: 0 auto;
-
-margin-top: 100px;
-
-width: 300px;
-
-height: 300px;
-
-border-radius: 300px;
-  
-
-}
-
-/* =========================================================
-18. GENERAL H1
-========================================================= */
-
-h1 {
-margin-top: 50px;
-
-  
-text-align: center;
-
-padding: 2em;
-
-font-weight: 500;
-
-letter-spacing: 1px;
-
-color: #000;
-  
-
-}
-
-/* =========================================================
-19. GREAT LEGACY PAGE
-========================================================= */
-
-.header-section {
-position: relative;
-
-  
-text-align: center;
-
-padding: 0;
-
-font-size: 16px;
-
-margin: 0;
-
-box-sizing: border-box;
-
-overflow: hidden;
-  
-
-}
-
-.header-img {
-width: 100vw;
-
-  
-height: 400px;
-
-margin: 0;
-
-padding: 0;
-
-background-size: cover;
-  
-
-}
-
-.header-text {
-position: absolute;
-
-  
-color: rgb(255, 255, 255);
-
-text-decoration: overline;
-
-opacity: 70%;
-
-font-weight: bolder;
-
-top: 45%;
-left: 15%;
-
-transform: translate(-50%, -50%);
-  
-
-}
-
-.brand-name-h {
-font-size: 40px;
-
-  
-font-weight: bold;
-
-padding-top: 0;
-  
-
-}
-
-/* =========================================================
-20. GENERAL FOOTER
-========================================================= */
-
-.footer-section {
-position: relative;
-
-  
-text-align: center;
-
-padding: 40px 20px;
-  
-
-}
-
-.footer-img {
-width: 100vw;
-
-  
-height: 300px;
-
-margin: 0;
-
-padding: 0;
-
-background-size: cover;
-  
-
-}
-
-.footer-text {
-text-align: center;
-
-  
-color: rgb(0, 0, 0);
-
-text-decoration: overline;
-
-font-style: italic;
-
-font-size: 16px;
-
-margin-bottom: 15px;
-  
-
-}
-
-/* =========================================================
-21. SOCIAL ICONS
-========================================================= */
-
-.social-icons {
-display: flex;
-
-  
-justify-content: center;
-
-color: rgb(0, 0, 0);
-
-opacity: 90%;
-
-font-size: 20px;
-
-text-decoration: none;
-
-gap: 5px;
-
-margin-bottom: 0;
-  
-
-}
-
-.social-icons a {
-color: rgb(0, 0, 0);
-
-  
-padding: 5px;
-
-text-decoration: none;
-  
-
-}
-
-.social-icons a:hover {
-color: gray;
-}
-
-/* =========================================================
-22. COPYRIGHT
-========================================================= */
-
-.copyrights-gen-home {
-text-align: center;
-
-  
-padding: 20px;
-
-background: black;
-
-color: white;
-
-font-size: 14px;
-  
-
-}
-
-.copyrights {
-padding-top: 20px;
-
-  
-text-align: center;
-
-color: rgb(0, 0, 0);
-
-font-style: italic;
-
-font-size: 12px;
-  
-
-}
-
-.copyrights-gen {
-position: absolute;
-
-  
-left: 50%;
-
-transform: translate(-50%, -50%);
-
-text-align: center;
-
-color: rgb(9, 9, 9);
-
-font-style: italic;
-
-z-index: 1;
-
-padding: 20px;
-
-font-size: 12px;
-  
-
-}
-
-/* =========================================================
-23. BRAND WEBSITE LINK
-========================================================= */
-
-.brand-web-link {
-text-align: center;
-
-  
-padding-top: 50px;
-
-padding-bottom: 10px;
-  
-
-}
-
-.website-link {
-text-decoration: none;
-
-  
-text-align: center;
-
-font-style: italic;
-
-color: #000000;
-
-padding-bottom: 20px;
-  
-
-}
-
-.website-link:hover {
-text-decoration: underline;
-}
-
-.logo-align {
-text-align: center;
-}
-
-/* =========================================================
-24. ABOUT PAGE
-========================================================= */
-
-.about-beelinx {
-padding-bottom: 3em;
-
-  
-max-width: 800px;
-
-margin: 0 auto;
-
-line-height: 1.8;
-
-padding: 20px;
-  
-
-}
-
-.about-beelinx h3 {
-text-transform: uppercase;
-
-  
-display: block;
-
-font-size: 18px;
-
-font-weight: 500;
-
-letter-spacing: 0.5px;
-
-margin-top: 40px;
-
-margin-bottom: 10px;
-
-text-align: center;
-  
-
-}
-
-.about-beelinx p {
-color: #555;
-
-  
-font-size: 15px;
-
-margin-bottom: 30px;
-
-padding-bottom: 20px;
-
-border-bottom: 1px solid #000000;
-
-text-align: center;
-  
-
-}
-
-.about-beelinx a {
-text-decoration: none;
-}
-
-/* =========================================================
-25. CATALOGUE BUTTON
-========================================================= */
-
-.open-catalogue {
-text-decoration: none;
-
-  
-color: #ffffff;
-
-background-color: #000000;
-
-padding: 10px 20px;
-
-border-radius: 10px;
-  
-
-}
-
-.open-catalogue:hover {
-background-color: #ffffff;
-
-  
-color: #000000;
-
-text-decoration: underline;
-
-font-style: italic;
-  
-
-}
-
-.catalogue-link {
-transition: all 0.3s ease;
-
-  
-display: block;
-
-width: fit-content;
-
-margin: 40px auto;
-  
-
-}
-
-.catalogue-link:hover {
-transform: translateY(-3px);
-}
-
-/* =========================================================
-26. TABLET
-========================================================= */
-
-@media (max-width: 768px) {
-
-  
-/* =====================================================
-   OTHER PAGES
-   ===================================================== */
-
-.header-section {
-    font-size: medium;
-}
-
-.header-img {
-    height: 450px;
-}
-
-.header-text {
-    font-size: medium;
-
-    left: 20%;
-    top: 50%;
-}
-
-.brand-product-logo {
-    margin-top: 70px;
-}
-
-.brand-name-h {
-    font-size: 28px;
-}
-
-.header-arrow {
-    font-size: 8px;
-
-    padding: 6px 10px;
-}
-
-.nav-center {
+    position: absolute;
+    left: 50%;
     transform: translateX(-50%);
 }
 
-.brand-logo {
-    width: min(150px, 100%);
+nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 2em;
+}
 
-    height: 150px;
+nav a {
+    color: rgb(255, 255, 255);
+    font-weight: 300;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   HAMBURGER
+========================================================= */
+
+.hamburger {
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo-link {
+    display: flex;
+    align-items: center;
 }
 
 .logo-img {
-    height: 40px;
+    height: 50px;
+    width: auto;
 }
 
-
-/* =====================================================
-   HERO CAROUSEL
-   ===================================================== */
-
-.featured-product {
-    min-height: 0;
-
-    display: block;
-
+.logo {
     text-align: center;
 }
 
-.featured-slide,
-.featured-slide.active {
-    flex: 0 0 78vw;
 
-    width: 78vw;
+/* =========================================================
+   3. SIDE MENU
+========================================================= */
 
-    min-height: 330px;
-}
-
-.featured-slide .clothe-image {
-    height: 260px;
-}
-
-.featured-slide .featured-product-name {
-    font-size: 19px;
-}
-
-.featured-slide .featured-product-info {
-    font-size: 12px;
-
-    line-height: 1.5;
-}
-
-
-/* =====================================================
-   PRODUCT GRID
-   ===================================================== */
-
-.products-container {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.products img {
-    width: 170px;
-
-    height: 170px;
-}
-
-.clothe-text {
-    font-size: smaller;
-}
-
-
-/* =====================================================
-   SEARCH
-   ===================================================== */
-
-.search-input:focus {
+.side-menu {
     position: fixed;
-
-    border-radius: 0;
-
     top: 0;
-    left: 0;
-
-    width: 100%;
-
-    height: 35px;
-
-    padding: 15px;
-
-    background: white;
-
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: black;
+    padding-top: 80px;
+    transition: 0.3s ease;
     z-index: 1001;
 }
 
-
-/* =====================================================
-   BRAND AD
-   ===================================================== */
-
-.brand-ad-slider {
-    width: 100vw;
-
-    max-width: 100vw;
-
-    overflow-x: auto;
-
-    display: flex;
-
-    flex-direction: row;
-
-    flex-wrap: nowrap;
-
-    gap: 0;
-
-    scroll-snap-type: x mandatory;
-
-    touch-action: pan-x;
+.side-menu.active {
+    left: 0;
 }
 
-.brand-ad-slide {
-    flex: 0 0 100vw;
-
-    width: 100vw;
-
-    min-width: 100vw;
-
-    height: 450px;
-
-    flex-shrink: 0;
+.side-menu a {
+    display: block;
+    padding: 15px 25px;
+    color: white;
+    text-decoration: none;
 }
 
-.brand-ad-title {
-    font-size: 22px;
+.side-menu a:hover {
+    background: #111;
 }
 
-.brand-ad-subtitle {
-    font-size: 12px;
-}
-
-
-/* =====================================================
-   FOOTER
-   ===================================================== */
-
-.footer-text {
-    font-size: 10px;
-
-    opacity: 90%;
-}
-
-.brand-web-link {
-    font-size: 10px;
-
-    padding-bottom: 6px;
-}
-
-.social-icons {
-    font-size: 14px;
-
-    gap: 2px;
-}
-
-.copyrights {
-    font-size: 8px;
-
-    font-weight: bold;
-}
-
-.copyrights-gen {
-    font-size: 8px;
-
-    font-weight: bold;
-}
-
-.brand-section-container {
-    grid-template-columns: repeat(2, 1fr);
-}
-  
-
-}
 
 /* =========================================================
-27. MOBILE
+   CLOSE BUTTON
 ========================================================= */
 
-@media (max-width: 600px) {
+.close-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+}
 
-  
-/* =====================================================
-   HERO CAROUSEL
-   ===================================================== */
+
+/* =========================================================
+   4. SEARCH
+========================================================= */
+
+.search-container {
+    position: relative;
+    margin-left: auto;
+    margin-right: 4px;
+    margin-top: 14px;
+}
+
+.search-input {
+    width: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    transition:
+        width 0.4s ease,
+        padding 0.4s ease;
+    font-size: 17px;
+}
+
+.search-input:focus {
+    width: 200px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.search-btn {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   5. HOMEPAGE HERO SECTION
+========================================================= */
 
 .featured-section-container {
     width: 100%;
-
+    background: white;
     overflow: hidden;
 }
 
 .featured-product {
     width: 100%;
-
-    padding: 10px 0 8px;
-
+    display: block;
+    padding: 15px 0 10px;
+    margin-bottom: 0;
+    background: white;
     overflow: hidden;
+    position: relative;
+    min-height: 0;
+    text-align: center;
 }
+
+
+/* =========================================================
+   6. HERO HORIZONTAL TRACK
+========================================================= */
 
 .featured-track {
     display: flex;
-
     flex-direction: row;
-
     flex-wrap: nowrap;
-
-    gap: 12px;
-
+    gap: 16px;
     width: 100%;
-
     overflow-x: auto;
-
     overflow-y: hidden;
 
-    padding: 0 12px;
+    /*
+       Side padding allows the active card to sit
+       in the center while showing the neighbouring
+       cards on both sides.
+    */
+    padding-left: 14vw;
+    padding-right: 14vw;
 
     -webkit-overflow-scrolling: touch;
-
     scroll-snap-type: x mandatory;
-
     scrollbar-width: none;
 
     overscroll-behavior-x: contain;
-
     touch-action: pan-x;
+
+    /*
+       Helps browser snapping keep cards centered.
+    */
+    scroll-padding-left: 14vw;
+    scroll-padding-right: 14vw;
 }
 
 .featured-track::-webkit-scrollbar {
@@ -1655,160 +249,149 @@ transform: translateY(-3px);
 }
 
 
-/* =====================================================
-   MOBILE HERO CARD
-   ===================================================== */
+/* =========================================================
+   7. HERO CARDS
+========================================================= */
 
 .featured-slide,
 .featured-slide.active {
-    flex: 0 0 86vw;
+    position: relative;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
 
-    width: 86vw;
+    /*
+       Three-card appearance:
+       center card + partial card on each side.
+    */
+    flex: 0 0 72vw;
+    width: 72vw;
 
-    min-width: 86vw;
+    min-height: 330px;
 
-    height: 400px;
-
-    min-height: 400px;
-
-    max-height: 400px;
-
-    display: flex;
-
-    flex-direction: row;
-
-    align-items: center;
-
-    justify-content: center;
+    background: #000000;
+    color: #ffffff;
 
     border-radius: 14px;
-
     overflow: hidden;
 
-    scroll-snap-align: start;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-    scroll-snap-stop: always;
+    /*
+       Keep the existing start-based snapping
+       because the JavaScript infinite loop
+       positions cards using offsetLeft.
+    */
+    scroll-snap-align: start;
 
     flex-shrink: 0;
 }
 
 
-/* =====================================================
-   COLLECTION TITLE
-   ===================================================== */
+/*
+   Cloned slides behave exactly like
+   normal slides.
+*/
+
+.featured-clone {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* =========================================================
+   8. HERO COLLECTION TITLE
+========================================================= */
 
 .featured-slide .welcome-section {
     position: absolute;
-
-    top: 14px;
-
-    left: 0;
-
-    width: 100%;
-
+    top: 15px;
+    left: 20px;
+    width: auto;
     height: auto;
 
     display: block;
 
     background: transparent;
-
-    text-align: center;
-
-    padding: 0;
-
     z-index: 2;
 }
 
 .featured-slide .collection-name {
-    font-size: 13px;
-
-    line-height: 1.3;
-
     padding: 0;
-
     margin: 0;
 
-    width: 100%;
+    color: white;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.collection-name:hover {
+    text-decoration: underline;
 }
 
 
-/* =====================================================
-   IMAGE AREA
-   ===================================================== */
+/* =========================================================
+   9. HERO PRODUCT IMAGE
+========================================================= */
 
 .featured-slide > .glightbox {
-    width: 42%;
-
+    width: 45%;
     height: 100%;
 
-    flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    padding-top: 20px;
+    flex-shrink: 0;
 }
 
 .featured-slide .clothe-image {
     width: 100%;
-
-    height: 210px;
-
-    max-width: 100%;
+    height: 260px;
 
     object-fit: contain;
 
     padding: 0;
-
     margin: 0;
 
     border-radius: 0;
 }
 
 
-/* =====================================================
-   TEXT AREA
-   ===================================================== */
+/* =========================================================
+   10. HERO PRODUCT TEXT
+========================================================= */
 
 .featured-slide .featured-text {
-    width: 58%;
+    width: 55%;
 
     margin: 0;
-
-    padding: 48px 15px 20px 5px;
-
-    text-align: center;
+    padding: 45px 18px 20px 5px;
 
     color: white;
-
     opacity: 1;
 
-    overflow: hidden;
+    text-align: center;
 }
 
 .featured-slide .featured-product-name {
     display: block;
 
-    font-size: 18px;
+    font-size: 20px;
 
-    line-height: 1.2;
-
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 
     color: white;
-
     opacity: 1;
 }
 
 .featured-slide .featured-product-info {
     display: block;
 
-    font-size: 11px;
-
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.55;
 
     color: #dddddd;
 }
@@ -1816,124 +399,86 @@ transform: translateY(-3px);
 .featured-slide .featured-product-link {
     display: inline-block;
 
-    margin-top: 12px;
-
-    font-size: 13px;
+    margin-top: 14px;
 
     color: white;
 
     text-decoration: underline;
-
     font-style: italic;
 }
 
-
-/* =====================================================
-   MOBILE HERO ARROWS
-   ===================================================== */
-
-.featured-product .header-arrow {
-    display: none;
+.featured-slide .featured-product-link:hover {
+    text-decoration: overline;
 }
 
 
-/* =====================================================
-   MOBILE MOTTO
-   ===================================================== */
+/* =========================================================
+   11. HERO ARROWS
+========================================================= */
 
-.motto {
-    font-size: small;
+.header-arrow {
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    background: transparent;
+
+    color: white;
+
+    border: none;
+
+    font-size: 14px;
+
+    padding: 4px 6px;
+
+    cursor: pointer;
+
+    z-index: 10;
+
+    opacity: 0;
+
+    transition: opacity 0.3s ease;
+}
+
+.header-arrow.left {
+    left: 10px;
+}
+
+.header-arrow.right {
+    right: 10px;
+}
+
+.featured-product:hover .header-arrow {
+    opacity: 1;
 }
 
 
-/* =====================================================
-   MOBILE BUY BUTTON
-   ===================================================== */
-
-.buy-button {
-    padding: 3px 5px;
-
-    font-size: 10px;
-
-    border-color: #000;
-
-    width: 70px;
-}
-
-
-/* =====================================================
-   MOBILE PRODUCT GRID
-   ===================================================== */
-
-.products img {
-    width: 170px;
-
-    height: 170px;
-}
-
-.products-container {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.clothe-text {
-    font-size: smaller;
-}
-
-
-/* =====================================================
-   MOBILE SEARCH
-   ===================================================== */
-
-.search-input:focus {
-    position: fixed;
-
-    border-radius: 0;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-
-    height: 35px;
-
-    padding: 15px;
-
-    background: white;
-
-    z-index: 1001;
-}
-
-
-/* =====================================================
-   MOBILE FULL-WIDTH BRAND AD
-   ===================================================== */
+/* =========================================================
+   12. FULL-WIDTH BRAND AD SLIDER
+========================================================= */
 
 .brand-ad-slider {
     position: relative;
 
-    width: 100vw;
-
+    width: 100%;
     max-width: 100vw;
 
-    margin: 0;
-
-    padding: 0;
-
     display: flex;
-
     flex-direction: row;
-
     flex-wrap: nowrap;
 
     gap: 0;
 
     overflow-x: auto;
-
     overflow-y: hidden;
 
-    scroll-snap-type: x mandatory;
+    margin: 0;
+    padding: 0;
 
-    scroll-behavior: smooth;
+    background: transparent;
+
+    scroll-snap-type: x mandatory;
 
     -webkit-overflow-scrolling: touch;
 
@@ -1949,9 +494,9 @@ transform: translateY(-3px);
 }
 
 
-/* =====================================================
-   EVERY AD IS EXACTLY ONE PHONE SCREEN WIDE
-   ===================================================== */
+/* =========================================================
+   BRAND AD SLIDES
+========================================================= */
 
 .brand-ad-slide {
     position: relative;
@@ -1959,34 +504,28 @@ transform: translateY(-3px);
     flex: 0 0 100vw;
 
     width: 100vw;
-
     min-width: 100vw;
 
-    max-width: 100vw;
-
-    height: 350px;
-
-    min-height: 350px;
+    height: 500px;
 
     margin: 0;
-
     padding: 0;
 
     overflow: hidden;
 
-    flex-shrink: 0;
-
     scroll-snap-align: start;
 
-    scroll-snap-stop: always;
+    flex-shrink: 0;
+}
 
-    border-radius: 0;
+.brand-ad-clone {
+    visibility: visible;
 }
 
 
-/* =====================================================
-   AD LINK
-   ===================================================== */
+/* =========================================================
+   BRAND AD LINK
+========================================================= */
 
 .brand-ad-slide > a {
     position: relative;
@@ -1994,210 +533,1506 @@ transform: translateY(-3px);
     display: block;
 
     width: 100%;
-
     height: 100%;
 
     margin: 0;
-
     padding: 0;
+
+    text-decoration: none;
 }
 
 
-/* =====================================================
-   AD IMAGE
-   ===================================================== */
+/* =========================================================
+   BRAND AD IMAGE
+========================================================= */
 
 .brand-ad-slide img {
     display: block;
 
     width: 100%;
-
     height: 100%;
 
-    min-width: 100%;
-
     margin: 0;
-
     padding: 0;
 
     object-fit: cover;
-
     object-position: center;
 }
 
 
-/* =====================================================
-   AD TEXT
-   ===================================================== */
+/* =========================================================
+   BRAND AD TEXT
+========================================================= */
 
 .brand-ad-content {
-    padding: 25px 15px;
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+
+    padding: 30px 20px;
+
+    text-align: center;
+
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.65),
+        rgba(0, 0, 0, 0)
+    );
+
+    color: white;
+
+    pointer-events: none;
 }
 
 .brand-ad-title {
-    font-size: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
 .brand-ad-subtitle {
-    font-size: 11px;
-
-    letter-spacing: 0.8px;
+    font-size: 13px;
+    letter-spacing: 1px;
 }
 
 
-/* =====================================================
-   NO ARROWS / BUTTONS
-   ===================================================== */
+/* =========================================================
+   BRAND AD ARROWS
+========================================================= */
 
 .brand-ad-arrow {
     display: none !important;
 }
 
 
-/* =====================================================
-   FOOTER
-   ===================================================== */
+/* =========================================================
+   13. GENERAL COLLECTION TITLE
+========================================================= */
+
+.collection-name {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.collection-name:hover {
+    text-decoration: underline;
+}
+
+.welcome-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #000000;
+
+    height: 50px;
+}
+
+.welcome-section a {
+    text-decoration: none;
+}
+
+.welcome-section p {
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 500;
+
+    margin: 0;
+
+    text-decoration: none;
+
+    opacity: 70%;
+}
+
+
+/* =========================================================
+   14. HOMEPAGE MOTTO
+========================================================= */
+
+.motto {
+    font-family: 'Playfair Display', serif;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-weight: lighter;
+    font-style: italic;
+
+    font-size: large;
+
+    letter-spacing: 0;
+
+    opacity: 0.6;
+
+    padding-bottom: 2em;
+
+    color: #000000;
+}
+
+
+/* =========================================================
+   15. PRODUCT PRICES / BUTTONS
+========================================================= */
+
+.price {
+    text-align: center;
+
+    font-weight: bolder;
+
+    padding-top: 4px;
+}
+
+.buy-button {
+    display: inline-block;
+
+    border-radius: 10px;
+
+    width: 200px;
+
+    cursor: pointer;
+
+    align-content: center;
+
+    padding: 5px 10px;
+
+    align-items: center;
+
+    text-decoration: none;
+
+    color: #ffffff;
+
+    font-weight: bolder;
+
+    font-size: smaller;
+
+    background-color: #ffffff;
+}
+
+.buy-button:hover {
+    background-color: #ffffff;
+
+    color: #000000;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   16. PRODUCT GRID
+========================================================= */
+
+.products-container {
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    align-items: center;
+
+    gap: 30px;
+
+    margin: 1em auto;
+
+    max-width: 1200px;
+}
+
+.products {
+    transition: transform 0.2s ease;
+}
+
+.products:hover {
+    transform: translateY(-5px);
+}
+
+.products img {
+    display: block;
+
+    margin: 0 auto;
+
+    width: 230px;
+    height: 230px;
+}
+
+.clothe-text {
+    margin: 0;
+    text-align: center;
+}
+
+.clothe-image {
+    width: min(300px, 100%);
+
+    border-radius: 20px;
+
+    height: 250px;
+
+    object-fit: contain;
+
+    padding-bottom: 10px;
+
+    transition: transform 0.3s ease;
+}
+
+.clothe-image:hover {
+    opacity: 70%;
+
+    transform:
+        translateY(-6px)
+        scale(1.02);
+}
+
+.brand-page-link {
+    text-decoration: none;
+    color: #020202;
+}
+
+.brand-page-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   17. BRAND SECTION
+========================================================= */
+
+.brand-section-container {
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    padding: 20px;
+}
+
+.brand-section {
+    transition: transform 0.2s ease;
+}
+
+.brand-section:hover {
+    transform: translateY(-5px);
+}
+
+.brand-logo {
+    width: min(250px, 100%);
+
+    height: 250px;
+
+    padding: 15px;
+
+    border-radius: 50px;
+}
+
+.brand-logo:hover {
+    opacity: 70%;
+}
+
+.brand-product-logo {
+    display: block;
+
+    margin: 0 auto;
+
+    margin-top: 100px;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 300px;
+}
+
+
+/* =========================================================
+   18. GENERAL H1
+========================================================= */
+
+h1 {
+    margin-top: 50px;
+
+    text-align: center;
+
+    padding: 2em;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
+    color: #000;
+}
+
+
+/* =========================================================
+   19. GREAT LEGACY PAGE
+========================================================= */
+
+.header-section {
+    position: relative;
+
+    text-align: center;
+
+    padding: 0;
+
+    font-size: 16px;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.header-img {
+    width: 100vw;
+
+    height: 400px;
+
+    margin: 0;
+    padding: 0;
+
+    background-size: cover;
+}
+
+.header-text {
+    position: absolute;
+
+    color: rgb(255, 255, 255);
+
+    text-decoration: overline;
+
+    opacity: 70%;
+
+    font-weight: bolder;
+
+    top: 45%;
+
+    left: 15%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+}
+
+.brand-name-h {
+    font-size: 40px;
+
+    font-weight: bold;
+
+    padding-top: 0;
+}
+
+
+/* =========================================================
+   20. GENERAL FOOTER
+========================================================= */
+
+.footer-section {
+    position: relative;
+
+    text-align: center;
+
+    padding: 40px 20px;
+}
+
+.footer-img {
+    width: 100vw;
+
+    height: 300px;
+
+    margin: 0;
+    padding: 0;
+
+    background-size: cover;
+}
 
 .footer-text {
-    font-size: 10px;
+    text-align: center;
 
-    opacity: 90%;
+    color: rgb(0, 0, 0);
+
+    text-decoration: overline;
+
+    font-style: italic;
+
+    font-size: 16px;
+
+    margin-bottom: 15px;
 }
 
-.brand-web-link {
-    font-size: 10px;
 
-    padding-bottom: 6px;
-}
+/* =========================================================
+   21. SOCIAL ICONS
+========================================================= */
 
 .social-icons {
-    font-size: 14px;
+    display: flex;
 
-    gap: 2px;
+    justify-content: center;
+
+    color: rgb(0, 0, 0);
+
+    opacity: 90%;
+
+    font-size: 20px;
+
+    text-decoration: none;
+
+    gap: 5px;
+
+    margin-bottom: 0;
+}
+
+.social-icons a {
+    color: rgb(0, 0, 0);
+
+    padding: 5px;
+
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    color: gray;
+}
+
+
+/* =========================================================
+   22. COPYRIGHT
+========================================================= */
+
+.copyrights-gen-home {
+    text-align: center;
+
+    padding: 20px;
+
+    background: black;
+
+    color: white;
+
+    font-size: 14px;
 }
 
 .copyrights {
-    font-size: 8px;
+    padding-top: 20px;
 
-    font-weight: bold;
+    text-align: center;
+
+    color: rgb(0, 0, 0);
+
+    font-style: italic;
+
+    font-size: 12px;
 }
 
 .copyrights-gen {
-    font-size: 8px;
+    position: absolute;
 
-    font-weight: bold;
-}
+    left: 50%;
 
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
 
-/* =====================================================
-   BRAND GRID
-   ===================================================== */
+    text-align: center;
 
-.brand-section-container {
-    grid-template-columns: repeat(2, 1fr);
-}
+    color: rgb(9, 9, 9);
 
+    font-style: italic;
 
-}
+    z-index: 1;
 
-/* =========================================================
-28. VERY SMALL PHONES
-========================================================= */
+    padding: 20px;
 
-@media (max-width: 360px) {
-
-/* =====================================================
-   HERO
-   ===================================================== */
-
-.featured-slide,
-.featured-slide.active {
-    flex: 0 0 88vw;
-
-    width: 88vw;
-
-    min-width: 88vw;
-
-    height: 390px;
-
-    min-height: 390px;
-
-    max-height: 390px;
-}
-
-.featured-slide > .glightbox {
-    width: 40%;
-}
-
-.featured-slide .featured-text {
-    width: 60%;
-
-    padding-right: 12px;
-}
-
-.featured-slide .clothe-image {
-    height: 190px;
-}
-
-.featured-slide .featured-product-name {
-    font-size: 17px;
-}
-
-.featured-slide .featured-product-info {
-    font-size: 10.5px;
-
-    line-height: 1.45;
-}
-
-.featured-slide .featured-product-link {
     font-size: 12px;
 }
 
 
-/* =====================================================
-   VERY SMALL BRAND ADS
-   ===================================================== */
+/* =========================================================
+   23. BRAND WEBSITE LINK
+========================================================= */
 
-.brand-ad-slider {
-    width: 100vw;
+.brand-web-link {
+    text-align: center;
 
-    max-width: 100vw;
-
-    overflow-x: auto;
-
-    display: flex;
-
-    flex-direction: row;
-
-    flex-wrap: nowrap;
-
-    gap: 0;
-
-    touch-action: pan-x;
+    padding-top: 50px;
+    padding-bottom: 10px;
 }
 
-.brand-ad-slide {
-    width: 100vw;
+.website-link {
+    text-decoration: none;
 
-    min-width: 100vw;
+    text-align: center;
 
-    max-width: 100vw;
+    font-style: italic;
 
-    flex: 0 0 100vw;
+    color: #000000;
 
-    flex-shrink: 0;
-
-    height: 320px;
-
-    min-height: 320px;
+    padding-bottom: 20px;
 }
 
-.brand-ad-title {
+.website-link:hover {
+    text-decoration: underline;
+}
+
+.logo-align {
+    text-align: center;
+}
+
+
+/* =========================================================
+   24. ABOUT PAGE
+========================================================= */
+
+.about-beelinx {
+    padding-bottom: 3em;
+
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    line-height: 1.8;
+
+    padding: 20px;
+}
+
+.about-beelinx h3 {
+    text-transform: uppercase;
+
+    display: block;
+
     font-size: 18px;
+
+    font-weight: 500;
+
+    letter-spacing: 0.5px;
+
+    margin-top: 40px;
+
+    margin-bottom: 10px;
+
+    text-align: center;
 }
 
-.brand-ad-subtitle {
-    font-size: 10px;
+.about-beelinx p {
+    color: #555;
+
+    font-size: 15px;
+
+    margin-bottom: 30px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #000000;
+
+    text-align: center;
 }
+
+.about-beelinx a {
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   25. CATALOGUE BUTTON
+========================================================= */
+
+.open-catalogue {
+    text-decoration: none;
+
+    color: #ffffff;
+
+    background-color: #000000;
+
+    padding: 10px 20px;
+
+    border-radius: 10px;
+}
+
+.open-catalogue:hover {
+    background-color: #ffffff;
+
+    color: #000000;
+
+    text-decoration: underline;
+
+    font-style: italic;
+}
+
+.catalogue-link {
+    transition: all 0.3s ease;
+
+    display: block;
+
+    width: fit-content;
+
+    margin: 40px auto;
+}
+
+.catalogue-link:hover {
+    transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   26. TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .header-section {
+        font-size: medium;
+    }
+
+    .header-img {
+        height: 450px;
+    }
+
+    .header-text {
+        font-size: medium;
+
+        left: 20%;
+        top: 50%;
+    }
+
+    .brand-product-logo {
+        margin-top: 70px;
+    }
+
+    .brand-name-h {
+        font-size: 28px;
+    }
+
+    .header-arrow {
+        font-size: 8px;
+
+        padding: 6px 10px;
+    }
+
+    .nav-center {
+        transform:
+            translateX(-50%);
+    }
+
+    .brand-logo {
+        width: min(150px, 100%);
+        height: 150px;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .featured-product {
+        min-height: 0;
+
+        display: block;
+
+        text-align: center;
+    }
+
+    .featured-track {
+
+        /*
+           More room around the centered card
+           on tablet screens.
+        */
+        padding-left: 11vw;
+        padding-right: 11vw;
+
+        scroll-padding-left: 11vw;
+        scroll-padding-right: 11vw;
+    }
+
+    .featured-slide,
+    .featured-slide.active {
+        flex: 0 0 78vw;
+
+        width: 78vw;
+
+        min-height: 330px;
+    }
+
+    .featured-slide .clothe-image {
+        height: 260px;
+    }
+
+    .featured-slide .featured-product-name {
+        font-size: 19px;
+    }
+
+    .featured-slide .featured-product-info {
+        font-size: 12px;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================================
+       PRODUCT GRID
+    ===================================================== */
+
+    .products-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .products img {
+        width: 170px;
+        height: 170px;
+    }
+
+    .clothe-text {
+        font-size: smaller;
+    }
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    .search-input:focus {
+        position: fixed;
+
+        border-radius: 0;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+
+        height: 35px;
+
+        padding: 15px;
+
+        background: white;
+
+        z-index: 1001;
+    }
+
+
+    /* =====================================================
+       BRAND AD
+    ===================================================== */
+
+    .brand-ad-slider {
+        width: 100vw;
+
+        max-width: 100vw;
+
+        overflow-x: auto;
+
+        display: flex;
+
+        flex-direction: row;
+
+        flex-wrap: nowrap;
+
+        gap: 0;
+
+        scroll-snap-type: x mandatory;
+
+        touch-action: pan-x;
+    }
+
+    .brand-ad-slide {
+        flex: 0 0 100vw;
+
+        width: 100vw;
+
+        min-width: 100vw;
+
+        height: 450px;
+
+        flex-shrink: 0;
+    }
+
+    .brand-ad-title {
+        font-size: 22px;
+    }
+
+    .brand-ad-subtitle {
+        font-size: 12px;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .footer-text {
+        font-size: 10px;
+
+        opacity: 90%;
+    }
+
+    .brand-web-link {
+        font-size: 10px;
+
+        padding-bottom: 6px;
+    }
+
+    .social-icons {
+        font-size: 14px;
+
+        gap: 2px;
+    }
+
+    .copyrights {
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+    .copyrights-gen {
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+    .brand-section-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   27. MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .featured-section-container {
+        width: 100%;
+
+        overflow: hidden;
+    }
+
+    .featured-product {
+        width: 100%;
+
+        padding: 10px 0 8px;
+
+        overflow: hidden;
+    }
+
+    .featured-track {
+        display: flex;
+
+        flex-direction: row;
+
+        flex-wrap: nowrap;
+
+        /*
+           Slightly smaller gap makes the neighbouring
+           cards feel connected to the center card.
+        */
+        gap: 12px;
+
+        width: 100%;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        /*
+           Creates the centered-card layout:
+           [partial card] [FULL CARD] [partial card]
+        */
+        padding-left: 12vw;
+        padding-right: 12vw;
+
+        -webkit-overflow-scrolling: touch;
+
+        scroll-snap-type: x mandatory;
+
+        scrollbar-width: none;
+
+        overscroll-behavior-x: contain;
+
+        touch-action: pan-x;
+
+        scroll-padding-left: 12vw;
+        scroll-padding-right: 12vw;
+    }
+
+    .featured-track::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    /* =====================================================
+       MOBILE HERO CARD
+    ===================================================== */
+
+    .featured-slide,
+    .featured-slide.active {
+        /*
+           76vw gives enough room for the active card
+           while allowing the next/previous cards
+           to remain visible at both sides.
+        */
+        flex: 0 0 76vw;
+
+        width: 76vw;
+
+        min-width: 76vw;
+
+        height: 400px;
+
+        min-height: 400px;
+
+        max-height: 400px;
+
+        display: flex;
+
+        flex-direction: row;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 14px;
+
+        overflow: hidden;
+
+        scroll-snap-align: start;
+
+        flex-shrink: 0;
+    }
+
+
+    /* =====================================================
+       COLLECTION TITLE
+    ===================================================== */
+
+    .featured-slide .welcome-section {
+        position: absolute;
+
+        top: 14px;
+        left: 0;
+
+        width: 100%;
+
+        height: auto;
+
+        display: block;
+
+        background: transparent;
+
+        text-align: center;
+
+        padding: 0;
+
+        z-index: 2;
+    }
+
+    .featured-slide .collection-name {
+        font-size: 13px;
+
+        line-height: 1.3;
+
+        padding: 0;
+
+        margin: 0;
+
+        width: 100%;
+    }
+
+
+    /* =====================================================
+       IMAGE AREA
+    ===================================================== */
+
+    .featured-slide > .glightbox {
+        width: 42%;
+
+        height: 100%;
+
+        flex-shrink: 0;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding-top: 20px;
+    }
+
+    .featured-slide .clothe-image {
+        width: 100%;
+
+        height: 210px;
+
+        max-width: 100%;
+
+        object-fit: contain;
+
+        padding: 0;
+
+        margin: 0;
+
+        border-radius: 0;
+    }
+
+
+    /* =====================================================
+       TEXT AREA
+    ===================================================== */
+
+    .featured-slide .featured-text {
+        width: 58%;
+
+        margin: 0;
+
+        padding: 48px 15px 20px 5px;
+
+        text-align: center;
+
+        color: white;
+
+        opacity: 1;
+
+        overflow: hidden;
+    }
+
+    .featured-slide .featured-product-name {
+        display: block;
+
+        font-size: 18px;
+
+        line-height: 1.2;
+
+        margin-bottom: 10px;
+
+        color: white;
+
+        opacity: 1;
+    }
+
+    .featured-slide .featured-product-info {
+        display: block;
+
+        font-size: 11px;
+
+        line-height: 1.5;
+
+        color: #dddddd;
+    }
+
+    .featured-slide .featured-product-link {
+        display: inline-block;
+
+        margin-top: 12px;
+
+        font-size: 13px;
+
+        color: white;
+
+        text-decoration: underline;
+
+        font-style: italic;
+    }
+
+
+    /* =====================================================
+       MOBILE HERO ARROWS
+    ===================================================== */
+
+    .featured-product .header-arrow {
+        display: none;
+    }
+
+
+    /* =====================================================
+       MOBILE MOTTO
+    ===================================================== */
+
+    .motto {
+        font-size: small;
+    }
+
+
+    /* =====================================================
+       MOBILE BUY BUTTON
+    ===================================================== */
+
+    .buy-button {
+        padding: 3px 5px;
+
+        font-size: 10px;
+
+        border-color: #000;
+
+        width: 70px;
+    }
+
+
+    /* =====================================================
+       MOBILE PRODUCT GRID
+    ===================================================== */
+
+    .products img {
+        width: 170px;
+
+        height: 170px;
+    }
+
+    .products-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .clothe-text {
+        font-size: smaller;
+    }
+
+
+    /* =====================================================
+       MOBILE SEARCH
+    ===================================================== */
+
+    .search-input:focus {
+        position: fixed;
+
+        border-radius: 0;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+
+        height: 35px;
+
+        padding: 15px;
+
+        background: white;
+
+        z-index: 1001;
+    }
+
+
+    /* =====================================================
+       MOBILE BRAND AD
+    ===================================================== */
+
+    .brand-ad-slider {
+        position: relative;
+
+        width: 100vw;
+
+        max-width: 100vw;
+
+        margin: 0;
+
+        padding: 0;
+
+        display: flex;
+
+        flex-direction: row;
+
+        flex-wrap: nowrap;
+
+        gap: 0;
+
+        overflow-x: auto;
+
+        overflow-y: hidden;
+
+        scroll-snap-type: x mandatory;
+
+        -webkit-overflow-scrolling: touch;
+
+        scrollbar-width: none;
+
+        overscroll-behavior-x: contain;
+
+        touch-action: pan-x;
+    }
+
+    .brand-ad-slider::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    /* =====================================================
+       EVERY AD = ONE PHONE SCREEN
+    ===================================================== */
+
+    .brand-ad-slide {
+        position: relative;
+
+        flex: 0 0 100vw;
+
+        width: 100vw;
+
+        min-width: 100vw;
+
+        max-width: 100vw;
+
+        height: 350px;
+
+        min-height: 350px;
+
+        margin: 0;
+
+        padding: 0;
+
+        overflow: hidden;
+
+        flex-shrink: 0;
+
+        scroll-snap-align: start;
+
+        border-radius: 0;
+    }
+
+
+    /* =====================================================
+       AD LINK
+    ===================================================== */
+
+    .brand-ad-slide > a {
+        position: relative;
+
+        display: block;
+
+        width: 100%;
+
+        height: 100%;
+
+        margin: 0;
+
+        padding: 0;
+    }
+
+
+    /* =====================================================
+       AD IMAGE
+    ===================================================== */
+
+    .brand-ad-slide img {
+        display: block;
+
+        width: 100%;
+
+        height: 100%;
+
+        min-width: 100%;
+
+        margin: 0;
+
+        padding: 0;
+
+        object-fit: cover;
+
+        object-position: center;
+    }
+
+
+    /* =====================================================
+       AD TEXT
+    ===================================================== */
+
+    .brand-ad-content {
+        padding: 25px 15px;
+    }
+
+    .brand-ad-title {
+        font-size: 20px;
+    }
+
+    .brand-ad-subtitle {
+        font-size: 11px;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    /* =====================================================
+       NO ARROWS
+    ===================================================== */
+
+    .brand-ad-arrow {
+        display: none !important;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .footer-text {
+        font-size: 10px;
+
+        opacity: 90%;
+    }
+
+    .brand-web-link {
+        font-size: 10px;
+
+        padding-bottom: 6px;
+    }
+
+    .social-icons {
+        font-size: 14px;
+
+        gap: 2px;
+    }
+
+    .copyrights {
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+    .copyrights-gen {
+        font-size: 8px;
+
+        font-weight: bold;
+    }
+
+
+    /* =====================================================
+       BRAND GRID
+    ===================================================== */
+
+    .brand-section-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   28. VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .featured-track {
+        /*
+           Keep the centered-card appearance
+           on very small screens.
+        */
+        padding-left: 10vw;
+        padding-right: 10vw;
+
+        scroll-padding-left: 10vw;
+        scroll-padding-right: 10vw;
+    }
+
+    .featured-slide,
+    .featured-slide.active {
+        flex: 0 0 80vw;
+
+        width: 80vw;
+
+        min-width: 80vw;
+
+        height: 390px;
+
+        min-height: 390px;
+
+        max-height: 390px;
+    }
+
+    .featured-slide > .glightbox {
+        width: 40%;
+    }
+
+    .featured-slide .featured-text {
+        width: 60%;
+
+        padding-right: 12px;
+    }
+
+    .featured-slide .clothe-image {
+        height: 190px;
+    }
+
+    .featured-slide .featured-product-name {
+        font-size: 17px;
+    }
+
+    .featured-slide .featured-product-info {
+        font-size: 10.5px;
+
+        line-height: 1.45;
+    }
+
+    .featured-slide .featured-product-link {
+        font-size: 12px;
+    }
+
+
+    /* =====================================================
+       VERY SMALL BRAND ADS
+    ===================================================== */
+
+    .brand-ad-slider {
+        width: 100vw;
+
+        max-width: 100vw;
+
+        overflow-x: auto;
+
+        display: flex;
+
+        touch-action: pan-x;
+    }
+
+    .brand-ad-slide {
+        width: 100vw;
+
+        min-width: 100vw;
+
+        max-width: 100vw;
+
+        flex: 0 0 100vw;
+
+        flex-shrink: 0;
+
+        height: 320px;
+
+        min-height: 320px;
+    }
+
+    .brand-ad-title {
+        font-size: 18px;
+    }
+
+    .brand-ad-subtitle {
+        font-size: 10px;
+    }
 
 }

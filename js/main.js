@@ -1,25 +1,30 @@
-javascript
 /* =========================================================
    BEELINX MAIN JAVASCRIPT
-   ========================================================= */
+========================================================= */
 
 
 /* =========================================================
    1. SEARCH FUNCTION
-   ========================================================= */
+========================================================= */
 
 function searchFunction() {
 
-    const input = document.getElementById("searchInput");
+    const input =
+        document.getElementById("searchInput");
 
     if (!input) return;
 
-    const filter = input.value.toLowerCase().trim();
+    const filter =
+        input.value.toLowerCase().trim();
 
     const products =
         document.getElementsByClassName("products");
 
-    for (let i = 0; i < products.length; i++) {
+    for (
+        let i = 0;
+        i < products.length;
+        i++
+    ) {
 
         const text =
             products[i].textContent.toLowerCase();
@@ -41,7 +46,7 @@ function searchFunction() {
 
 /* =========================================================
    2. MENU TOGGLE
-   ========================================================= */
+========================================================= */
 
 function toggleMenu() {
 
@@ -73,15 +78,18 @@ function closeMenu() {
 
 /* =========================================================
    3. GLIGHTBOX
-   ========================================================= */
+========================================================= */
+
+let lightbox = null;
 
 if (typeof GLightbox !== "undefined") {
 
     let scrollPosition = 0;
 
-    const lightbox = GLightbox({
+    lightbox = GLightbox({
 
         touchNavigation: true,
+
         loop: true
 
     });
@@ -121,57 +129,285 @@ if (typeof GLightbox !== "undefined") {
 
 
 /* =========================================================
-   4. HERO CAROUSEL
-   =========================================================
+   4. FEATURED PRODUCT CAROUSEL
+========================================================= */
 
-   IMPORTANT:
+let featuredTrack = null;
 
-   The carousel is now controlled primarily by
-   the browser's native horizontal scrolling.
-
-   JavaScript only handles:
-   - automatic sliding
-   - dots
-   - trackpad horizontal movement
-
-   JavaScript NO LONGER reacts to touchend.
-
-   This prevents the carousel from fighting
-   the user's finger while they swipe.
-*/
-
-
-const featuredTrack =
-    document.querySelector(".featured-track");
-
-
-const featuredSlides =
-    document.querySelectorAll(
-        ".featured-slide"
-    );
-
-
-const featuredDots =
-    document.querySelectorAll(".dot");
-
+let featuredSlides = [];
 
 let featuredIndex = 0;
 
-let featuredAutoSlider;
+let featuredAutoSlider = null;
+
+let featuredScrollTimer = null;
+
+let featuredIsResetting = false;
+
+
+/*
+   Keeps the automatic slider from fighting
+   the user's manual swipe/scroll.
+*/
+
+let featuredIsUserScrolling = false;
+
+let featuredResumeTimer = null;
+
+let featuredScrollStartTimer = null;
 
 
 /* =========================================================
-   UPDATE HERO DOTS
-   ========================================================= */
+   BUILD FEATURED CARDS
+========================================================= */
 
-function updateFeaturedDots(index) {
+function buildFeaturedCarousel() {
 
-    featuredDots.forEach(
-        (dot, i) => {
+    const track =
+        document.getElementById(
+            "featuredTrack"
+        );
 
-            dot.classList.toggle(
-                "active",
-                i === index
+    if (!track) return;
+
+
+    if (
+        typeof featuredProducts ===
+        "undefined"
+    ) {
+
+        console.error(
+            "Beelinx: featuredProducts was not found in products.js."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Array.isArray(featuredProducts) ||
+        featuredProducts.length === 0
+    ) {
+
+        console.warn(
+            "Beelinx: No featured products found."
+        );
+
+        return;
+
+    }
+
+
+    track.innerHTML = "";
+
+
+    featuredProducts.forEach(
+        (product) => {
+
+            const slide =
+                document.createElement("div");
+
+            slide.className =
+                "featured-slide";
+
+
+            /* =================================================
+               COLLECTION / BRAND TITLE
+            ================================================= */
+
+            const welcome =
+                document.createElement("div");
+
+            welcome.className =
+                "welcome-section";
+
+
+            const brandLink =
+                document.createElement("a");
+
+            brandLink.href =
+                product.brandLink || "#";
+
+            brandLink.className =
+                "logo-link";
+
+
+            const collectionName =
+                document.createElement("p");
+
+            collectionName.className =
+                "collection-name";
+
+            collectionName.textContent =
+                product.collection ||
+                `${product.brand || ""} COLLECTION`;
+
+
+            brandLink.appendChild(
+                collectionName
+            );
+
+            welcome.appendChild(
+                brandLink
+            );
+
+
+            /* =================================================
+               PRODUCT IMAGE
+            ================================================= */
+
+            const imageLink =
+                document.createElement("a");
+
+            imageLink.href =
+                product.image;
+
+            imageLink.className =
+                "glightbox";
+
+            imageLink.setAttribute(
+                "data-gallery",
+                "featured"
+            );
+
+
+            const image =
+                document.createElement("img");
+
+            image.className =
+                "clothe-image";
+
+            image.src =
+                product.image;
+
+            image.alt =
+                product.name ||
+                "Featured product";
+
+            image.loading =
+                "lazy";
+
+
+            imageLink.appendChild(
+                image
+            );
+
+
+            /* =================================================
+               PRODUCT TEXT
+            ================================================= */
+
+            const text =
+                document.createElement("div");
+
+            text.className =
+                "featured-text";
+
+
+            const productName =
+                document.createElement("span");
+
+            productName.className =
+                "featured-product-name";
+
+            productName.textContent =
+                product.name || "";
+
+
+            const productInfo =
+                document.createElement("span");
+
+            productInfo.className =
+                "featured-product-info";
+
+
+            const price =
+                product.price || "";
+
+            const description =
+                product.description || "";
+
+
+            productInfo.innerHTML =
+                `<strong>At ${price}</strong><br><br>${description}`;
+
+
+            /* =================================================
+               PRODUCT LINK
+            ================================================= */
+
+            const productLink =
+                document.createElement("a");
+
+            productLink.className =
+                "featured-product-link";
+
+            productLink.href =
+                product.orderLink || "#";
+
+            productLink.textContent =
+                "View Product";
+
+
+            productLink.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                }
+            );
+
+
+            text.appendChild(
+                productName
+            );
+
+            text.appendChild(
+                document.createElement("br")
+            );
+
+            text.appendChild(
+                document.createElement("br")
+            );
+
+            text.appendChild(
+                productInfo
+            );
+
+            text.appendChild(
+                document.createElement("br")
+            );
+
+            text.appendChild(
+                document.createElement("br")
+            );
+
+            text.appendChild(
+                productLink
+            );
+
+
+            /* =================================================
+               BUILD SLIDE
+            ================================================= */
+
+            slide.appendChild(
+                welcome
+            );
+
+            slide.appendChild(
+                imageLink
+            );
+
+            slide.appendChild(
+                text
+            );
+
+
+            track.appendChild(
+                slide
             );
 
         }
@@ -181,40 +417,159 @@ function updateFeaturedDots(index) {
 
 
 /* =========================================================
-   GET HERO SLIDE POSITION
-   ========================================================= */
+   SETUP TRUE INFINITE FEATURED CAROUSEL
+========================================================= */
 
-function getFeaturedSlidePosition(slide) {
+function setupFeaturedCarousel() {
+
+    featuredTrack =
+        document.getElementById(
+            "featuredTrack"
+        );
+
+    if (!featuredTrack) return;
+
+
+    const originalSlides =
+        Array.from(
+            featuredTrack.querySelectorAll(
+                ".featured-slide"
+            )
+        );
+
 
     if (
-        !featuredTrack ||
-        !slide
+        originalSlides.length === 0
     ) {
 
-        return 0;
+        return;
 
     }
 
 
-    const trackRect =
-        featuredTrack.getBoundingClientRect();
+    /* =====================================================
+       ONLY ONE PRODUCT
+    ===================================================== */
 
-    const slideRect =
-        slide.getBoundingClientRect();
+    if (
+        originalSlides.length === 1
+    ) {
+
+        featuredSlides =
+            originalSlides;
+
+        featuredIndex = 0;
 
 
-    return (
-        slideRect.left -
-        trackRect.left +
-        featuredTrack.scrollLeft
-    );
+        requestAnimationFrame(() => {
+
+            featuredTrack.scrollLeft = 0;
+
+        });
+
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       TRUE INFINITE LOOP
+    ===================================================== */
+
+    const originalHTML =
+        originalSlides.map(
+            slide => slide.outerHTML
+        );
+
+
+    featuredTrack.innerHTML = "";
+
+
+    const numberOfCopies = 7;
+
+
+    for (
+        let copy = 0;
+        copy < numberOfCopies;
+        copy++
+    ) {
+
+        originalHTML.forEach(
+            (html, originalIndex) => {
+
+                const wrapper =
+                    document.createElement("div");
+
+                wrapper.innerHTML =
+                    html;
+
+
+                const slide =
+                    wrapper.firstElementChild;
+
+
+                if (slide) {
+
+                    slide.classList.add(
+                        "featured-infinite-slide"
+                    );
+
+                    slide.dataset.originalIndex =
+                        originalIndex;
+
+
+                    featuredTrack.appendChild(
+                        slide
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    featuredSlides =
+        Array.from(
+            featuredTrack.querySelectorAll(
+                ".featured-slide"
+            )
+        );
+
+
+    const count =
+        originalSlides.length;
+
+
+    /* =====================================================
+       START IN COPY 3
+    ===================================================== */
+
+    requestAnimationFrame(() => {
+
+        const startingSlide =
+            featuredSlides[
+                count * 3
+            ];
+
+
+        if (startingSlide) {
+
+            featuredTrack.scrollLeft =
+                startingSlide.offsetLeft;
+
+        }
+
+    });
 
 }
 
 
 /* =========================================================
-   GET CURRENT HERO SLIDE
-   ========================================================= */
+   GET CURRENT FEATURED SLIDE
+========================================================= */
 
 function getCurrentFeaturedSlide() {
 
@@ -228,7 +583,7 @@ function getCurrentFeaturedSlide() {
     }
 
 
-    const currentScroll =
+    const scrollPosition =
         featuredTrack.scrollLeft;
 
 
@@ -241,16 +596,10 @@ function getCurrentFeaturedSlide() {
     featuredSlides.forEach(
         (slide, index) => {
 
-            const slidePosition =
-                getFeaturedSlidePosition(
-                    slide
-                );
-
-
             const distance =
                 Math.abs(
-                    slidePosition -
-                    currentScroll
+                    slide.offsetLeft -
+                    scrollPosition
                 );
 
 
@@ -271,16 +620,97 @@ function getCurrentFeaturedSlide() {
     );
 
 
-    return closestIndex;
+    const realCount =
+        getFeaturedOriginalCount();
+
+
+    if (
+        realCount <= 0
+    ) {
+
+        return 0;
+
+    }
+
+
+    return (
+        closestIndex %
+        realCount
+    );
 
 }
 
 
 /* =========================================================
-   SCROLL TO HERO SLIDE
-   ========================================================= */
+   GET ORIGINAL FEATURED COUNT
+========================================================= */
 
-function scrollToFeaturedSlide(index) {
+function getFeaturedOriginalCount() {
+
+    if (
+        !featuredSlides.length
+    ) {
+
+        return 0;
+
+    }
+
+
+    const firstOriginalIndex =
+        featuredSlides.findIndex(
+            slide =>
+                slide.dataset.originalIndex === "0"
+        );
+
+
+    if (
+        firstOriginalIndex === -1
+    ) {
+
+        return featuredSlides.length;
+
+    }
+
+
+    let count = 0;
+
+
+    for (
+        let i = firstOriginalIndex;
+        i < featuredSlides.length;
+        i++
+    ) {
+
+        const originalIndex =
+            featuredSlides[i].dataset.originalIndex;
+
+
+        if (
+            originalIndex ===
+            String(count)
+        ) {
+
+            count++;
+
+        } else {
+
+            break;
+
+        }
+
+    }
+
+
+    return count || 1;
+
+}
+
+
+/* =========================================================
+   UPDATE FEATURED INDEX
+========================================================= */
+
+function updateFeaturedIndex() {
 
     if (
         !featuredTrack ||
@@ -292,122 +722,141 @@ function scrollToFeaturedSlide(index) {
     }
 
 
-    if (index < 0) {
+    featuredIndex =
+        getCurrentFeaturedSlide();
 
-        index =
-            featuredSlides.length - 1;
+}
+
+
+/* =========================================================
+   MOVE TO FEATURED SLIDE
+========================================================= */
+
+function scrollToFeaturedSlide(
+    realIndex,
+    smooth = true
+) {
+
+    if (
+        !featuredTrack ||
+        featuredSlides.length === 0
+    ) {
+
+        return;
 
     }
+
+
+    const realCount =
+        getFeaturedOriginalCount();
 
 
     if (
-        index >=
-        featuredSlides.length
+        realCount <= 0
     ) {
 
-        index = 0;
+        return;
 
     }
 
 
-    const slide =
-        featuredSlides[index];
+    realIndex =
+        (
+            realIndex +
+            realCount
+        ) %
+        realCount;
 
 
-    const targetPosition =
-        getFeaturedSlidePosition(
-            slide
-        );
+    const currentPosition =
+        featuredTrack.scrollLeft;
+
+
+    let bestSlide = null;
+
+    let bestDistance =
+        Infinity;
+
+
+    featuredSlides.forEach(
+        slide => {
+
+            if (
+                Number(
+                    slide.dataset.originalIndex
+                ) !== realIndex
+            ) {
+
+                return;
+
+            }
+
+
+            const distance =
+                Math.abs(
+                    slide.offsetLeft -
+                    currentPosition
+                );
+
+
+            if (
+                distance <
+                bestDistance
+            ) {
+
+                bestDistance =
+                    distance;
+
+                bestSlide =
+                    slide;
+
+            }
+
+        }
+    );
+
+
+    if (!bestSlide) return;
+
+
+    featuredIndex =
+        realIndex;
 
 
     featuredTrack.scrollTo({
 
-        left: targetPosition,
+        left:
+            bestSlide.offsetLeft,
 
-        behavior: "smooth"
+        behavior:
+            smooth
+                ? "smooth"
+                : "auto"
 
     });
 
-
-    featuredIndex =
-        index;
-
-
-    updateFeaturedDots(
-        index
-    );
-
 }
 
 
 /* =========================================================
-   GO TO HERO SLIDE
-   ========================================================= */
-
-function goToSlide(index) {
-
-    if (!featuredSlides.length) {
-
-        return;
-
-    }
-
-
-    scrollToFeaturedSlide(
-        index
-    );
-
-
-    restartFeaturedSlider();
-
-}
-
-
-/* =========================================================
-   NEXT HERO SLIDE
-   ========================================================= */
+   NEXT FEATURED SLIDE
+========================================================= */
 
 function nextSlide() {
 
-    if (!featuredSlides.length) {
+    if (
+        !featuredTrack ||
+        featuredSlides.length < 2
+    ) {
 
         return;
 
     }
-
-
-    const currentIndex =
-        getCurrentFeaturedSlide();
-
-
-    let nextIndex =
-        currentIndex + 1;
 
 
     if (
-        nextIndex >=
-        featuredSlides.length
+        featuredIsUserScrolling
     ) {
-
-        nextIndex = 0;
-
-    }
-
-
-    scrollToFeaturedSlide(
-        nextIndex
-    );
-
-}
-
-
-/* =========================================================
-   PREVIOUS HERO SLIDE
-   ========================================================= */
-
-function prevSlide() {
-
-    if (!featuredSlides.length) {
 
         return;
 
@@ -418,32 +867,397 @@ function prevSlide() {
         getCurrentFeaturedSlide();
 
 
-    let previousIndex =
-        currentIndex - 1;
+    const realCount =
+        getFeaturedOriginalCount();
 
 
-    if (previousIndex < 0) {
+    if (
+        realCount <= 1
+    ) {
 
-        previousIndex =
-            featuredSlides.length - 1;
+        return;
 
     }
 
 
+    const nextIndex =
+        (
+            currentIndex + 1
+        ) %
+        realCount;
+
+
     scrollToFeaturedSlide(
-        previousIndex
+        nextIndex,
+        true
     );
 
 }
 
 
 /* =========================================================
-   HERO AUTO SLIDER
-   ========================================================= */
+   PREVIOUS FEATURED SLIDE
+========================================================= */
+
+function prevSlide() {
+
+    if (
+        !featuredTrack ||
+        featuredSlides.length < 2
+    ) {
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getCurrentFeaturedSlide();
+
+
+    const realCount =
+        getFeaturedOriginalCount();
+
+
+    if (
+        realCount <= 1
+    ) {
+
+        return;
+
+    }
+
+
+    const previousIndex =
+        (
+            currentIndex -
+            1 +
+            realCount
+        ) %
+        realCount;
+
+
+    scrollToFeaturedSlide(
+        previousIndex,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   FIX TRUE FEATURED INFINITE LOOP
+========================================================= */
+
+function fixFeaturedLoop() {
+
+    if (
+        !featuredTrack ||
+        featuredIsResetting ||
+        featuredSlides.length < 2
+    ) {
+
+        return;
+
+    }
+
+
+    const realCount =
+        getFeaturedOriginalCount();
+
+
+    if (
+        realCount <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const middleStart =
+        featuredSlides[
+            realCount * 3
+        ];
+
+
+    const nextCopyStart =
+        featuredSlides[
+            realCount * 4
+        ];
+
+
+    if (
+        !middleStart ||
+        !nextCopyStart
+    ) {
+
+        return;
+
+    }
+
+
+    const copyWidth =
+        nextCopyStart.offsetLeft -
+        middleStart.offsetLeft;
+
+
+    if (
+        copyWidth <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const currentScroll =
+        featuredTrack.scrollLeft;
+
+
+    const rightLimit =
+        middleStart.offsetLeft +
+        copyWidth * 2;
+
+
+    const leftLimit =
+        middleStart.offsetLeft -
+        copyWidth * 2;
+
+
+    if (
+        currentScroll >
+        rightLimit
+    ) {
+
+        featuredIsResetting = true;
+
+
+        featuredTrack.scrollLeft =
+            currentScroll -
+            copyWidth;
+
+
+        requestAnimationFrame(() => {
+
+            featuredIsResetting =
+                false;
+
+        });
+
+
+        return;
+
+    }
+
+
+    if (
+        currentScroll <
+        leftLimit
+    ) {
+
+        featuredIsResetting = true;
+
+
+        featuredTrack.scrollLeft =
+            currentScroll +
+            copyWidth;
+
+
+        requestAnimationFrame(() => {
+
+            featuredIsResetting =
+                false;
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   FEATURED SCROLL DETECTION
+========================================================= */
+
+function initializeFeaturedScroll() {
+
+    if (!featuredTrack) return;
+
+
+    featuredTrack.addEventListener(
+        "scroll",
+        () => {
+
+            fixFeaturedLoop();
+
+
+            clearTimeout(
+                featuredScrollTimer
+            );
+
+
+            featuredScrollTimer =
+                setTimeout(() => {
+
+                    updateFeaturedIndex();
+
+                }, 80);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* =====================================================
+       TOUCH START
+    ===================================================== */
+
+    featuredTrack.addEventListener(
+        "touchstart",
+        () => {
+
+            featuredIsUserScrolling =
+                true;
+
+
+            clearInterval(
+                featuredAutoSlider
+            );
+
+
+            clearTimeout(
+                featuredResumeTimer
+            );
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* =====================================================
+       TOUCH END
+    ===================================================== */
+
+    featuredTrack.addEventListener(
+        "touchend",
+        () => {
+
+            clearTimeout(
+                featuredResumeTimer
+            );
+
+
+            featuredResumeTimer =
+                setTimeout(() => {
+
+                    featuredIsUserScrolling =
+                        false;
+
+                    startFeaturedSlider();
+
+                }, 3500);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* =====================================================
+       TOUCH CANCEL
+    ===================================================== */
+
+    featuredTrack.addEventListener(
+        "touchcancel",
+        () => {
+
+            clearTimeout(
+                featuredResumeTimer
+            );
+
+
+            featuredResumeTimer =
+                setTimeout(() => {
+
+                    featuredIsUserScrolling =
+                        false;
+
+                    startFeaturedSlider();
+
+                }, 3500);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* =====================================================
+       DESKTOP WHEEL / TRACKPAD
+    ===================================================== */
+
+    featuredTrack.addEventListener(
+        "wheel",
+        () => {
+
+            featuredIsUserScrolling =
+                true;
+
+
+            clearInterval(
+                featuredAutoSlider
+            );
+
+
+            clearTimeout(
+                featuredResumeTimer
+            );
+
+
+            featuredResumeTimer =
+                setTimeout(() => {
+
+                    featuredIsUserScrolling =
+                        false;
+
+                    startFeaturedSlider();
+
+                }, 3500);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FEATURED AUTO SLIDER
+========================================================= */
 
 function startFeaturedSlider() {
 
-    if (!featuredSlides.length) {
+    if (
+        featuredSlides.length < 2
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        featuredIsUserScrolling
+    ) {
 
         return;
 
@@ -458,12 +1272,22 @@ function startFeaturedSlider() {
     featuredAutoSlider =
         setInterval(() => {
 
-            nextSlide();
+            if (
+                !featuredIsUserScrolling
+            ) {
+
+                nextSlide();
+
+            }
 
         }, 7000);
 
 }
 
+
+/* =========================================================
+   RESTART FEATURED SLIDER
+========================================================= */
 
 function restartFeaturedSlider() {
 
@@ -472,143 +1296,25 @@ function restartFeaturedSlider() {
     );
 
 
-    startFeaturedSlider();
+    if (
+        !featuredIsUserScrolling
+    ) {
+
+        startFeaturedSlider();
+
+    }
 
 }
 
 
 /* =========================================================
-   HERO MANUAL SCROLL DETECTION
-   =========================================================
+   FEATURED HOVER
+========================================================= */
 
-   IMPORTANT:
+function initializeFeaturedHover() {
 
-   We only UPDATE the dots here.
+    if (!featuredTrack) return;
 
-   We DO NOT call scrollTo().
-   We DO NOT force the carousel
-   to another position.
-
-   Therefore the user's manual
-   scrolling remains completely free.
-*/
-
-if (featuredTrack) {
-
-    let featuredScrollTimer;
-
-
-    featuredTrack.addEventListener(
-        "scroll",
-        () => {
-
-            clearTimeout(
-                featuredScrollTimer
-            );
-
-
-            featuredScrollTimer =
-                setTimeout(() => {
-
-                    const currentIndex =
-                        getCurrentFeaturedSlide();
-
-
-                    featuredIndex =
-                        currentIndex;
-
-
-                    updateFeaturedDots(
-                        currentIndex
-                    );
-
-                }, 100);
-
-        },
-        {
-            passive: true
-        }
-    );
-
-}
-
-
-/* =========================================================
-   HERO TRACKPAD
-   =========================================================
-
-   Only horizontal trackpad gestures are
-   intercepted.
-
-   Normal vertical scrolling is untouched.
-*/
-
-if (featuredTrack) {
-
-    let lastHeroWheel = 0;
-
-
-    featuredTrack.addEventListener(
-        "wheel",
-        (event) => {
-
-            if (
-                Math.abs(event.deltaX) <=
-                Math.abs(event.deltaY)
-            ) {
-
-                return;
-
-            }
-
-
-            const now =
-                Date.now();
-
-
-            if (
-                now - lastHeroWheel <
-                600
-            ) {
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            event.preventDefault();
-
-
-            if (event.deltaX > 0) {
-
-                nextSlide();
-
-            } else {
-
-                prevSlide();
-
-            }
-
-
-            lastHeroWheel =
-                now;
-
-        },
-        {
-            passive: false
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PAUSE HERO WHEN HOVERED
-   ========================================================= */
-
-if (featuredTrack) {
 
     featuredTrack.addEventListener(
         "mouseenter",
@@ -626,7 +1332,13 @@ if (featuredTrack) {
         "mouseleave",
         () => {
 
-            startFeaturedSlider();
+            if (
+                !featuredIsUserScrolling
+            ) {
+
+                startFeaturedSlider();
+
+            }
 
         }
     );
@@ -635,114 +1347,195 @@ if (featuredTrack) {
 
 
 /* =========================================================
-   INITIAL HERO SLIDE
-   ========================================================= */
-
-if (featuredSlides.length) {
-
-    featuredIndex = 0;
-
-
-    updateFeaturedDots(0);
-
-
-    if (featuredTrack) {
-
-        featuredTrack.scrollLeft = 0;
-
-    }
-
-
-    startFeaturedSlider();
-
-}
-
-
-/* =========================================================
    5. BRAND AD SLIDER
-   =========================================================
+========================================================= */
 
-   Same philosophy as the hero carousel.
+let brandAdSlider = null;
 
-   The browser handles manual touch scrolling.
-
-   JavaScript only handles:
-   - automatic movement
-   - dots
-   - horizontal trackpad movement
-
-   There is NO touchend handler.
-*/
-
-
-const brandAdSlider =
-    document.querySelector(
-        ".brand-ad-slider"
-    );
-
-
-const brandAdSlides =
-    document.querySelectorAll(
-        ".brand-ad-slide"
-    );
-
-
-const brandAdDots =
-    document.querySelectorAll(
-        ".brand-ad-dot"
-    );
-
+let brandAdSlides = [];
 
 let brandAdIndex = 0;
 
-let brandAdInterval;
+let brandAdInterval = null;
+
+let brandAdScrollTimer = null;
+
+let brandAdIsResetting = false;
 
 
 /* =========================================================
-   GET BRAND AD POSITION
-   ========================================================= */
+   BUILD BRAND ADVERTISEMENTS
+========================================================= */
 
-function getBrandAdSlidePosition(slide) {
+function buildBrandAds() {
+
+    const slider =
+        document.getElementById(
+            "brandAdSlider"
+        );
+
+
+    if (!slider) return;
+
 
     if (
-        !brandAdSlider ||
-        !slide
+        typeof brandAds ===
+        "undefined"
     ) {
 
-        return 0;
+        console.error(
+            "Beelinx: brandAds was not found in products.js."
+        );
+
+        return;
 
     }
 
 
-    const sliderRect =
-        brandAdSlider.getBoundingClientRect();
+    if (
+        !Array.isArray(brandAds) ||
+        brandAds.length === 0
+    ) {
+
+        console.warn(
+            "Beelinx: No brand advertisements found."
+        );
+
+        return;
+
+    }
 
 
-    const slideRect =
-        slide.getBoundingClientRect();
+    slider.innerHTML = "";
 
 
-    return (
-        slideRect.left -
-        sliderRect.left +
-        brandAdSlider.scrollLeft
-    );
+    brandAds.forEach(
+        (ad) => {
 
-}
+            /*
+               Find the brand automatically
+               from the brands database.
+            */
+
+            const brandData =
+                typeof brands !== "undefined"
+                    ? brands[ad.brand]
+                    : null;
 
 
-/* =========================================================
-   UPDATE BRAND AD DOTS
-   ========================================================= */
+            const slide =
+                document.createElement("div");
 
-function updateBrandAdDots(index) {
+            slide.className =
+                "brand-ad-slide";
 
-    brandAdDots.forEach(
-        (dot, i) => {
 
-            dot.classList.toggle(
-                "active",
-                i === index
+            /* =================================================
+               BRAND LINK
+            ================================================= */
+
+            const link =
+                document.createElement("a");
+
+
+            link.href =
+                ad.link ||
+                (brandData
+                    ? brandData.page
+                    : "#");
+
+
+            /* =================================================
+               IMAGE
+            ================================================= */
+
+            const image =
+                document.createElement("img");
+
+
+            image.src =
+                ad.image;
+
+
+            image.alt =
+                ad.alt ||
+                `${ad.brand || "Brand"} collection`;
+
+
+            image.loading =
+                "lazy";
+
+
+            /* =================================================
+               CONTENT
+            ================================================= */
+
+            const content =
+                document.createElement("div");
+
+
+            content.className =
+                "brand-ad-content";
+
+
+            const title =
+                document.createElement("p");
+
+
+            title.className =
+                "brand-ad-title";
+
+
+            title.textContent =
+                ad.title ||
+                ad.brand ||
+                "";
+
+
+            const subtitle =
+                document.createElement("p");
+
+
+            subtitle.className =
+                "brand-ad-subtitle";
+
+
+            subtitle.textContent =
+                ad.subtitle ||
+                "EXPLORE THE COLLECTION";
+
+
+            /* =================================================
+               BUILD AD
+            ================================================= */
+
+            content.appendChild(
+                title
+            );
+
+
+            content.appendChild(
+                subtitle
+            );
+
+
+            link.appendChild(
+                image
+            );
+
+
+            link.appendChild(
+                content
+            );
+
+
+            slide.appendChild(
+                link
+            );
+
+
+            slider.appendChild(
+                slide
             );
 
         }
@@ -752,8 +1545,163 @@ function updateBrandAdDots(index) {
 
 
 /* =========================================================
+   SETUP TRUE INFINITE BRAND AD CAROUSEL
+========================================================= */
+
+function setupBrandAdCarousel() {
+
+    brandAdSlider =
+        document.getElementById(
+            "brandAdSlider"
+        );
+
+
+    if (!brandAdSlider) return;
+
+
+    const originalSlides =
+        Array.from(
+            brandAdSlider.querySelectorAll(
+                ".brand-ad-slide"
+            )
+        );
+
+
+    if (
+        originalSlides.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       ONLY ONE AD
+    ===================================================== */
+
+    if (
+        originalSlides.length === 1
+    ) {
+
+        brandAdSlides =
+            originalSlides;
+
+        brandAdIndex = 0;
+
+
+        requestAnimationFrame(() => {
+
+            brandAdSlider.scrollLeft =
+                0;
+
+        });
+
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       TRUE INFINITE LOOP
+    ===================================================== */
+
+    const originalHTML =
+        originalSlides.map(
+            slide => slide.outerHTML
+        );
+
+
+    brandAdSlider.innerHTML = "";
+
+
+    const numberOfCopies = 7;
+
+
+    for (
+        let copy = 0;
+        copy < numberOfCopies;
+        copy++
+    ) {
+
+        originalHTML.forEach(
+            (html, originalIndex) => {
+
+                const wrapper =
+                    document.createElement("div");
+
+
+                wrapper.innerHTML =
+                    html;
+
+
+                const slide =
+                    wrapper.firstElementChild;
+
+
+                if (slide) {
+
+                    slide.classList.add(
+                        "brand-ad-infinite-slide"
+                    );
+
+
+                    slide.dataset.originalIndex =
+                        originalIndex;
+
+
+                    brandAdSlider.appendChild(
+                        slide
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    brandAdSlides =
+        Array.from(
+            brandAdSlider.querySelectorAll(
+                ".brand-ad-slide"
+            )
+        );
+
+
+    const count =
+        originalSlides.length;
+
+
+    /* =====================================================
+       START IN COPY 3
+    ===================================================== */
+
+    requestAnimationFrame(() => {
+
+        const startingSlide =
+            brandAdSlides[
+                count * 3
+            ];
+
+
+        if (startingSlide) {
+
+            brandAdSlider.scrollLeft =
+                startingSlide.offsetLeft;
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
    GET CURRENT BRAND AD
-   ========================================================= */
+========================================================= */
 
 function getCurrentBrandAd() {
 
@@ -767,7 +1715,7 @@ function getCurrentBrandAd() {
     }
 
 
-    const currentScroll =
+    const scrollPosition =
         brandAdSlider.scrollLeft;
 
 
@@ -780,16 +1728,10 @@ function getCurrentBrandAd() {
     brandAdSlides.forEach(
         (slide, index) => {
 
-            const slidePosition =
-                getBrandAdSlidePosition(
-                    slide
-                );
-
-
             const distance =
                 Math.abs(
-                    slidePosition -
-                    currentScroll
+                    slide.offsetLeft -
+                    scrollPosition
                 );
 
 
@@ -810,19 +1752,209 @@ function getCurrentBrandAd() {
     );
 
 
-    return closestIndex;
+    const realCount =
+        getBrandAdOriginalCount();
+
+
+    if (
+        realCount <= 0
+    ) {
+
+        return 0;
+
+    }
+
+
+    return (
+        closestIndex %
+        realCount
+    );
 
 }
 
 
 /* =========================================================
-   SCROLL TO BRAND AD
-   ========================================================= */
+   GET ORIGINAL BRAND AD COUNT
+========================================================= */
 
-function scrollToBrandAd(index) {
+function getBrandAdOriginalCount() {
+
+    if (
+        !brandAdSlides.length
+    ) {
+
+        return 0;
+
+    }
+
+
+    const firstOriginal =
+        brandAdSlides.findIndex(
+            slide =>
+                slide.dataset.originalIndex === "0"
+        );
+
+
+    if (
+        firstOriginal === -1
+    ) {
+
+        return brandAdSlides.length;
+
+    }
+
+
+    let count = 0;
+
+
+    for (
+        let i = firstOriginal;
+        i < brandAdSlides.length;
+        i++
+    ) {
+
+        const originalIndex =
+            brandAdSlides[i].dataset.originalIndex;
+
+
+        if (
+            originalIndex ===
+            String(count)
+        ) {
+
+            count++;
+
+        } else {
+
+            break;
+
+        }
+
+    }
+
+
+    return count || 1;
+
+}
+
+
+/* =========================================================
+   MOVE TO BRAND AD
+========================================================= */
+
+function scrollToBrandAd(
+    realIndex,
+    smooth = true
+) {
 
     if (
         !brandAdSlider ||
+        brandAdSlides.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const count =
+        getBrandAdOriginalCount();
+
+
+    if (
+        count <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    realIndex =
+        (
+            realIndex +
+            count
+        ) %
+        count;
+
+
+    const currentPosition =
+        brandAdSlider.scrollLeft;
+
+
+    let bestSlide = null;
+
+    let bestDistance =
+        Infinity;
+
+
+    brandAdSlides.forEach(
+        slide => {
+
+            if (
+                Number(
+                    slide.dataset.originalIndex
+                ) !== realIndex
+            ) {
+
+                return;
+
+            }
+
+
+            const distance =
+                Math.abs(
+                    slide.offsetLeft -
+                    currentPosition
+                );
+
+
+            if (
+                distance <
+                bestDistance
+            ) {
+
+                bestDistance =
+                    distance;
+
+                bestSlide =
+                    slide;
+
+            }
+
+        }
+    );
+
+
+    if (!bestSlide) return;
+
+
+    brandAdIndex =
+        realIndex;
+
+
+    brandAdSlider.scrollTo({
+
+        left:
+            bestSlide.offsetLeft,
+
+        behavior:
+            smooth
+                ? "smooth"
+                : "auto"
+
+    });
+
+}
+
+
+/* =========================================================
+   GO TO BRAND AD
+========================================================= */
+
+function goToBrandAd(index) {
+
+    if (
         !brandAdSlides.length
     ) {
 
@@ -831,163 +1963,30 @@ function scrollToBrandAd(index) {
     }
 
 
-    if (index < 0) {
-
-        index =
-            brandAdSlides.length - 1;
-
-    }
+    const count =
+        getBrandAdOriginalCount();
 
 
     if (
-        index >=
-        brandAdSlides.length
+        count <= 0
     ) {
 
-        index = 0;
-
-    }
-
-
-    const slide =
-        brandAdSlides[index];
-
-
-    const targetPosition =
-        getBrandAdSlidePosition(
-            slide
-        );
-
-
-    brandAdSlider.scrollTo({
-
-        left: targetPosition,
-
-        behavior: "smooth"
-
-    });
-
-
-    brandAdIndex =
-        index;
-
-
-    updateBrandAdDots(
-        index
-    );
-
-}
-
-
-/* =========================================================
-   SHOW BRAND AD
-   ========================================================= */
-
-function showBrandAd(index) {
-
-    if (!brandAdSlides.length) {
-
         return;
 
     }
 
 
-    scrollToBrandAd(
-        index
-    );
-
-}
-
-
-/* =========================================================
-   NEXT BRAND AD
-   ========================================================= */
-
-function nextBrandAd() {
-
-    if (!brandAdSlides.length) {
-
-        return;
-
-    }
-
-
-    const currentIndex =
-        getCurrentBrandAd();
-
-
-    let nextIndex =
-        currentIndex + 1;
-
-
-    if (
-        nextIndex >=
-        brandAdSlides.length
-    ) {
-
-        nextIndex = 0;
-
-    }
+    index =
+        (
+            index +
+            count
+        ) %
+        count;
 
 
     scrollToBrandAd(
-        nextIndex
-    );
-
-}
-
-
-/* =========================================================
-   PREVIOUS BRAND AD
-   ========================================================= */
-
-function prevBrandAd() {
-
-    if (!brandAdSlides.length) {
-
-        return;
-
-    }
-
-
-    const currentIndex =
-        getCurrentBrandAd();
-
-
-    let previousIndex =
-        currentIndex - 1;
-
-
-    if (previousIndex < 0) {
-
-        previousIndex =
-            brandAdSlides.length - 1;
-
-    }
-
-
-    scrollToBrandAd(
-        previousIndex
-    );
-
-}
-
-
-/* =========================================================
-   GO TO BRAND AD
-   ========================================================= */
-
-function goToBrandAd(index) {
-
-    if (!brandAdSlides.length) {
-
-        return;
-
-    }
-
-
-    scrollToBrandAd(
-        index
+        index,
+        true
     );
 
 
@@ -997,23 +1996,260 @@ function goToBrandAd(index) {
 
 
 /* =========================================================
+   SHOW BRAND AD
+========================================================= */
+
+function showBrandAd(index) {
+
+    goToBrandAd(index);
+
+}
+
+
+/* =========================================================
+   NEXT BRAND AD
+========================================================= */
+
+function nextBrandAd() {
+
+    if (
+        !brandAdSlider ||
+        brandAdSlides.length < 2
+    ) {
+
+        return;
+
+    }
+
+
+    const count =
+        getBrandAdOriginalCount();
+
+
+    if (
+        count <= 1
+    ) {
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getCurrentBrandAd();
+
+
+    const nextIndex =
+        (
+            currentIndex + 1
+        ) %
+        count;
+
+
+    scrollToBrandAd(
+        nextIndex,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   PREVIOUS BRAND AD
+========================================================= */
+
+function prevBrandAd() {
+
+    if (
+        !brandAdSlider ||
+        brandAdSlides.length < 2
+    ) {
+
+        return;
+
+    }
+
+
+    const count =
+        getBrandAdOriginalCount();
+
+
+    if (
+        count <= 1
+    ) {
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getCurrentBrandAd();
+
+
+    const previousIndex =
+        (
+            currentIndex -
+            1 +
+            count
+        ) %
+        count;
+
+
+    scrollToBrandAd(
+        previousIndex,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   FIX TRUE BRAND AD INFINITE LOOP
+========================================================= */
+
+function fixBrandAdLoop() {
+
+    if (
+        !brandAdSlider ||
+        brandAdIsResetting ||
+        brandAdSlides.length < 2
+    ) {
+
+        return;
+
+    }
+
+
+    const count =
+        getBrandAdOriginalCount();
+
+
+    if (
+        count <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const middleStart =
+        brandAdSlides[
+            count * 3
+        ];
+
+
+    const nextCopyStart =
+        brandAdSlides[
+            count * 4
+        ];
+
+
+    if (
+        !middleStart ||
+        !nextCopyStart
+    ) {
+
+        return;
+
+    }
+
+
+    const copyWidth =
+        nextCopyStart.offsetLeft -
+        middleStart.offsetLeft;
+
+
+    if (
+        copyWidth <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const currentScroll =
+        brandAdSlider.scrollLeft;
+
+
+    const rightLimit =
+        middleStart.offsetLeft +
+        copyWidth * 2;
+
+
+    const leftLimit =
+        middleStart.offsetLeft -
+        copyWidth * 2;
+
+
+    if (
+        currentScroll >
+        rightLimit
+    ) {
+
+        brandAdIsResetting = true;
+
+
+        brandAdSlider.scrollLeft =
+            currentScroll -
+            copyWidth;
+
+
+        requestAnimationFrame(() => {
+
+            brandAdIsResetting =
+                false;
+
+        });
+
+
+        return;
+
+    }
+
+
+    if (
+        currentScroll <
+        leftLimit
+    ) {
+
+        brandAdIsResetting = true;
+
+
+        brandAdSlider.scrollLeft =
+            currentScroll +
+            copyWidth;
+
+
+        requestAnimationFrame(() => {
+
+            brandAdIsResetting =
+                false;
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
    BRAND AD SCROLL DETECTION
-   =========================================================
+========================================================= */
 
-   Only update the dots.
+function initializeBrandAdScroll() {
 
-   Never force the slider back
-   while the user is scrolling.
-*/
-
-if (brandAdSlider) {
-
-    let brandAdScrollTimer;
+    if (!brandAdSlider) return;
 
 
     brandAdSlider.addEventListener(
         "scroll",
         () => {
+
+            fixBrandAdLoop();
+
 
             clearTimeout(
                 brandAdScrollTimer
@@ -1023,19 +2259,10 @@ if (brandAdSlider) {
             brandAdScrollTimer =
                 setTimeout(() => {
 
-                    const currentIndex =
+                    brandAdIndex =
                         getCurrentBrandAd();
 
-
-                    brandAdIndex =
-                        currentIndex;
-
-
-                    updateBrandAdDots(
-                        currentIndex
-                    );
-
-                }, 100);
+                }, 80);
 
         },
         {
@@ -1048,11 +2275,13 @@ if (brandAdSlider) {
 
 /* =========================================================
    BRAND AD AUTO SLIDER
-   ========================================================= */
+========================================================= */
 
 function startBrandAdSlider() {
 
-    if (!brandAdSlides.length) {
+    if (
+        brandAdSlides.length < 2
+    ) {
 
         return;
 
@@ -1087,75 +2316,13 @@ function restartBrandAdSlider() {
 
 
 /* =========================================================
-   BRAND AD TRACKPAD
-   ========================================================= */
+   BRAND AD HOVER
+========================================================= */
 
-if (brandAdSlider) {
+function initializeBrandAdHover() {
 
-    let lastBrandAdWheel = 0;
+    if (!brandAdSlider) return;
 
-
-    brandAdSlider.addEventListener(
-        "wheel",
-        (event) => {
-
-            if (
-                Math.abs(event.deltaX) <=
-                Math.abs(event.deltaY)
-            ) {
-
-                return;
-
-            }
-
-
-            const now =
-                Date.now();
-
-
-            if (
-                now - lastBrandAdWheel <
-                700
-            ) {
-
-                event.preventDefault();
-
-                return;
-
-            }
-
-
-            event.preventDefault();
-
-
-            if (event.deltaX > 0) {
-
-                nextBrandAd();
-
-            } else {
-
-                prevBrandAd();
-
-            }
-
-
-            lastBrandAdWheel =
-                now;
-
-        },
-        {
-            passive: false
-        }
-    );
-
-}
-
-
-/* =========================================================
-   PAUSE BRAND AD WHEN HOVERED
-   ========================================================= */
-
-if (brandAdSlider) {
 
     brandAdSlider.addEventListener(
         "mouseenter",
@@ -1182,25 +2349,44 @@ if (brandAdSlider) {
 
 
 /* =========================================================
-   INITIAL BRAND AD
-   ========================================================= */
+   6. INITIALIZE EVERYTHING
+========================================================= */
 
-if (brandAdSlides.length) {
-
-    brandAdIndex = 0;
-
-
-    updateBrandAdDots(0);
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
 
-    if (brandAdSlider) {
+        /* =================================================
+           FEATURED PRODUCTS
+        ================================================= */
 
-        brandAdSlider.scrollLeft = 0;
+        buildFeaturedCarousel();
+
+        setupFeaturedCarousel();
+
+        initializeFeaturedScroll();
+
+        initializeFeaturedHover();
+
+        startFeaturedSlider();
+
+
+
+        /* =================================================
+           BRAND ADS
+        ================================================= */
+
+        buildBrandAds();
+
+        setupBrandAdCarousel();
+
+        initializeBrandAdScroll();
+
+        initializeBrandAdHover();
+
+        startBrandAdSlider();
+
 
     }
-
-
-    startBrandAdSlider();
-
-}
-
+);
