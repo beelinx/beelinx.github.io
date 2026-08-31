@@ -1,414 +1,1206 @@
-/* =============================
-   SEARCH FUNCTION
-============================= */
+javascript
+/* =========================================================
+   BEELINX MAIN JAVASCRIPT
+   ========================================================= */
+
+
+/* =========================================================
+   1. SEARCH FUNCTION
+   ========================================================= */
 
 function searchFunction() {
 
-	let input = document.getElementById("searchInput");
-	if (!input) return;
+    const input = document.getElementById("searchInput");
 
-	let filter = input.value.toLowerCase();
-	let products = document.getElementsByClassName("products");
+    if (!input) return;
 
-	for (let i = 0; i < products.length; i++) {
+    const filter = input.value.toLowerCase().trim();
 
-		let text = products[i].textContent.toLowerCase();
+    const products =
+        document.getElementsByClassName("products");
 
-		if (text.includes(filter)) {
-			products[i].style.display = "";
-		} else {
-			products[i].style.display = "none";
-		}
+    for (let i = 0; i < products.length; i++) {
 
-	}
+        const text =
+            products[i].textContent.toLowerCase();
+
+        if (text.includes(filter)) {
+
+            products[i].style.display = "";
+
+        } else {
+
+            products[i].style.display = "none";
+
+        }
+
+    }
+
 }
 
 
-/* =============================
-   MENU TOGGLE
-============================= */
+/* =========================================================
+   2. MENU TOGGLE
+   ========================================================= */
 
 function toggleMenu() {
 
-	let menu = document.getElementById("sideMenu");
+    const menu =
+        document.getElementById("sideMenu");
 
-	if (menu) {
-		menu.classList.add("active");
-	}
+    if (menu) {
+
+        menu.classList.add("active");
+
+    }
 
 }
+
 
 function closeMenu() {
 
-	let menu = document.getElementById("sideMenu");
+    const menu =
+        document.getElementById("sideMenu");
 
-	if (menu) {
-		menu.classList.remove("active");
-	}
+    if (menu) {
+
+        menu.classList.remove("active");
+
+    }
 
 }
 
 
-/* =============================
-   GLIGHTBOX
-============================= */
+/* =========================================================
+   3. GLIGHTBOX
+   ========================================================= */
 
 if (typeof GLightbox !== "undefined") {
 
-let scrollPosition = 0;
+    let scrollPosition = 0;
 
-const lightbox = GLightbox({
-	touchNavigation: true,
-	loop: true
-});
+    const lightbox = GLightbox({
 
-/* save scroll position BEFORE opening */
-lightbox.on('open', () => {
+        touchNavigation: true,
+        loop: true
 
-	scrollPosition = window.scrollY;
-
-	setTimeout(() => {
-		window.scrollTo(0, scrollPosition);
-	}, 10);
-
-});
-
-/* restore again when closing */
-lightbox.on('close', () => {
-
-	setTimeout(() => {
-		window.scrollTo(0, scrollPosition);
-	}, 10);
-
-});
-
-}
+    });
 
 
-/* =============================
-   HEADER SLIDER
-============================= */
+    lightbox.on("open", () => {
 
-const slides = document.querySelectorAll(".featured-slide");
-const dots = document.querySelectorAll(".dot");
+        scrollPosition =
+            window.scrollY;
 
-let index = 0;
-let headerSlider;
+        setTimeout(() => {
 
-function showSlides() {
+            window.scrollTo(
+                0,
+                scrollPosition
+            );
 
-	if (!slides.length) return;
+        }, 10);
 
-	slides.forEach(slide => slide.classList.remove("active"));
-	dots.forEach(dot => dot.classList.remove("active"));
+    });
 
-	index++;
 
-	if (index >= slides.length) {
-		index = 0;
-	}
+    lightbox.on("close", () => {
 
-	slides[index].classList.add("active");
+        setTimeout(() => {
 
-	if (dots[index]) {
-		dots[index].classList.add("active");
-	}
+            window.scrollTo(
+                0,
+                scrollPosition
+            );
+
+        }, 10);
+
+    });
 
 }
 
 
-function goToSlide(n) {
+/* =========================================================
+   4. HERO CAROUSEL
+   =========================================================
 
-	if (!slides.length) return;
+   IMPORTANT:
 
-	slides.forEach(slide => slide.classList.remove("active"));
-	dots.forEach(dot => dot.classList.remove("active"));
+   The carousel is now controlled primarily by
+   the browser's native horizontal scrolling.
 
-	index = n;
+   JavaScript only handles:
+   - automatic sliding
+   - dots
+   - trackpad horizontal movement
 
-	slides[index].classList.add("active");
+   JavaScript NO LONGER reacts to touchend.
 
-	if (dots[index]) {
-		dots[index].classList.add("active");
-	}
+   This prevents the carousel from fighting
+   the user's finger while they swipe.
+*/
+
+
+const featuredTrack =
+    document.querySelector(".featured-track");
+
+
+const featuredSlides =
+    document.querySelectorAll(
+        ".featured-slide"
+    );
+
+
+const featuredDots =
+    document.querySelectorAll(".dot");
+
+
+let featuredIndex = 0;
+
+let featuredAutoSlider;
+
+
+/* =========================================================
+   UPDATE HERO DOTS
+   ========================================================= */
+
+function updateFeaturedDots(index) {
+
+    featuredDots.forEach(
+        (dot, i) => {
+
+            dot.classList.toggle(
+                "active",
+                i === index
+            );
+
+        }
+    );
 
 }
 
+
+/* =========================================================
+   GET HERO SLIDE POSITION
+   ========================================================= */
+
+function getFeaturedSlidePosition(slide) {
+
+    if (
+        !featuredTrack ||
+        !slide
+    ) {
+
+        return 0;
+
+    }
+
+
+    const trackRect =
+        featuredTrack.getBoundingClientRect();
+
+    const slideRect =
+        slide.getBoundingClientRect();
+
+
+    return (
+        slideRect.left -
+        trackRect.left +
+        featuredTrack.scrollLeft
+    );
+
+}
+
+
+/* =========================================================
+   GET CURRENT HERO SLIDE
+   ========================================================= */
+
+function getCurrentFeaturedSlide() {
+
+    if (
+        !featuredTrack ||
+        !featuredSlides.length
+    ) {
+
+        return 0;
+
+    }
+
+
+    const currentScroll =
+        featuredTrack.scrollLeft;
+
+
+    let closestIndex = 0;
+
+    let closestDistance =
+        Infinity;
+
+
+    featuredSlides.forEach(
+        (slide, index) => {
+
+            const slidePosition =
+                getFeaturedSlidePosition(
+                    slide
+                );
+
+
+            const distance =
+                Math.abs(
+                    slidePosition -
+                    currentScroll
+                );
+
+
+            if (
+                distance <
+                closestDistance
+            ) {
+
+                closestDistance =
+                    distance;
+
+                closestIndex =
+                    index;
+
+            }
+
+        }
+    );
+
+
+    return closestIndex;
+
+}
+
+
+/* =========================================================
+   SCROLL TO HERO SLIDE
+   ========================================================= */
+
+function scrollToFeaturedSlide(index) {
+
+    if (
+        !featuredTrack ||
+        !featuredSlides.length
+    ) {
+
+        return;
+
+    }
+
+
+    if (index < 0) {
+
+        index =
+            featuredSlides.length - 1;
+
+    }
+
+
+    if (
+        index >=
+        featuredSlides.length
+    ) {
+
+        index = 0;
+
+    }
+
+
+    const slide =
+        featuredSlides[index];
+
+
+    const targetPosition =
+        getFeaturedSlidePosition(
+            slide
+        );
+
+
+    featuredTrack.scrollTo({
+
+        left: targetPosition,
+
+        behavior: "smooth"
+
+    });
+
+
+    featuredIndex =
+        index;
+
+
+    updateFeaturedDots(
+        index
+    );
+
+}
+
+
+/* =========================================================
+   GO TO HERO SLIDE
+   ========================================================= */
+
+function goToSlide(index) {
+
+    if (!featuredSlides.length) {
+
+        return;
+
+    }
+
+
+    scrollToFeaturedSlide(
+        index
+    );
+
+
+    restartFeaturedSlider();
+
+}
+
+
+/* =========================================================
+   NEXT HERO SLIDE
+   ========================================================= */
 
 function nextSlide() {
-	showSlides();
+
+    if (!featuredSlides.length) {
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getCurrentFeaturedSlide();
+
+
+    let nextIndex =
+        currentIndex + 1;
+
+
+    if (
+        nextIndex >=
+        featuredSlides.length
+    ) {
+
+        nextIndex = 0;
+
+    }
+
+
+    scrollToFeaturedSlide(
+        nextIndex
+    );
+
 }
 
+
+/* =========================================================
+   PREVIOUS HERO SLIDE
+   ========================================================= */
 
 function prevSlide() {
 
-	if (!slides.length) return;
+    if (!featuredSlides.length) {
 
-	slides.forEach(slide => slide.classList.remove("active"));
-	dots.forEach(dot => dot.classList.remove("active"));
+        return;
 
-	index--;
+    }
 
-	if (index < 0) {
-		index = slides.length - 1;
-	}
 
-	slides[index].classList.add("active");
+    const currentIndex =
+        getCurrentFeaturedSlide();
 
-	if (dots[index]) {
-		dots[index].classList.add("active");
-	}
+
+    let previousIndex =
+        currentIndex - 1;
+
+
+    if (previousIndex < 0) {
+
+        previousIndex =
+            featuredSlides.length - 1;
+
+    }
+
+
+    scrollToFeaturedSlide(
+        previousIndex
+    );
 
 }
 
 
-if (slides.length) {
-	headerSlider = setInterval(showSlides, 7000);
-}
+/* =========================================================
+   HERO AUTO SLIDER
+   ========================================================= */
+
+function startFeaturedSlider() {
+
+    if (!featuredSlides.length) {
+
+        return;
+
+    }
 
 
-/* =============================
-   TRACKPAD SWIPE (HEADER)
-============================= */
+    clearInterval(
+        featuredAutoSlider
+    );
 
-const headerSliderTrackpad = document.querySelector(".featured-product");
 
-if (headerSliderTrackpad) {
+    featuredAutoSlider =
+        setInterval(() => {
 
-let lastScrollTime = 0;
-
-headerSliderTrackpad.addEventListener("wheel", function(e){
-
-    const now = Date.now();
-
-    if(now - lastScrollTime < 700) return; // prevents rapid firing
-
-    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){
-
-        if(e.deltaX > 0){
             nextSlide();
-        } else {
-            prevSlide();
-        }
 
-        lastScrollTime = now;
+        }, 7000);
+
+}
+
+
+function restartFeaturedSlider() {
+
+    clearInterval(
+        featuredAutoSlider
+    );
+
+
+    startFeaturedSlider();
+
+}
+
+
+/* =========================================================
+   HERO MANUAL SCROLL DETECTION
+   =========================================================
+
+   IMPORTANT:
+
+   We only UPDATE the dots here.
+
+   We DO NOT call scrollTo().
+   We DO NOT force the carousel
+   to another position.
+
+   Therefore the user's manual
+   scrolling remains completely free.
+*/
+
+if (featuredTrack) {
+
+    let featuredScrollTimer;
+
+
+    featuredTrack.addEventListener(
+        "scroll",
+        () => {
+
+            clearTimeout(
+                featuredScrollTimer
+            );
+
+
+            featuredScrollTimer =
+                setTimeout(() => {
+
+                    const currentIndex =
+                        getCurrentFeaturedSlide();
+
+
+                    featuredIndex =
+                        currentIndex;
+
+
+                    updateFeaturedDots(
+                        currentIndex
+                    );
+
+                }, 100);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+}
+
+
+/* =========================================================
+   HERO TRACKPAD
+   =========================================================
+
+   Only horizontal trackpad gestures are
+   intercepted.
+
+   Normal vertical scrolling is untouched.
+*/
+
+if (featuredTrack) {
+
+    let lastHeroWheel = 0;
+
+
+    featuredTrack.addEventListener(
+        "wheel",
+        (event) => {
+
+            if (
+                Math.abs(event.deltaX) <=
+                Math.abs(event.deltaY)
+            ) {
+
+                return;
+
+            }
+
+
+            const now =
+                Date.now();
+
+
+            if (
+                now - lastHeroWheel <
+                600
+            ) {
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            if (event.deltaX > 0) {
+
+                nextSlide();
+
+            } else {
+
+                prevSlide();
+
+            }
+
+
+            lastHeroWheel =
+                now;
+
+        },
+        {
+            passive: false
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PAUSE HERO WHEN HOVERED
+   ========================================================= */
+
+if (featuredTrack) {
+
+    featuredTrack.addEventListener(
+        "mouseenter",
+        () => {
+
+            clearInterval(
+                featuredAutoSlider
+            );
+
+        }
+    );
+
+
+    featuredTrack.addEventListener(
+        "mouseleave",
+        () => {
+
+            startFeaturedSlider();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIAL HERO SLIDE
+   ========================================================= */
+
+if (featuredSlides.length) {
+
+    featuredIndex = 0;
+
+
+    updateFeaturedDots(0);
+
+
+    if (featuredTrack) {
+
+        featuredTrack.scrollLeft = 0;
+
     }
 
-});
+
+    startFeaturedSlider();
 
 }
 
 
-/* =============================
-   HEADER SWIPE
-============================= */
+/* =========================================================
+   5. BRAND AD SLIDER
+   =========================================================
 
-const slider = document.querySelector(".featured-product");
+   Same philosophy as the hero carousel.
 
-if (slider) {
+   The browser handles manual touch scrolling.
 
-	let startX = 0;
+   JavaScript only handles:
+   - automatic movement
+   - dots
+   - horizontal trackpad movement
 
-	slider.addEventListener("touchstart", function(e) {
-
-		startX = e.touches[0].clientX;
-
-	});
-
-	slider.addEventListener("touchend", function(e) {
-
-		let endX = e.changedTouches[0].clientX;
-
-		if (startX - endX > 50) {
-			showSlides();
-		}
-
-		if (endX - startX > 50) {
-
-			index -= 2;
-
-			if (index < -1) {
-				index = slides.length - 2;
-			}
-
-			showSlides();
-
-		}
-
-	});
-
-}
+   There is NO touchend handler.
+*/
 
 
-/* =============================
-   PAUSE HEADER SLIDER
-============================= */
-
-const headerContainer = document.querySelector(".featured-product");
-
-if (headerContainer) {
-
-	headerContainer.addEventListener("mouseenter", function() {
-		clearInterval(headerSlider);
-	});
-
-	headerContainer.addEventListener("mouseleave", function() {
-		headerSlider = setInterval(showSlides, 5000);
-	});
-
-}
+const brandAdSlider =
+    document.querySelector(
+        ".brand-ad-slider"
+    );
 
 
-/* =============================
-   FOOTER SLIDER
-============================= */
-
-const footerSlides = document.querySelectorAll(".featured-slide-footer");
-const footerDots = document.querySelectorAll(".footer-dot");
-
-let footerIndex = 0;
-let footerSliderInterval;
-
-function showFooterSlides() {
-
-	if (!footerSlides.length) return;
-
-	footerSlides.forEach(slide => slide.classList.remove("active"));
-	footerDots.forEach(dot => dot.classList.remove("active"));
-
-	footerIndex++;
-
-	if (footerIndex >= footerSlides.length) {
-		footerIndex = 0;
-	}
-
-	footerSlides[footerIndex].classList.add("active");
-
-	if (footerDots[footerIndex]) {
-		footerDots[footerIndex].classList.add("active");
-	}
-
-}
+const brandAdSlides =
+    document.querySelectorAll(
+        ".brand-ad-slide"
+    );
 
 
-function nextFooterSlide() {
-	showFooterSlides();
-}
+const brandAdDots =
+    document.querySelectorAll(
+        ".brand-ad-dot"
+    );
 
 
-function prevFooterSlide() {
+let brandAdIndex = 0;
 
-	if (!footerSlides.length) return;
-
-	footerSlides.forEach(slide => slide.classList.remove("active"));
-	footerDots.forEach(dot => dot.classList.remove("active"));
-
-	footerIndex--;
-
-	if (footerIndex < 0) {
-		footerIndex = footerSlides.length - 1;
-	}
-
-	footerSlides[footerIndex].classList.add("active");
-
-	if (footerDots[footerIndex]) {
-		footerDots[footerIndex].classList.add("active");
-	}
-
-}
+let brandAdInterval;
 
 
-if (footerSlides.length) {
-	footerSliderInterval = setInterval(showFooterSlides, 10000);
-}
+/* =========================================================
+   GET BRAND AD POSITION
+   ========================================================= */
 
-/* =============================
-   TRACKPAD SWIPE (FOOTER)
-============================= */
+function getBrandAdSlidePosition(slide) {
 
-const footerTrackpad = document.querySelector(".featured-product-footer-slider");
+    if (
+        !brandAdSlider ||
+        !slide
+    ) {
 
-if (footerTrackpad) {
+        return 0;
 
-let lastScrollTime = 0;
-
-footerTrackpad.addEventListener("wheel", function(e){
-
-    const now = Date.now();
-
-    if(now - lastScrollTime < 700) return;
-
-    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){
-
-        if(e.deltaX > 0){
-            nextFooterSlide();
-        } else {
-            prevFooterSlide();
-        }
-
-        lastScrollTime = now;
     }
 
-});
+
+    const sliderRect =
+        brandAdSlider.getBoundingClientRect();
+
+
+    const slideRect =
+        slide.getBoundingClientRect();
+
+
+    return (
+        slideRect.left -
+        sliderRect.left +
+        brandAdSlider.scrollLeft
+    );
 
 }
 
 
-/* =============================
-   FOOTER SWIPE
-============================= */
+/* =========================================================
+   UPDATE BRAND AD DOTS
+   ========================================================= */
 
-const footerSlider = document.querySelector(".featured-product-footer-slider");
+function updateBrandAdDots(index) {
 
-if (footerSlider) {
+    brandAdDots.forEach(
+        (dot, i) => {
 
-	let footerStartX = 0;
+            dot.classList.toggle(
+                "active",
+                i === index
+            );
 
-	footerSlider.addEventListener("touchstart", function(e) {
-
-		footerStartX = e.touches[0].clientX;
-
-	});
-
-	footerSlider.addEventListener("touchend", function(e) {
-
-		let footerEndX = e.changedTouches[0].clientX;
-
-		if (footerStartX - footerEndX > 50) {
-			showFooterSlides();
-		}
-
-		if (footerEndX - footerStartX > 50) {
-
-			footerIndex -= 2;
-
-			if (footerIndex < -1) {
-				footerIndex = footerSlides.length - 2;
-			}
-
-			showFooterSlides();
-
-		}
-
-	});
+        }
+    );
 
 }
 
 
-/* =============================
-   PAUSE FOOTER SLIDER
-============================= */
+/* =========================================================
+   GET CURRENT BRAND AD
+   ========================================================= */
 
-const footerContainer = document.querySelector(".featured-product-footer-slider");
+function getCurrentBrandAd() {
 
-if (footerContainer) {
+    if (
+        !brandAdSlider ||
+        !brandAdSlides.length
+    ) {
 
-	footerContainer.addEventListener("mouseenter", function() {
-		clearInterval(footerSliderInterval);
-	});
+        return 0;
 
-	footerContainer.addEventListener("mouseleave", function() {
-		footerSliderInterval = setInterval(showFooterSlides, 5000);
-	});
+    }
+
+
+    const currentScroll =
+        brandAdSlider.scrollLeft;
+
+
+    let closestIndex = 0;
+
+    let closestDistance =
+        Infinity;
+
+
+    brandAdSlides.forEach(
+        (slide, index) => {
+
+            const slidePosition =
+                getBrandAdSlidePosition(
+                    slide
+                );
+
+
+            const distance =
+                Math.abs(
+                    slidePosition -
+                    currentScroll
+                );
+
+
+            if (
+                distance <
+                closestDistance
+            ) {
+
+                closestDistance =
+                    distance;
+
+                closestIndex =
+                    index;
+
+            }
+
+        }
+    );
+
+
+    return closestIndex;
 
 }
+
+
+/* =========================================================
+   SCROLL TO BRAND AD
+   ========================================================= */
+
+function scrollToBrandAd(index) {
+
+    if (
+        !brandAdSlider ||
+        !brandAdSlides.length
+    ) {
+
+        return;
+
+    }
+
+
+    if (index < 0) {
+
+        index =
+            brandAdSlides.length - 1;
+
+    }
+
+
+    if (
+        index >=
+        brandAdSlides.length
+    ) {
+
+        index = 0;
+
+    }
+
+
+    const slide =
+        brandAdSlides[index];
+
+
+    const targetPosition =
+        getBrandAdSlidePosition(
+            slide
+        );
+
+
+    brandAdSlider.scrollTo({
+
+        left: targetPosition,
+
+        behavior: "smooth"
+
+    });
+
+
+    brandAdIndex =
+        index;
+
+
+    updateBrandAdDots(
+        index
+    );
+
+}
+
+
+/* =========================================================
+   SHOW BRAND AD
+   ========================================================= */
+
+function showBrandAd(index) {
+
+    if (!brandAdSlides.length) {
+
+        return;
+
+    }
+
+
+    scrollToBrandAd(
+        index
+    );
+
+}
+
+
+/* =========================================================
+   NEXT BRAND AD
+   ========================================================= */
+
+function nextBrandAd() {
+
+    if (!brandAdSlides.length) {
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getCurrentBrandAd();
+
+
+    let nextIndex =
+        currentIndex + 1;
+
+
+    if (
+        nextIndex >=
+        brandAdSlides.length
+    ) {
+
+        nextIndex = 0;
+
+    }
+
+
+    scrollToBrandAd(
+        nextIndex
+    );
+
+}
+
+
+/* =========================================================
+   PREVIOUS BRAND AD
+   ========================================================= */
+
+function prevBrandAd() {
+
+    if (!brandAdSlides.length) {
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getCurrentBrandAd();
+
+
+    let previousIndex =
+        currentIndex - 1;
+
+
+    if (previousIndex < 0) {
+
+        previousIndex =
+            brandAdSlides.length - 1;
+
+    }
+
+
+    scrollToBrandAd(
+        previousIndex
+    );
+
+}
+
+
+/* =========================================================
+   GO TO BRAND AD
+   ========================================================= */
+
+function goToBrandAd(index) {
+
+    if (!brandAdSlides.length) {
+
+        return;
+
+    }
+
+
+    scrollToBrandAd(
+        index
+    );
+
+
+    restartBrandAdSlider();
+
+}
+
+
+/* =========================================================
+   BRAND AD SCROLL DETECTION
+   =========================================================
+
+   Only update the dots.
+
+   Never force the slider back
+   while the user is scrolling.
+*/
+
+if (brandAdSlider) {
+
+    let brandAdScrollTimer;
+
+
+    brandAdSlider.addEventListener(
+        "scroll",
+        () => {
+
+            clearTimeout(
+                brandAdScrollTimer
+            );
+
+
+            brandAdScrollTimer =
+                setTimeout(() => {
+
+                    const currentIndex =
+                        getCurrentBrandAd();
+
+
+                    brandAdIndex =
+                        currentIndex;
+
+
+                    updateBrandAdDots(
+                        currentIndex
+                    );
+
+                }, 100);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BRAND AD AUTO SLIDER
+   ========================================================= */
+
+function startBrandAdSlider() {
+
+    if (!brandAdSlides.length) {
+
+        return;
+
+    }
+
+
+    clearInterval(
+        brandAdInterval
+    );
+
+
+    brandAdInterval =
+        setInterval(() => {
+
+            nextBrandAd();
+
+        }, 10000);
+
+}
+
+
+function restartBrandAdSlider() {
+
+    clearInterval(
+        brandAdInterval
+    );
+
+
+    startBrandAdSlider();
+
+}
+
+
+/* =========================================================
+   BRAND AD TRACKPAD
+   ========================================================= */
+
+if (brandAdSlider) {
+
+    let lastBrandAdWheel = 0;
+
+
+    brandAdSlider.addEventListener(
+        "wheel",
+        (event) => {
+
+            if (
+                Math.abs(event.deltaX) <=
+                Math.abs(event.deltaY)
+            ) {
+
+                return;
+
+            }
+
+
+            const now =
+                Date.now();
+
+
+            if (
+                now - lastBrandAdWheel <
+                700
+            ) {
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            if (event.deltaX > 0) {
+
+                nextBrandAd();
+
+            } else {
+
+                prevBrandAd();
+
+            }
+
+
+            lastBrandAdWheel =
+                now;
+
+        },
+        {
+            passive: false
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PAUSE BRAND AD WHEN HOVERED
+   ========================================================= */
+
+if (brandAdSlider) {
+
+    brandAdSlider.addEventListener(
+        "mouseenter",
+        () => {
+
+            clearInterval(
+                brandAdInterval
+            );
+
+        }
+    );
+
+
+    brandAdSlider.addEventListener(
+        "mouseleave",
+        () => {
+
+            startBrandAdSlider();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIAL BRAND AD
+   ========================================================= */
+
+if (brandAdSlides.length) {
+
+    brandAdIndex = 0;
+
+
+    updateBrandAdDots(0);
+
+
+    if (brandAdSlider) {
+
+        brandAdSlider.scrollLeft = 0;
+
+    }
+
+
+    startBrandAdSlider();
+
+}
+

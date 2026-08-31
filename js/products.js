@@ -2,11 +2,47 @@
    BEELINX PRODUCT DATABASE
 ========================================= */
 
+/* =========================================
+   BEELINX BRAND DATABASE
+   Brand-specific information lives here.
+========================================= */
+
+const brands = {
+
+
+    /* =========================================
+       BRAND INFORMATION
+    ========================================= */
+
+    "Great Legacy": {
+
+        name: "Great Legacy",
+
+        logo: "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
+
+        page: "brandpage-template.html?brand=Great%20Legacy",
+
+        website: "https://greatlegacy0.myshopify.com/",
+
+        social: {
+
+            instagram: "https://instagram.com/_gtl_1",
+
+            tiktok: "https://www.tiktok.com/@great_legacy_",
+
+            twitter: "https://twitter.com/greatlegacy001"
+
+        }
+
+    }
+
+};
+
 const products = {
 
 
     /* =========================================
-       GREAT LEGACY
+       GREAT LEGACY PRODUCTS
     ========================================= */
 
 
@@ -301,39 +337,5 @@ const products = {
 
 
 
-/* =========================================
-   BEELINX BRAND DATABASE
-   Brand-specific information lives here.
-========================================= */
 
-const brands = {
-
-
-    /* =========================================
-       GREAT LEGACY
-    ========================================= */
-
-    "Great Legacy": {
-
-        name: "Great Legacy",
-
-        logo: "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
-        page: "brandpage-template.html?brand=Great%20Legacy",
-
-        website: "https://greatlegacy0.myshopify.com/",
-
-        social: {
-
-            instagram: "https://instagram.com/great_legacy1",
-
-            tiktok: "https://www.tiktok.com/@great_legacy_",
-
-            twitter: "https://twitter.com/greatlegacy001"
-
-        }
-
-    }
-
-};
 
