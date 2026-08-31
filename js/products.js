@@ -22,13 +22,13 @@ const brands = {
 
         page: "brandpage-template.html?brand=Great%20Legacy",
 
-        website: "https://greatlegacy0.myshopify.com/",
+        website: "https://gtl-great-legacy539.labeld.app/",
 
         social: {
 
             instagram: "https://instagram.com/_gtl_1",
 
-            tiktok: "https://www.tiktok.com/@great_legacy_",
+            tiktok: "https://www.tiktok.com/@_gtl_",
 
             twitter: "https://twitter.com/greatlegacy001"
 
