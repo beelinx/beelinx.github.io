@@ -1143,6 +1143,17 @@ h1 {
     text-decoration: none;
 }
 
+.email-link {
+    color: #000000;
+
+    font-style: italic;
+}
+
+.email-link:hover {
+    color: #555;
+    text-decoration: underline !important;
+}
+
 
 /* =========================================================
    25. CATALOGUE BUTTON
