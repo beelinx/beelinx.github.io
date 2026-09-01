@@ -86,6 +86,10 @@ nav a:hover {
     cursor: pointer;
 }
 
+.hamburger:hover {
+    opacity: 0.7;
+}
+
 
 /* =========================================================
    LOGO
@@ -103,6 +107,10 @@ nav a:hover {
 
 .logo {
     text-align: center;
+}
+
+.logo-img:hover {
+    opacity: 0.7;
 }
 
 
@@ -135,6 +143,7 @@ nav a:hover {
 
 .side-menu a:hover {
     background: #111;
+    opacity: 0.7;
 }
 
 
@@ -151,6 +160,9 @@ nav a:hover {
     cursor: pointer;
 }
 
+.close-btn:hover {
+    opacity: 0.7;
+}
 
 /* =========================================================
    4. SEARCH
@@ -183,6 +195,10 @@ nav a:hover {
 .search-btn {
     cursor: pointer;
     color: #ffffff;
+}
+
+.search-btn:hover {
+    opacity: 0.7;
 }
 
 
@@ -222,11 +238,6 @@ nav a:hover {
     overflow-x: auto;
     overflow-y: hidden;
 
-    /*
-       Side padding allows the active card to sit
-       in the center while showing the neighbouring
-       cards on both sides.
-    */
     padding-left: 14vw;
     padding-right: 14vw;
 
@@ -237,9 +248,6 @@ nav a:hover {
     overscroll-behavior-x: contain;
     touch-action: pan-x;
 
-    /*
-       Helps browser snapping keep cards centered.
-    */
     scroll-padding-left: 14vw;
     scroll-padding-right: 14vw;
 }
@@ -260,10 +268,6 @@ nav a:hover {
     transform: none;
     pointer-events: auto;
 
-    /*
-       Three-card appearance:
-       center card + partial card on each side.
-    */
     flex: 0 0 72vw;
     width: 72vw;
 
@@ -279,21 +283,11 @@ nav a:hover {
     flex-direction: row;
     align-items: center;
 
-    /*
-       Keep the existing start-based snapping
-       because the JavaScript infinite loop
-       positions cards using offsetLeft.
-    */
     scroll-snap-align: start;
 
     flex-shrink: 0;
 }
 
-
-/*
-   Cloned slides behave exactly like
-   normal slides.
-*/
 
 .featured-clone {
     opacity: 1;
@@ -412,50 +406,11 @@ nav a:hover {
 }
 
 
-/* =========================================================
-   11. HERO ARROWS
-========================================================= */
 
-.header-arrow {
-    position: absolute;
-
-    top: 50%;
-    transform: translateY(-50%);
-
-    background: transparent;
-
-    color: white;
-
-    border: none;
-
-    font-size: 14px;
-
-    padding: 4px 6px;
-
-    cursor: pointer;
-
-    z-index: 10;
-
-    opacity: 0;
-
-    transition: opacity 0.3s ease;
-}
-
-.header-arrow.left {
-    left: 10px;
-}
-
-.header-arrow.right {
-    right: 10px;
-}
-
-.featured-product:hover .header-arrow {
-    opacity: 1;
-}
 
 
 /* =========================================================
-   12. FULL-WIDTH BRAND AD SLIDER
+   11. FULL-WIDTH BRAND AD SLIDER
 ========================================================= */
 
 .brand-ad-slider {
@@ -600,16 +555,7 @@ nav a:hover {
 
 
 /* =========================================================
-   BRAND AD ARROWS
-========================================================= */
-
-.brand-ad-arrow {
-    display: none !important;
-}
-
-
-/* =========================================================
-   13. GENERAL COLLECTION TITLE
+   12. GENERAL COLLECTION TITLE
 ========================================================= */
 
 .collection-name {
@@ -645,12 +591,12 @@ nav a:hover {
 
     text-decoration: none;
 
-    opacity: 70%;
+    opacity: 0.7;
 }
 
 
 /* =========================================================
-   14. HOMEPAGE MOTTO
+   13. HOMEPAGE MOTTO
 ========================================================= */
 
 .motto {
@@ -676,7 +622,7 @@ nav a:hover {
 
 
 /* =========================================================
-   15. PRODUCT PRICES / BUTTONS
+   14. PRODUCT PRICES / BUTTONS
 ========================================================= */
 
 .price {
@@ -723,7 +669,7 @@ nav a:hover {
 
 
 /* =========================================================
-   16. PRODUCT GRID
+   15. PRODUCT GRID
 ========================================================= */
 
 .products-container {
@@ -734,7 +680,7 @@ nav a:hover {
 
     display: grid;
 
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
 
     align-items: center;
 
@@ -758,8 +704,8 @@ nav a:hover {
 
     margin: 0 auto;
 
-    width: 230px;
-    height: 230px;
+    width: 170px;
+    height: 170px;
 }
 
 .clothe-text {
@@ -782,7 +728,7 @@ nav a:hover {
 }
 
 .clothe-image:hover {
-    opacity: 70%;
+    opacity: 0.7;
 
     transform:
         translateY(-6px)
@@ -800,7 +746,7 @@ nav a:hover {
 
 
 /* =========================================================
-   17. BRAND SECTION
+   16. BRAND SECTION
 ========================================================= */
 
 .brand-section-container {
@@ -835,7 +781,7 @@ nav a:hover {
 }
 
 .brand-logo:hover {
-    opacity: 70%;
+    opacity: 0.7;
 }
 
 .brand-product-logo {
@@ -853,7 +799,7 @@ nav a:hover {
 
 
 /* =========================================================
-   18. GENERAL H1
+   17. GENERAL H1
 ========================================================= */
 
 h1 {
@@ -872,7 +818,7 @@ h1 {
 
 
 /* =========================================================
-   19. GREAT LEGACY PAGE
+   18. GREAT LEGACY PAGE
 ========================================================= */
 
 .header-section {
@@ -909,7 +855,7 @@ h1 {
 
     text-decoration: overline;
 
-    opacity: 70%;
+    opacity: 0.7;
 
     font-weight: bolder;
 
@@ -934,7 +880,7 @@ h1 {
 
 
 /* =========================================================
-   20. GENERAL FOOTER
+   19. GENERAL FOOTER
 ========================================================= */
 
 .footer-section {
@@ -972,7 +918,7 @@ h1 {
 
 
 /* =========================================================
-   21. SOCIAL ICONS
+   20. SOCIAL ICONS
 ========================================================= */
 
 .social-icons {
@@ -981,8 +927,6 @@ h1 {
     justify-content: center;
 
     color: rgb(0, 0, 0);
-
-    opacity: 90%;
 
     font-size: 20px;
 
@@ -1003,11 +947,13 @@ h1 {
 
 .social-icons a:hover {
     color: gray;
+    transition: transform 0.2s ease, color 0.2s ease;
+    transform: translateY(-3px);
 }
 
 
 /* =========================================================
-   22. COPYRIGHT
+   21. COPYRIGHT
 ========================================================= */
 
 .copyrights-gen-home {
@@ -1060,7 +1006,7 @@ h1 {
 
 
 /* =========================================================
-   23. BRAND WEBSITE LINK
+   22. BRAND WEBSITE LINK
 ========================================================= */
 
 .brand-web-link {
@@ -1080,10 +1026,12 @@ h1 {
     color: #000000;
 
     padding-bottom: 20px;
+
+    transition: font-size 0.2s ease;
 }
 
 .website-link:hover {
-    text-decoration: underline;
+    font-size: larger !important;
 }
 
 .logo-align {
@@ -1092,7 +1040,7 @@ h1 {
 
 
 /* =========================================================
-   24. ABOUT PAGE
+   23. ABOUT PAGE
 ========================================================= */
 
 .about-beelinx {
@@ -1156,7 +1104,7 @@ h1 {
 
 
 /* =========================================================
-   25. CATALOGUE BUTTON
+   24. CATALOGUE BUTTON
 ========================================================= */
 
 .open-catalogue {
@@ -1197,7 +1145,7 @@ h1 {
 
 
 /* =========================================================
-   26. TABLET
+   25. TABLET
 ========================================================= */
 
 @media (max-width: 768px) {
@@ -1223,12 +1171,6 @@ h1 {
 
     .brand-name-h {
         font-size: 28px;
-    }
-
-    .header-arrow {
-        font-size: 8px;
-
-        padding: 6px 10px;
     }
 
     .nav-center {
@@ -1260,10 +1202,6 @@ h1 {
 
     .featured-track {
 
-        /*
-           More room around the centered card
-           on tablet screens.
-        */
         padding-left: 11vw;
         padding-right: 11vw;
 
@@ -1301,7 +1239,7 @@ h1 {
 
     .products-container {
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(3, 1fr);
     }
 
     .products img {
@@ -1390,7 +1328,7 @@ h1 {
     .footer-text {
         font-size: 10px;
 
-        opacity: 90%;
+        opacity: 0.7;
     }
 
     .brand-web-link {
@@ -1426,7 +1364,7 @@ h1 {
 
 
 /* =========================================================
-   27. MOBILE
+   26. MOBILE
 ========================================================= */
 
 @media (max-width: 600px) {
@@ -1457,10 +1395,6 @@ h1 {
 
         flex-wrap: nowrap;
 
-        /*
-           Slightly smaller gap makes the neighbouring
-           cards feel connected to the center card.
-        */
         gap: 12px;
 
         width: 100%;
@@ -1468,10 +1402,6 @@ h1 {
         overflow-x: auto;
         overflow-y: hidden;
 
-        /*
-           Creates the centered-card layout:
-           [partial card] [FULL CARD] [partial card]
-        */
         padding-left: 12vw;
         padding-right: 12vw;
 
@@ -1500,11 +1430,7 @@ h1 {
 
     .featured-slide,
     .featured-slide.active {
-        /*
-           76vw gives enough room for the active card
-           while allowing the next/previous cards
-           to remain visible at both sides.
-        */
+
         flex: 0 0 76vw;
 
         width: 76vw;
@@ -1609,7 +1535,6 @@ h1 {
         border-radius: 0;
     }
 
-
     /* =====================================================
        TEXT AREA
     ===================================================== */
@@ -1668,16 +1593,6 @@ h1 {
         font-style: italic;
     }
 
-
-    /* =====================================================
-       MOBILE HERO ARROWS
-    ===================================================== */
-
-    .featured-product .header-arrow {
-        display: none;
-    }
-
-
     /* =====================================================
        MOBILE MOTTO
     ===================================================== */
@@ -1685,7 +1600,6 @@ h1 {
     .motto {
         font-size: small;
     }
-
 
     /* =====================================================
        MOBILE BUY BUTTON
@@ -1707,14 +1621,17 @@ h1 {
     ===================================================== */
 
     .products img {
-        width: 170px;
+        width: 100%;
+        height: auto;
 
-        height: 170px;
+        max-width: 120px;
     }
 
     .products-container {
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(3, 1fr);
+
+        gap: 12px;
     }
 
     .clothe-text {
@@ -1821,7 +1738,6 @@ h1 {
         border-radius: 0;
     }
 
-
     /* =====================================================
        AD LINK
     ===================================================== */
@@ -1839,7 +1755,6 @@ h1 {
 
         padding: 0;
     }
-
 
     /* =====================================================
        AD IMAGE
@@ -1863,7 +1778,6 @@ h1 {
         object-position: center;
     }
 
-
     /* =====================================================
        AD TEXT
     ===================================================== */
@@ -1882,16 +1796,6 @@ h1 {
         letter-spacing: 0.8px;
     }
 
-
-    /* =====================================================
-       NO ARROWS
-    ===================================================== */
-
-    .brand-ad-arrow {
-        display: none !important;
-    }
-
-
     /* =====================================================
        FOOTER
     ===================================================== */
@@ -1899,7 +1803,7 @@ h1 {
     .footer-text {
         font-size: 10px;
 
-        opacity: 90%;
+        opacity: 0.7;
     }
 
     .brand-web-link {
@@ -1940,7 +1844,7 @@ h1 {
 
 
 /* =========================================================
-   28. VERY SMALL PHONES
+   27. VERY SMALL PHONES
 ========================================================= */
 
 @media (max-width: 360px) {
@@ -1951,10 +1855,6 @@ h1 {
     ===================================================== */
 
     .featured-track {
-        /*
-           Keep the centered-card appearance
-           on very small screens.
-        */
         padding-left: 10vw;
         padding-right: 10vw;
 
@@ -2003,6 +1903,24 @@ h1 {
 
     .featured-slide .featured-product-link {
         font-size: 12px;
+    }
+
+
+    /* =====================================================
+       VERY SMALL MOBILE PRODUCT GRID
+    ===================================================== */
+
+    .products-container {
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 8px;
+    }
+
+    .products img {
+        width: 100%;
+        height: auto;
+        max-width: 100px;
     }
 
 

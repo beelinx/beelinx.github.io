@@ -1,4 +1,3 @@
-css
 * {
     box-sizing: border-box;
     margin: 0;
@@ -24,6 +23,7 @@ body.glightbox-open {
 
 /* =========================================
    NAVBAR
+   MATCHES HOMEPAGE NAVBAR
 ========================================= */
 
 .navbar {
@@ -34,7 +34,9 @@ body.glightbox-open {
     padding: 10px 20px;
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 50px;
     z-index: 1000;
 }
 
@@ -52,7 +54,7 @@ nav ul {
 }
 
 nav a {
-    color: white;
+    color: rgb(255, 255, 255);
     font-weight: 300;
 }
 
@@ -64,6 +66,10 @@ nav a:hover {
     font-size: 22px;
     color: white;
     cursor: pointer;
+}
+
+.hamburger:hover {
+    opacity: 0.7;
 }
 
 .side-menu {
@@ -87,11 +93,11 @@ nav a:hover {
 
 .side-menu a:hover {
     background: #111;
+    opacity: 0.7;
 }
 
 .side-menu.active {
     left: 0;
-    position: fixed;
 }
 
 .close-btn {
@@ -103,6 +109,10 @@ nav a:hover {
     cursor: pointer;
 }
 
+.close-btn:hover {
+    opacity: 0.7;
+}
+
 .logo-link {
     display: flex;
     align-items: center;
@@ -111,6 +121,10 @@ nav a:hover {
 .logo-img {
     height: 50px;
     width: auto;
+}
+
+.logo-img:hover {
+    opacity: 0.7;
 }
 
 .search-container {
@@ -125,7 +139,9 @@ nav a:hover {
     padding: 0;
     border: none;
     outline: none;
-    transition: width 0.4s ease, padding 0.4s ease;
+    transition:
+        width 0.4s ease,
+        padding 0.4s ease;
     font-size: 17px;
 }
 
@@ -137,7 +153,11 @@ nav a:hover {
 
 .search-btn {
     cursor: pointer;
-    color: white;
+    color: #ffffff;
+}
+
+.search-btn:hover {
+    opacity: 0.7;
 }
 
 
@@ -180,6 +200,7 @@ nav a:hover {
 .product-page .brand-product-logo:hover {
     transition: transform 0.2s ease;
     transform: scale(1.08);
+    opacity: 0.7;
 }
 
 .product-page #product-name {
@@ -317,7 +338,8 @@ nav a:hover {
 }
 
 .more-product-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-20px);
+    opacity: 0.7;
 }
 
 .more-product-card img {
@@ -478,12 +500,15 @@ nav a:hover {
 
 @media (max-width: 600px) {
 
+    /* NAVBAR — MATCH HOMEPAGE */
+
     .navbar {
-        padding: 8px 15px;
+        padding: 10px 20px;
+        height: 50px;
     }
 
     .logo-img {
-        height: 45px;
+        height: 40px;
     }
 
 
@@ -698,4 +723,3 @@ nav a:hover {
         font-size: 7px;
     }
 }
-
