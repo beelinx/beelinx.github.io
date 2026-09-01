@@ -343,8 +343,36 @@ function buildFeaturedCarousel() {
             productLink.className =
                 "featured-product-link";
 
-            productLink.href =
-                product.orderLink || "#";
+
+            /*
+               Use the productId to send the user
+               to Beelinx's own product template.
+
+               Example:
+               productId: "legacy-jorst"
+
+               becomes:
+               product-template.html?id=legacy-jorst
+            */
+
+            if (product.productId) {
+
+                productLink.href =
+                    `product-template.html?id=${encodeURIComponent(product.productId)}`;
+
+            } else {
+
+                /*
+                   Fallback to the original orderLink
+                   if a featured product doesn't have
+                   a productId.
+                */
+
+                productLink.href =
+                    product.orderLink || "#";
+
+            }
+
 
             productLink.textContent =
                 "View Product";

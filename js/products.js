@@ -26,6 +26,8 @@ const featuredProducts = [
 
     {
 
+        productId: "legacy-jorst",
+
         name: "LEGACY JORST",
 
         price: "₦28,000",
@@ -42,9 +44,6 @@ const featuredProducts = [
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-jorst?variant=44552514338927",
-
         description:
             "The LEGACY JORST is a modern take on classic denim. Cut from durable, mid-weight jean fabric with a relaxed fit, it’s built for everyday wear without losing its edge. Subtle detailing and a structured silhouette give it a standout look that works effortlessly with tees, hoodies, or layered fits."
 
@@ -56,6 +55,8 @@ const featuredProducts = [
     ========================================= */
 
     {
+
+        productId: "legacy-skull-cap",
 
         name: "LEGACY SKULL CAP",
 
@@ -73,9 +74,6 @@ const featuredProducts = [
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-skull-capp?variant=44521672474735",
-
         description:
             "Built for everyday presence, the Legacy Skull Cap blends minimal design with timeless identity. Crafted from soft, durable knit, it delivers warmth, comfort, and a clean silhouette that fits effortlessly into any look."
 
@@ -87,6 +85,8 @@ const featuredProducts = [
     ========================================= */
 
     {
+
+        productId: "legacy-crop-tee",
 
         name: "LEGACY CROP TEE",
 
@@ -103,9 +103,6 @@ const featuredProducts = [
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991",
 
         description:
             "The LEGACY CROP TEE brings a clean, contemporary edge to the Great Legacy collection. Designed with a cropped silhouette and bold character, it’s an easy statement piece that pairs effortlessly with relaxed trousers, denim, or layered fits."
