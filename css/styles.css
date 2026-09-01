@@ -628,7 +628,9 @@ nav a:hover {
 .price {
     text-align: center;
 
-    font-weight: bolder;
+    font-size: 12px;
+
+    color: grey;
 
     padding-top: 4px;
 }
@@ -711,6 +713,8 @@ nav a:hover {
 .clothe-text {
     margin: 0;
     text-align: center;
+    font-weight: lighter;
+    color: #181717;
 }
 
 .clothe-image {
@@ -737,7 +741,9 @@ nav a:hover {
 
 .brand-page-link {
     text-decoration: none;
-    color: #020202;
+    color: grey;
+    font-weight: lighter;
+    font-size: smaller;
 }
 
 .brand-page-link:hover {
