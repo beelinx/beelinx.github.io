@@ -39,6 +39,9 @@ const productsContainer =
 const brandWebsite =
     document.getElementById("brand-website");
 
+const brandSlogan =
+    document.getElementById("brand-slogan");
+
 const socialContainer =
     document.getElementById("brand-socials");
 
@@ -113,6 +116,16 @@ if (!brand) {
     }
 
 
+    /* Brand slogan */
+
+    if (brandSlogan) {
+
+        brandSlogan.textContent =
+            brand.slogan;
+
+    }
+
+
     /* =========================================
        FIND BRAND PRODUCTS
     ========================================= */
@@ -168,14 +181,17 @@ if (!brand) {
 
                         </a>
 
+                        <br>
+
                         ${product.name}
 
 
-                        <p class="price">
+                    </p>
 
-                            ${product.price}
 
-                        </p>
+                    <p class="price">
+
+                        ${product.price}
 
                     </p>
 

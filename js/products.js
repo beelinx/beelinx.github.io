@@ -79,9 +79,37 @@ const featuredProducts = [
 
     },
 
-
     /* =========================================
        FEATURED PRODUCT 3
+    ========================================= */
+
+    {
+
+        productId: "5 \u2605 TRUCKER",
+
+        name: "5 \u2605 TRUCKER",
+
+        price: "₦15,750",
+
+        image:
+            "../images-fsn/r4ndom-drip/IMG_0776.PNG",
+
+        brand:
+            "R4ndom Drip",
+
+        collection:
+            "NEW R4NDOM DRIP COLLECTION",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        description:
+            "The 5 ⭐ TRUCKER combines a classic trucker silhouette with a bold streetwear edge. Designed for everyday wear, it features a structured front, breathable mesh backing, and an adjustable fit for easy comfort. A versatile finishing piece that adds character to any casual look."
+    },
+
+
+    /* =========================================
+       FEATURED PRODUCT 4
     ========================================= */
 
     {
@@ -107,7 +135,36 @@ const featuredProducts = [
         description:
             "The LEGACY CROP TEE brings a clean, contemporary edge to the Great Legacy collection. Designed with a cropped silhouette and bold character, it’s an easy statement piece that pairs effortlessly with relaxed trousers, denim, or layered fits."
 
-    }
+    },
+
+    /* =========================================
+       FEATURED PRODUCT 5
+    ========================================= */
+
+    {
+
+        productId: "5 \u2605 TEE",
+
+        name: "5 \u2605 TEE",
+
+        price: "₦31,500",
+
+        image:
+            "../images-fsn/r4ndom-drip/IMG_0872.PNG",
+
+        brand:
+            "R4ndom Drip",
+
+        collection:
+            "NEW R4NDOM DRIP COLLECTION",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        description:
+            "The 5 ⭐ TEE brings a clean, contemporary edge to the R4ndom Drip collection. Designed with a cropped silhouette and bold character, it’s an easy statement piece that pairs effortlessly with relaxed trousers, denim, or layered fits."
+
+    },
 
 ];
 
@@ -156,29 +213,28 @@ const brandAds = [
 
     },
 
-
     /* =========================================
-       GREAT LEGACY AD 2
+       R4NDOM DRIP AD 1
     ========================================= */
 
     {
 
         brand:
-            "Great Legacy",
+            "R4ndom Drip",
 
         image:
-            "../images-fsn/great-legacy/98b271aa-490e-4356-9b4e-6ecfeeab8f4a.jpeg",
+            "../images-fsn/r4ndom-drip/IMG_0765.WEBP",
 
         title:
-            "GREAT LEGACY",
+            "R4NDOM DRIP",
 
         subtitle:
             "DISCOVER MORE",
 
         alt:
-            "Great Legacy collection"
+            "R4ndom Drip collection"
 
-    }
+    },
 
 ];
 
@@ -225,7 +281,36 @@ const brands = {
 
         }
 
-    }
+    },
+
+    "R4ndom Drip": {
+
+        name:
+            "R4ndom Drip",
+
+        logo:"../images-fsn/r4ndom-drip/9533CAA2-6B83-47CC-8D21-D3A46A54F3D0.png",
+
+        page:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        website:
+            "https://r4ndom-drip.labeld.app/",
+
+        slogan:
+            "Dress to Impress",
+
+        social: {
+
+            instagram:
+                "https://instagram.com/r4ndom.drip",
+
+            tiktok:
+                "https://www.tiktok.com/@r4ndom_drip",
+
+
+        }
+
+    },
 
 };
 
@@ -255,9 +340,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -280,9 +362,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -307,9 +386,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -332,10 +408,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -358,9 +430,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -385,9 +454,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -410,9 +476,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -437,9 +500,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -462,9 +522,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -489,9 +546,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -514,9 +568,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -541,9 +592,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -566,9 +614,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -593,9 +638,6 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
@@ -618,9 +660,6 @@ const products = {
 
         brand:
             "Great Legacy",
-
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
 
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
@@ -645,15 +684,107 @@ const products = {
         brand:
             "Great Legacy",
 
-        brandLogo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
-
         brandLink:
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
             "https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"
 
-    }
+    },
+
+    /* =========================================
+       R4NDOM DRIP PRODUCTS
+    ========================================= */
+
+
+    "5 \u2605 TEE": {
+
+        name:
+            "5 \u2605 TEE",
+
+        price:
+            "₦31,500",
+
+        image:
+            "../images-fsn/r4ndom-drip/IMG_0770.WEBP",
+
+        brand:
+            "R4ndom Drip",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        orderLink:
+            "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/ofad7BH6N2pTjXyRzfd0"
+
+    },
+
+    
+    "5 \u2605 TRUCKER": {
+
+        name:
+            "5 \u2605 TRUCKER",
+
+        price:
+            "₦15,750",
+
+        image:
+            "../images-fsn/r4ndom-drip/IMG_0771.WEBP",
+
+        brand:
+            "R4ndom Drip",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        orderLink:
+            "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/ewB8FCwq6QCQngKMCgYx"
+
+    },
+
+    "RD CLASSIC TEE": {
+
+        name:
+            "RD CLASSIC TEE",
+
+        price:
+            "₦31,503",
+
+        image:
+            "../images-fsn/r4ndom-drip/EB6EED05-E1FA-4BBD-806D-5BD248E2EE47.png",
+
+        brand:
+            "R4ndom Drip",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        orderLink:
+            "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/VVacQQi5z0KrZ2dtIwgY"
+
+    },
+
+    "5 \u2605 TANK": {
+
+        name:
+            "5 \u2605 TANK",
+
+        price:
+            "₦36,750",
+
+        image:
+            "../images-fsn/r4ndom-drip/IMG_0871.JPG",
+
+        brand:
+            "R4ndom Drip",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        orderLink:
+            "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/gZE9JDfI7dL1qoDsY6Zx"
+
+    },
+
 
 };
