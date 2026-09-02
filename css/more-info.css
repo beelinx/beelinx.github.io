@@ -396,10 +396,11 @@ nav a:hover {
     color: #000000 !important;
     padding-bottom: 20px;
     font-size: inherit;
+    transition: font-size 0.2s ease;
 }
 
 .product-brand-website .website-link:hover {
-    text-decoration: underline !important;
+    font-size: larger !important;
     color: #000000 !important;
 }
 

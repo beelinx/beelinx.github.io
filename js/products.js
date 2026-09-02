@@ -21,7 +21,7 @@
 const featuredProducts = [
 
     /* =========================================
-       FEATURED PRODUCT 1
+       FEATURED PRODUCT 1 (Great Legacy, LEGACY JORST)
     ========================================= */
 
     {
@@ -51,7 +51,7 @@ const featuredProducts = [
 
 
     /* =========================================
-       FEATURED PRODUCT 2
+       FEATURED PRODUCT 2 (Great Legacy, LEGACY SKULL CAP)
     ========================================= */
 
     {
@@ -80,7 +80,7 @@ const featuredProducts = [
     },
 
     /* =========================================
-       FEATURED PRODUCT 3
+       FEATURED PRODUCT 3 (R4ndom Drip, 5 ⭐ TRUCKER)
     ========================================= */
 
     {
@@ -109,7 +109,7 @@ const featuredProducts = [
 
 
     /* =========================================
-       FEATURED PRODUCT 4
+       FEATURED PRODUCT 4 (Great Legacy, LEGACY CROP TEE)
     ========================================= */
 
     {
@@ -138,7 +138,7 @@ const featuredProducts = [
     },
 
     /* =========================================
-       FEATURED PRODUCT 5
+       FEATURED PRODUCT 5 (R4ndom Drip, 5 ⭐ TEE)
     ========================================= */
 
     {
@@ -191,7 +191,7 @@ const featuredProducts = [
 const brandAds = [
 
     /* =========================================
-       GREAT LEGACY AD 1
+       AD 1 GREAT LEGACY
     ========================================= */
 
     {
@@ -214,7 +214,7 @@ const brandAds = [
     },
 
     /* =========================================
-       R4NDOM DRIP AD 1
+       AD 2 R4NDOM DRIP
     ========================================= */
 
     {
@@ -257,7 +257,7 @@ const brands = {
             "Great Legacy",
 
         logo:
-            "../images-fsn/great-legacy/627839a2-2465-477c-8e09-e6d088122392.JPG",
+            "../images-fsn/great-legacy/IMG_0874.JPG",
 
         page:
             "brandpage-template.html?brand=Great%20Legacy",
