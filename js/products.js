@@ -266,7 +266,7 @@ const brands = {
             "https://gtl-great-legacy539.labeld.app/",
 
         slogan:
-            "Elevate your style",
+            "Swag up",
 
         social: {
 
@@ -297,7 +297,7 @@ const brands = {
             "https://r4ndom-drip.labeld.app/",
 
         slogan:
-            "Dress to Impress",
+            "Elevate your style",
 
         social: {
 
@@ -325,17 +325,16 @@ const products = {
        GREAT LEGACY PRODUCTS
     ========================================= */
 
-
-    "gl-01": {
+    "GTL WARCORE": {
 
         name:
-            "GREAT LEGACY'S GL-01 SET",
+            "GTL WARCORE LONG SLEEVE",
 
         price:
-            "₦29,000",
+            "₦35,000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3037.WEBP",
+            "../images-fsn/great-legacy/gtlwarcorewhite.webp",
 
         brand:
             "Great Legacy",
@@ -344,147 +343,9 @@ const products = {
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
-            "https://greatlegacy0.myshopify.com/"
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/INQgLXBVVs17p2J6HOnU"
 
     },
-
-
-    "legacy-monarch": {
-
-        name:
-            "LEGACY MONARCH",
-
-        price:
-            "₦31,000",
-
-        image:
-            "../images-fsn/great-legacy/4f3cc3b7-99a3-48a6-85ec-13d9f4792fd7.JPG",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-monarch?variant=44525883228271"
-
-    },
-
-
-    "gl-warmer": {
-
-        name:
-            "GL - WARMER",
-
-        price:
-            "₦23,000",
-
-        image:
-            "../images-fsn/great-legacy/IMG_3331.WEBP",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/gl-warmer?variant=44536435736687"
-
-    },
-
-
-    "after-dark-2": {
-
-        name:
-            "AFTER DARK 2",
-
-        price:
-            "₦28,000",
-
-        image:
-            "../images-fsn/great-legacy/ab1310be-ec08-46ed-bde3-ab78f58d0400.JPG",
-
-        brand:
-            "Great Legacy",
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/after-dark-2?variant=44341382938735"
-
-    },
-
-
-    "legacy-reaper": {
-
-        name:
-            "LEGACY REAPER",
-
-        price:
-            "₦26,000",
-
-        image:
-            "../images-fsn/great-legacy/IMG_3464.WEBP",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-reaper?variant=52747046387823"
-
-    },
-
-
-    "gl-edition": {
-
-        name:
-            "GL EDITION",
-
-        price:
-            "₦29,000",
-
-        image:
-            "../images-fsn/great-legacy/2cfd2606-1ed1-4c33-b7b3-959c45aa28fa.jpeg",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/gl-edition?variant=44521678930031"
-
-    },
-
-
-    "legacy-grip-tee": {
-
-        name:
-            "LEGACY GRIP TEE",
-
-        price:
-            "₦18,000",
-
-        image:
-            "../images-fsn/great-legacy/f91e7c10-6fdd-483a-a056-0365d3a12a7b.JPG",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-grip-tee?variant=44537614041199"
-
-    },
-
 
     "gl-made-in-ikoyi": {
 
@@ -495,7 +356,7 @@ const products = {
             "₦29,000",
 
         image:
-            "../images-fsn/great-legacy/faac6dac-080b-4523-8b73-0bfcaa465faf.JPG",
+            "../images-fsn/great-legacy/miiblack.webp",
 
         brand:
             "Great Legacy",
@@ -504,7 +365,7 @@ const products = {
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
-            "https://greatlegacy0.myshopify.com/products/gl-made-in-ikoyi?variant=44508133326959"
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/JqqoKjbolAsIvrqHTlFO"
 
     },
 
@@ -531,17 +392,16 @@ const products = {
 
     },
 
-
-    "gl-01-jogger": {
+    "LEGACY DEPT": {
 
         name:
-            "GL-01 JOGGER",
+            "LEGACY DEPT",
 
         price:
-            "₦26,000",
+            "₦40,000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3034.WEBP",
+            "../images-fsn/great-legacy/legacydeptpink.webp",
 
         brand:
             "Great Legacy",
@@ -550,21 +410,20 @@ const products = {
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
-            "https://greatlegacy0.myshopify.com/products/gl-01-jogger?variant=44092181905519"
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/Bq8DL3D5U2WvGvM2xz64"
 
     },
 
-
-    "gl-apex-tee": {
+    "ALL WE NEED IS MOTION": {
 
         name:
-            "GL APEX TEE",
+            "ALL WE NEED IS MOTION",
 
         price:
-            "₦31,000",
+            "₦20,000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3035.WEBP",
+            "../images-fsn/great-legacy/awnimteewhite.webp",
 
         brand:
             "Great Legacy",
@@ -573,90 +432,20 @@ const products = {
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
-            "https://greatlegacy0.myshopify.com/products/untitled-jan29_18-57?variant=44202474242159"
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/rIEGx9ty9qDUw2UzhFDP"
 
     },
 
-
-    "outlaw": {
-
-        name:
-            "OUTLAW",
-
-        price:
-            "₦25,000",
-
-        image:
-            "../images-fsn/great-legacy/IMG_3036.WEBP",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/b?variant=44300219547759"
-
-    },
-
-
-    "gl-x-zeno": {
+    "FREEDOM TEE": {
 
         name:
-            "GL x ZENO",
-
-        price:
-            "₦31,000",
-
-        image:
-            "../images-fsn/great-legacy/IMG_3039.WEBP",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/copy-gl-x-zeno?variant=44530307989615"
-
-    },
-
-
-    "legacy-jorst": {
-
-        name:
-            "LEGACY JORST",
-
-        price:
-            "₦29,000",
-
-        image:
-            "../images-fsn/great-legacy/IMG_3329.WEBP",
-
-        brand:
-            "Great Legacy",
-
-        brandLink:
-            "brandpage-template.html?brand=Great%20Legacy",
-
-        orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-jorst?variant=44552514338927"
-
-    },
-
-
-    "legacy-denim": {
-
-        name:
-            "LEGACY DENIM",
+            "FREEDOM TEE",
 
         price:
             "₦30,000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3330.WEBP",
+            "../images-fsn/great-legacy/freedomtee.webp",
 
         brand:
             "Great Legacy",
@@ -665,21 +454,20 @@ const products = {
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-denim?variant=44530914394223"
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/6nPra9Hozakt85vc7xCd"
 
     },
 
-
-    "legacy-crop-tee": {
+    "GTL 444 WAR JORTS": {
 
         name:
-            "LEGACY CROP TEE",
+            "GTL 444 WAR JORTS",
 
         price:
-            "₦22,000",
+            "₦27,000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3332.WEBP",
+            "../images-fsn/great-legacy/gtl444warjortsblackgold.webp",
 
         brand:
             "Great Legacy",
@@ -688,7 +476,73 @@ const products = {
             "brandpage-template.html?brand=Great%20Legacy",
 
         orderLink:
-            "https://greatlegacy0.myshopify.com/products/legacy-crop-tee?variant=44510958714991"
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/IYlfPhIptECJrq5d5v1v"
+
+    },
+
+    "GTL WAR JORST": {
+
+        name:
+            "GTL WAR JORST",
+
+        price:
+            "₦27,000",
+
+        image:
+            "../images-fsn/great-legacy/gtl444warjorst.webp",
+
+        brand:
+            "Great Legacy",
+
+        brandLink:
+            "brandpage-template.html?brand=Great%20Legacy",
+
+        orderLink:
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/4LGh2y1na1Z3RPBghhSb"
+
+    },
+
+    "MOTION IS THE MOTIVE": {
+
+        name:
+            "MOTION IS THE MOTIVE",
+
+        price:
+            "₦20,000",
+
+        image:
+            "../images-fsn/great-legacy/mitmwhite.webp",
+
+        brand:
+            "Great Legacy",
+
+        brandLink:
+            "brandpage-template.html?brand=Great%20Legacy",
+
+        orderLink:
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/iXn0Dl0qx7SSrnwIDJlA"
+
+    },
+
+    "GTL SYNDICATE TRACK": {
+
+        name:
+            "GTL SYNDICATE TRACK",
+
+        price:
+            "₦35,000",
+
+        image:
+            "../images-fsn/great-legacy/gtlsyndicatetrackblack.webp",
+
+        brand:
+            "Great Legacy",
+
+        brandLink:
+            "brandpage-template.html?brand=Great%20Legacy",
+
+        orderLink:
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/FaiOEVq7i722PrhhuY2H"
 
     },
 
@@ -783,6 +637,50 @@ const products = {
 
         orderLink:
             "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/gZE9JDfI7dL1qoDsY6Zx"
+
+    },
+
+    "RD INDIPENDENCE DAY": {
+
+        name:
+            "RD INDIPENDENCE DAY",
+
+        price:
+            "₦15,750",
+
+        image:
+            "../images-fsn/r4ndom-drip/rdindipendenceuse.jpg",
+
+        brand:
+            "R4ndom Drip",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        orderLink:
+            "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/szhXxg8Z1ZapMMlOZwKV"
+
+    },
+
+    "RD SKULLY": {
+
+        name:
+            "RD SKULLY",
+
+        price:
+            "₦15,750",
+
+        image:
+            "../images-fsn/r4ndom-drip/rdskully.webp",
+
+        brand:
+            "R4ndom Drip",
+
+        brandLink:
+            "brandpage-template.html?brand=R4ndom%20Drip",
+
+        orderLink:
+            "https://r4ndom-drip.labeld.app/brands/WA3gmm8SmgXXDX1R7hDYzBqfHfy1/drops/gnlfUYAXRjV3WJwytEkU"
 
     },
 
