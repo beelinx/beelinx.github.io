@@ -546,6 +546,28 @@ const products = {
 
     },
 
+    "GTL POLO": {
+
+        name:
+            "GTL POLO",
+
+        price:
+            "₦20,000",
+
+        image:
+            "../images-fsn/great-legacy/gtlpoloblack.webp",
+
+        brand:
+            "Great Legacy",
+
+        brandLink:
+            "brandpage-template.html?brand=Great%20Legacy",
+
+        orderLink:
+            "https://gtl-great-legacy539.labeld.app/brands/MKIp4g7ONRRW0ZDklzxorq1hniI3/drops/nJ3MZKrFQoytoKn4gAUq"
+
+    },
+
     /* =========================================
        R4NDOM DRIP PRODUCTS
     ========================================= */
