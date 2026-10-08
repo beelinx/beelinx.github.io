@@ -238,7 +238,7 @@ scroll-snap-type: x mandatory;
 scrollbar-width: none;
 
 overscroll-behavior-x: contain;
-touch-action: pan-x;
+touch-action: pan-y pan-x;
 
 scroll-padding-left: 14vw;
 scroll-padding-right: 14vw;
@@ -454,7 +454,7 @@ scrollbar-width: none;
 
 overscroll-behavior-x: contain;
 
-touch-action: pan-x;
+touch-action: pan-y pan-x;
 
 
 }
@@ -1430,7 +1430,7 @@ transform: translateY(-3px);
 
     scroll-snap-type: x mandatory;
 
-    touch-action: pan-x;
+    touch-action: pan-y pan-x;
 }
 
 .brand-ad-slide {
@@ -1545,7 +1545,7 @@ transform: translateY(-3px);
 
     overscroll-behavior-x: contain;
 
-    touch-action: pan-x;
+    touch-action: pan-y pan-x;
 
     scroll-padding-left: 12vw;
     scroll-padding-right: 12vw;
@@ -1817,7 +1817,7 @@ transform: translateY(-3px);
 
     overscroll-behavior-x: contain;
 
-    touch-action: pan-x;
+    touch-action: pan-y pan-x;
 }
 
 .brand-ad-slider::-webkit-scrollbar {
@@ -2047,7 +2047,7 @@ transform: translateY(-3px);
 
     display: flex;
 
-    touch-action: pan-x;
+    touch-action: pan-y pan-x;
 }
 
 .brand-ad-slide {
