@@ -4,6 +4,44 @@
 
 
 /* =========================================
+SHARED PRICE FORMATTER
+Adds the naira sign to every numeric price.
+Keeps prices already showing ₦ unchanged.
+========================================= */
+function formatPrice(price) {
+if (price === null || price === undefined || price === "") {
+return "";
+}
+
+if (typeof price === "string") {
+    const trimmedPrice = price.trim();
+
+    if (!trimmedPrice) return "";
+
+    // Prevent adding the naira sign twice.
+    if (trimmedPrice.includes("₦")) {
+        return trimmedPrice;
+    }
+
+    // Remove thousands separators before converting to a number.
+    price = trimmedPrice.replace(/,/g, "");
+}
+
+const numericPrice = Number(price);
+
+if (!Number.isFinite(numericPrice)) {
+    return String(price);
+}
+
+return "₦" + new Intl.NumberFormat("en-NG", {
+    maximumFractionDigits: 2
+}).format(numericPrice);
+
+}
+
+
+
+/* =========================================
    FEATURED CAROUSEL DATABASE
 
    THIS IS WHERE THE HOMEPAGE CAROUSEL
@@ -30,7 +68,7 @@ const featuredProducts = [
 
         name: "LEGACY JORST",
 
-        price: "₦28,000",
+        price: "28000",
 
         image:
             "../images-fsn/great-legacy/IMG_3445.PNG",
@@ -60,7 +98,7 @@ const featuredProducts = [
 
         name: "LEGACY SKULL CAP",
 
-        price: "₦16,000",
+        price: "16000",
 
         image:
             "../images-fsn/great-legacy/IMG_3720.PNG",
@@ -89,7 +127,7 @@ const featuredProducts = [
 
         name: "5 \u2605 TRUCKER",
 
-        price: "₦15,750",
+        price: "15750",
 
         image:
             "../images-fsn/r4ndom-drip/IMG_0776.PNG",
@@ -118,7 +156,7 @@ const featuredProducts = [
 
         name: "LEGACY CROP TEE",
 
-        price: "₦22,000",
+        price: "22000",
 
         image:
             "../images-fsn/great-legacy/IMG_3467.PNG",
@@ -147,7 +185,7 @@ const featuredProducts = [
 
         name: "5 \u2605 TEE",
 
-        price: "₦31,500",
+        price: "31500",
 
         image:
             "../images-fsn/r4ndom-drip/IMG_0872.PNG",
@@ -331,7 +369,7 @@ const products = {
             "GTL WARCORE LONG SLEEVE",
 
         price:
-            "₦35,000",
+            "35000",
 
         image:
             "../images-fsn/great-legacy/gtlwarcorewhite.webp",
@@ -353,7 +391,7 @@ const products = {
             "GL-MADE IN IKOYI",
 
         price:
-            "₦29,000",
+            "29000",
 
         image:
             "../images-fsn/great-legacy/miiblack.webp",
@@ -376,7 +414,7 @@ const products = {
             "LEGACY SKULL CAP",
 
         price:
-            "₦16,000",
+            "16000",
 
         image:
             "../images-fsn/great-legacy/IMG_3038.WEBP",
@@ -398,7 +436,7 @@ const products = {
             "LEGACY DEPT",
 
         price:
-            "₦40,000",
+            "40000",
 
         image:
             "../images-fsn/great-legacy/legacydeptpink.webp",
@@ -420,7 +458,7 @@ const products = {
             "ALL WE NEED IS MOTION",
 
         price:
-            "₦20,000",
+            "20000",
 
         image:
             "../images-fsn/great-legacy/awnimteewhite.webp",
@@ -442,7 +480,7 @@ const products = {
             "FREEDOM TEE",
 
         price:
-            "₦30,000",
+            "30000",
 
         image:
             "../images-fsn/great-legacy/freedomtee.webp",
@@ -464,7 +502,7 @@ const products = {
             "GTL 444 WAR JORTS",
 
         price:
-            "₦27,000",
+            "27000",
 
         image:
             "../images-fsn/great-legacy/gtl444warjortsblackgold.webp",
@@ -486,7 +524,7 @@ const products = {
             "GTL WAR JORST",
 
         price:
-            "₦27,000",
+            "27000",
 
         image:
             "../images-fsn/great-legacy/gtl444warjorst.webp",
@@ -508,7 +546,7 @@ const products = {
             "MOTION IS THE MOTIVE",
 
         price:
-            "₦20,000",
+            "20000",
 
         image:
             "../images-fsn/great-legacy/mitmwhite.webp",
@@ -530,7 +568,7 @@ const products = {
             "GTL SYNDICATE TRACK",
 
         price:
-            "₦35,000",
+            "35000",
 
         image:
             "../images-fsn/great-legacy/gtlsyndicatetrackblack.webp",
@@ -552,7 +590,7 @@ const products = {
             "GTL POLO",
 
         price:
-            "₦20,000",
+            "20000",
 
         image:
             "../images-fsn/great-legacy/gtlpoloblack.webp",
@@ -579,7 +617,7 @@ const products = {
             "5 \u2605 TEE",
 
         price:
-            "₦31,500",
+            "31500",
 
         image:
             "../images-fsn/r4ndom-drip/IMG_0770.WEBP",
@@ -602,7 +640,7 @@ const products = {
             "5 \u2605 TRUCKER",
 
         price:
-            "₦15,750",
+            "15750",
 
         image:
             "../images-fsn/r4ndom-drip/IMG_0771.WEBP",
@@ -624,7 +662,7 @@ const products = {
             "RD CLASSIC TEE",
 
         price:
-            "₦31,503",
+            "31503",
 
         image:
             "../images-fsn/r4ndom-drip/EB6EED05-E1FA-4BBD-806D-5BD248E2EE47.png",
@@ -646,7 +684,7 @@ const products = {
             "5 \u2605 TANK",
 
         price:
-            "₦36,750",
+            "36750",
 
         image:
             "../images-fsn/r4ndom-drip/IMG_0871.JPG",
@@ -668,7 +706,7 @@ const products = {
             "RD INDIPENDENCE DAY",
 
         price:
-            "₦15,750",
+            "15750",
 
         image:
             "../images-fsn/r4ndom-drip/rdindipendenceuse.jpg",
@@ -690,7 +728,7 @@ const products = {
             "RD SKULLY",
 
         price:
-            "₦15,750",
+            "15750",
 
         image:
             "../images-fsn/r4ndom-drip/rdskully.webp",

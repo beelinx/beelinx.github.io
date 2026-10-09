@@ -323,7 +323,9 @@ function buildFeaturedCarousel() {
 
 
             const price =
-                product.price || "";
+                typeof formatPrice === "function"
+                    ? formatPrice(product.price)
+                    : (product.price || "");
 
             const description =
                 product.description || "";

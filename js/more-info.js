@@ -3,328 +3,147 @@
    Reads product information from products.js
 ========================================= */
 
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
+const product = typeof products !== "undefined" ? products[productId] : null;
+const brand = product && typeof brands !== "undefined" ? brands[product.brand] : null;
 
-/* =========================================
-   GET PRODUCT ID FROM URL
-========================================= */
-
-const urlParams =
-    new URLSearchParams(window.location.search);
-
-const productId =
-    urlParams.get("id");
-
-
-/* =========================================
-   FIND PRODUCT
-========================================= */
-
-const product =
-    products[productId];
-
-
-/* =========================================
-   FIND BRAND
-========================================= */
-
-const brand =
-    product ? brands[product.brand] : null;
-
-
-/* =========================================
-   DISPLAY PRODUCT
-========================================= */
-
-if (product) {
-
-    /* -----------------------------------------
-       Product image
-    ----------------------------------------- */
-
-    document.getElementById("product-image").src =
-        product.image;
-
-    document.getElementById("product-image").alt =
-        product.name;
-
-    document.getElementById("product-image-link").href =
-        product.image;
-
-
-    /* -----------------------------------------
-       Product name
-    ----------------------------------------- */
-
-    document.getElementById("product-name").textContent =
-        product.name;
-
-
-    /* -----------------------------------------
-       Product price
-    ----------------------------------------- */
-
-    document.getElementById("product-price").textContent =
-        product.price;
-
-
-    /* -----------------------------------------
-       Brand information
-    ----------------------------------------- */
-
-    if (brand) {
-
-        /* Brand logo */
-
-        document.getElementById("brand-logo").src =
-            brand.logo;
-
-        document.getElementById("brand-logo").alt =
-            brand.name + " Logo";
-
-
-        /* Brand page */
-
-        document.getElementById("brand-link").href =
-            brand.page;
-
-    }
-
-
-    /* -----------------------------------------
-       Order link
-    ----------------------------------------- */
-
-    document.getElementById("order-link").href =
-        product.orderLink;
-
+function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value == null ? "" : value;
+    return element;
 }
 
+if (product) {
+    const productImage = document.getElementById("product-image");
+    if (productImage) {
+        productImage.src = product.image || "";
+        productImage.alt = product.name || "Product image";
+    }
+
+    const productImageLink = document.getElementById("product-image-link");
+    if (productImageLink) productImageLink.href = product.image || "#";
+
+    setText("product-name", product.name || "");
+    setText("product-price", typeof formatPrice === "function" ? formatPrice(product.price) : (product.price || ""));
+
+    if (brand) {
+        const brandLogo = document.getElementById("brand-logo");
+        if (brandLogo) {
+            brandLogo.src = brand.logo || "";
+            brandLogo.alt = `${brand.name} Logo`;
+        }
+
+        const brandLink = document.getElementById("brand-link");
+        if (brandLink) brandLink.href = brand.page || `brandpage-template.html?brand=${encodeURIComponent(brand.name)}`;
+    }
+
+    const orderLink = document.getElementById("order-link");
+    if (orderLink) {
+        orderLink.href = product.orderLink || "#";
+        if (!product.orderLink) orderLink.setAttribute("aria-disabled", "true");
+        else orderLink.removeAttribute("aria-disabled");
+    }
+} else {
+    setText("product-name", "Product Not Found");
+}
 
 /* =========================================
    MORE BY BRAND
 ========================================= */
 
-const moreProductsTitle =
-    document.getElementById("more-products-title");
+const moreProductsTitle = document.getElementById("more-products-title");
+const moreProductsContainer = document.getElementById("more-products-container");
 
-const moreProductsContainer =
-    document.getElementById("more-products-container");
+if (product && brand && moreProductsContainer) {
+    if (moreProductsTitle) moreProductsTitle.textContent = `More by ${brand.name}`;
+    moreProductsContainer.replaceChildren();
 
-
-if (
-    product &&
-    brand &&
-    moreProductsContainer
-) {
-
-    /* -----------------------------------------
-       Dynamic section title
-    ----------------------------------------- */
-
-    moreProductsTitle.textContent =
-        `More by ${brand.name}`;
-
-
-    /* -----------------------------------------
-       FIND OTHER PRODUCTS FROM SAME BRAND
-    ----------------------------------------- */
-
-    const relatedProducts =
-        Object.entries(products).filter(
-            ([id, item]) => {
-
-                return (
-                    item.brand === product.brand &&
-                    id !== productId
-                );
-
-            }
-        );
-
-
-    /* -----------------------------------------
-       CREATE PRODUCT CARDS
-    ----------------------------------------- */
-
-    relatedProducts.forEach(
-        ([id, item]) => {
-
-            const productCard =
-                document.createElement("div");
-
-            productCard.className =
-                "more-product-card";
-
-
-            productCard.innerHTML = `
-
-                <a href="product-template.html?id=${id}">
-
-                    <img
-                        src="${item.image}"
-                        alt="${item.name}"
-                        loading="lazy">
-
-                </a>
-
-                <div class="more-product-info">
-
-                    <p class="more-product-brand">
-                        ${brand.name}
-                    </p>
-
-                    <p class="more-product-name">
-                        ${item.name}
-                    </p>
-
-                    <p class="more-product-price">
-                        ${item.price}
-                    </p>
-
-                </div>
-
-            `;
-
-
-            moreProductsContainer.appendChild(
-                productCard
-            );
-
-        }
+    const relatedProducts = Object.entries(products).filter(
+        ([id, item]) => item.brand === product.brand && id !== productId
     );
 
-}
+    relatedProducts.forEach(([id, item]) => {
+        const productCard = document.createElement("div");
+        productCard.className = "more-product-card";
 
+        const imageLink = document.createElement("a");
+        imageLink.href = `product-template.html?id=${encodeURIComponent(id)}`;
+
+        const image = document.createElement("img");
+        image.src = item.image || "";
+        image.alt = item.name || "Product image";
+        image.loading = "lazy";
+        imageLink.appendChild(image);
+
+        const info = document.createElement("div");
+        info.className = "more-product-info";
+
+        const brandName = document.createElement("p");
+        brandName.className = "more-product-brand";
+        brandName.textContent = brand.name;
+
+        const name = document.createElement("p");
+        name.className = "more-product-name";
+        name.textContent = item.name || "";
+
+        const price = document.createElement("p");
+        price.className = "more-product-price";
+        price.textContent = typeof formatPrice === "function" ? formatPrice(item.price) : (item.price || "");
+
+        info.append(brandName, name, price);
+        productCard.append(imageLink, info);
+        moreProductsContainer.appendChild(productCard);
+    });
+}
 
 /* =========================================
    BRAND WEBSITE + SLOGAN
 ========================================= */
 
-const brandWebsite =
-    document.getElementById("productBrandWebsite");
-
-const brandSlogan =
-    document.getElementById("productBrandSlogan");
-
+const brandWebsite = document.getElementById("productBrandWebsite");
+const brandSlogan = document.getElementById("productBrandSlogan");
 
 if (brand) {
-
-    /* -----------------------------------------
-       Official brand website
-    ----------------------------------------- */
-
-    if (
-        brandWebsite &&
-        brand.website
-    ) {
-
-        brandWebsite.href =
-            brand.website;
-
-        brandWebsite.textContent =
-            `${brand.name} Official Website`;
-
+    if (brandWebsite && brand.website) {
+        brandWebsite.href = brand.website;
+        brandWebsite.textContent = `${brand.name} Official Website`;
+        brandWebsite.target = "_blank";
+        brandWebsite.rel = "noopener noreferrer";
     }
 
-
-    /* -----------------------------------------
-       Brand-specific slogan
-    ----------------------------------------- */
-
-    if (
-        brandSlogan &&
-        brand.slogan
-    ) {
-
-        brandSlogan.textContent =
-            brand.slogan;
-
-    }
-
+    if (brandSlogan) brandSlogan.textContent = brand.slogan || "";
 }
-
 
 /* =========================================
    BRAND SOCIAL MEDIA
 ========================================= */
 
-const socialContainer =
-    document.getElementById("brand-socials");
+const socialContainer = document.getElementById("brand-socials");
 
-
-if (
-    brand &&
-    socialContainer &&
-    brand.social
-) {
-
-    /* -----------------------------------------
-       Font Awesome icons
-    ----------------------------------------- */
-
+if (brand && socialContainer && brand.social) {
     const socialIcons = {
-
-        instagram:
-            "fab fa-instagram",
-
-        tiktok:
-            "fab fa-tiktok",
-
-        twitter:
-            "fab fa-x-twitter",
-
-        facebook:
-            "fab fa-facebook",
-
-        youtube:
-            "fab fa-youtube"
-
+        instagram: "fab fa-instagram",
+        tiktok: "fab fa-tiktok",
+        twitter: "fab fa-x-twitter",
+        facebook: "fab fa-facebook",
+        youtube: "fab fa-youtube"
     };
 
+    socialContainer.replaceChildren();
+    Object.entries(brand.social).forEach(([platform, link]) => {
+        if (!link || !socialIcons[platform]) return;
 
-    /* -----------------------------------------
-       CREATE SOCIAL LINKS
-    ----------------------------------------- */
+        const socialLink = document.createElement("a");
+        socialLink.href = link;
+        socialLink.target = "_blank";
+        socialLink.rel = "noopener noreferrer";
+        socialLink.className = "brand-social-link";
+        socialLink.setAttribute("aria-label", platform);
 
-    Object.entries(brand.social).forEach(
-        ([platform, link]) => {
-
-            if (
-                link &&
-                socialIcons[platform]
-            ) {
-
-                const socialLink =
-                    document.createElement("a");
-
-
-                socialLink.href =
-                    link;
-
-
-                socialLink.target =
-                    "_blank";
-
-
-                socialLink.rel =
-                    "noopener noreferrer";
-
-
-                socialLink.className =
-                    "brand-social-link";
-
-
-                socialLink.innerHTML =
-                    `<i class="${socialIcons[platform]}"></i>`;
-
-
-                socialContainer.appendChild(
-                    socialLink
-                );
-
-            }
-
-        }
-    );
-
+        const icon = document.createElement("i");
+        icon.className = socialIcons[platform];
+        socialLink.appendChild(icon);
+        socialContainer.appendChild(socialLink);
+    });
 }

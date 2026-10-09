@@ -3,279 +3,106 @@
    Dynamic brand template
 ========================================= */
 
+const urlParams = new URLSearchParams(window.location.search);
+const brandName = urlParams.get("brand");
+const brand = typeof brands !== "undefined" ? brands[brandName] : null;
 
-/* =========================================
-   GET BRAND FROM URL
-========================================= */
-
-const urlParams =
-    new URLSearchParams(window.location.search);
-
-const brandName =
-    urlParams.get("brand");
-
-
-/* =========================================
-   FIND BRAND
-========================================= */
-
-const brand =
-    brands[brandName];
-
-
-/* =========================================
-   PAGE ELEMENTS
-========================================= */
-
-const brandLogo =
-    document.getElementById("brand-logo");
-
-const brandNameElement =
-    document.getElementById("brand-name");
-
-const productsContainer =
-    document.getElementById("products-container");
-
-const brandWebsite =
-    document.getElementById("brand-website");
-
-const brandSlogan =
-    document.getElementById("brand-slogan");
-
-const socialContainer =
-    document.getElementById("brand-socials");
-
-const pageTitle =
-    document.getElementById("page-title");
-
-
-/* =========================================
-   CHECK BRAND
-========================================= */
+const brandLogo = document.getElementById("brand-logo");
+const brandNameElement = document.getElementById("brand-name");
+const productsContainer = document.getElementById("products-container");
+const brandWebsite = document.getElementById("brand-website");
+const brandSlogan = document.getElementById("brand-slogan");
+const socialContainer = document.getElementById("brand-socials");
+const pageTitle = document.getElementById("page-title");
 
 if (!brand) {
-
-    if (brandNameElement) {
-
-        brandNameElement.textContent =
-            "Brand Not Found";
-
-    }
-
+    if (brandNameElement) brandNameElement.textContent = "Brand Not Found";
+    if (productsContainer) productsContainer.replaceChildren();
 } else {
-
-
-    /* =========================================
-       BRAND INFORMATION
-    ========================================= */
-
-
-    /* Page title */
-
-    if (pageTitle) {
-
-        pageTitle.textContent =
-            `Beelinx | ${brand.name}`;
-
-    }
-
-
-    /* Brand logo */
+    if (pageTitle) pageTitle.textContent = `Beelinx | ${brand.name}`;
 
     if (brandLogo) {
-
-        brandLogo.src =
-            brand.logo;
-
-        brandLogo.alt =
-            `${brand.name} Logo`;
-
+        brandLogo.src = brand.logo || "";
+        brandLogo.alt = `${brand.name} Logo`;
     }
 
+    if (brandNameElement) brandNameElement.textContent = brand.name.toUpperCase();
 
-    /* Brand name */
-
-    if (brandNameElement) {
-
-        brandNameElement.textContent =
-            brand.name.toUpperCase();
-
+    if (brandWebsite && brand.website) {
+        brandWebsite.href = brand.website;
+        brandWebsite.textContent = `${brand.name} Official website`;
+        brandWebsite.target = "_blank";
+        brandWebsite.rel = "noopener noreferrer";
     }
 
+    if (brandSlogan) brandSlogan.textContent = brand.slogan || "";
 
-    /* Official website */
-
-    if (brandWebsite) {
-
-        brandWebsite.href =
-            brand.website;
-
-        brandWebsite.textContent =
-            `${brand.name} Official website`;
-
-    }
-
-
-    /* Brand slogan */
-
-    if (brandSlogan) {
-
-        brandSlogan.textContent =
-            brand.slogan;
-
-    }
-
-
-    /* =========================================
-       FIND BRAND PRODUCTS
-    ========================================= */
-
-    const brandProducts =
-        Object.entries(products).filter(
-            ([id, product]) => {
-
-                return product.brand === brand.name;
-
-            }
-        );
-
-
-    /* =========================================
-       CREATE PRODUCT CARDS
-    ========================================= */
+    const brandProducts = Object.entries(products || {}).filter(
+        ([, item]) => item.brand === brand.name
+    );
 
     if (productsContainer) {
+        productsContainer.replaceChildren();
 
-        brandProducts.forEach(
-            ([id, product]) => {
+        brandProducts.forEach(([id, item]) => {
+            const productCard = document.createElement("div");
+            productCard.className = "products";
 
-                const productCard =
-                    document.createElement("div");
+            const imageLink = document.createElement("a");
+            imageLink.href = `product-template.html?id=${encodeURIComponent(id)}`;
 
-                productCard.className =
-                    "products";
+            const image = document.createElement("img");
+            image.className = "clothe-image";
+            image.src = item.image || "";
+            image.alt = item.name || "Product image";
+            image.loading = "lazy";
+            imageLink.appendChild(image);
 
+            const text = document.createElement("p");
+            text.className = "clothe-text";
 
-                productCard.innerHTML = `
+            const brandLink = document.createElement("a");
+            brandLink.className = "brand-page-link";
+            brandLink.href = brand.page || `brandpage-template.html?brand=${encodeURIComponent(brand.name)}`;
 
-                    <a href="product-template.html?id=${id}">
+            const brandLabel = document.createElement("strong");
+            brandLabel.textContent = brand.name;
+            brandLink.appendChild(brandLabel);
 
-                        <img
-                            class="clothe-image"
-                            src="${product.image}"
-                            alt="${product.name}"
-                            loading="lazy">
+            const productLabel = document.createTextNode(item.name || "");
+            const price = document.createElement("p");
+            price.className = "price";
+            price.textContent = typeof formatPrice === "function" ? formatPrice(item.price) : (item.price || "");
 
-                    </a>
-
-
-                    <p class="clothe-text">
-
-                        <a
-                            class="brand-page-link"
-                            href="brandpage-template.html?brand=${encodeURIComponent(brand.name)}">
-
-                            <strong>
-                                ${brand.name}
-                            </strong>
-
-                        </a>
-
-                        <br>
-
-                        ${product.name}
-
-
-                    </p>
-
-
-                    <p class="price">
-
-                        ${product.price}
-
-                    </p>
-
-                `;
-
-
-                productsContainer.appendChild(
-                    productCard
-                );
-
-            }
-        );
-
+            text.append(brandLink, document.createElement("br"), productLabel);
+            productCard.append(imageLink, text, price);
+            productsContainer.appendChild(productCard);
+        });
     }
 
-
-    /* =========================================
-       SOCIAL MEDIA
-    ========================================= */
-
-    if (
-        socialContainer &&
-        brand.social
-    ) {
-
-
+    if (socialContainer && brand.social) {
         const socialIcons = {
-
-            instagram:
-                "fab fa-instagram",
-
-            tiktok:
-                "fab fa-tiktok",
-
-            twitter:
-                "fab fa-x-twitter",
-
-            facebook:
-                "fab fa-facebook",
-
-            youtube:
-                "fab fa-youtube"
-
+            instagram: "fab fa-instagram",
+            tiktok: "fab fa-tiktok",
+            twitter: "fab fa-x-twitter",
+            facebook: "fab fa-facebook",
+            youtube: "fab fa-youtube"
         };
 
+        socialContainer.replaceChildren();
+        Object.entries(brand.social).forEach(([platform, link]) => {
+            if (!link || !socialIcons[platform]) return;
 
-        Object.entries(brand.social).forEach(
-            ([platform, link]) => {
+            const socialLink = document.createElement("a");
+            socialLink.href = link;
+            socialLink.target = "_blank";
+            socialLink.rel = "noopener noreferrer";
+            socialLink.setAttribute("aria-label", platform);
 
-                if (
-                    link &&
-                    socialIcons[platform]
-                ) {
-
-
-                    const socialLink =
-                        document.createElement("a");
-
-
-                    socialLink.href =
-                        link;
-
-
-                    socialLink.target =
-                        "_blank";
-
-
-                    socialLink.rel =
-                        "noopener noreferrer";
-
-
-                    socialLink.innerHTML =
-                        `<i class="${socialIcons[platform]}"></i>`;
-
-
-                    socialContainer.appendChild(
-                        socialLink
-                    );
-
-                }
-
-            }
-        );
-
+            const icon = document.createElement("i");
+            icon.className = socialIcons[platform];
+            socialLink.appendChild(icon);
+            socialContainer.appendChild(socialLink);
+        });
     }
-
 }
