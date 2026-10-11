@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+    
 
 <head>
 
@@ -39,10 +40,84 @@ Explore fashion from different brands and find what fits your style.">
     rel="stylesheet"
     href="../css/styles.css">
 
+<style>
+
+/* <!-- =====================================================
+    SPLASH SCREEN OVERLAY
+===================================================== --> */
+
+#beelinx-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#beelinx-splash.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#beelinx-splash img {
+    width: 300px;
+    max-width: 55vw;
+    height: 100px;
+    object-fit: contain;
+    opacity: 0;
+    animation: beelinxLogoFade 1.7s ease forwards;
+}
+
+@keyframes beelinxLogoFade {
+    0% {
+        opacity: 0;
+    }
+
+    35% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+</style>
+
+<script>
+    if (sessionStorage.getItem("beelinxSplashShown")) {
+        document.documentElement.classList.add("skip-splash");
+    } else {
+        sessionStorage.setItem("beelinxSplashShown", "true");
+    }
+</script>
+
+<style>
+    html.skip-splash #beelinx-splash {
+        display: none;
+    }
+</style>
+
 </head>
 
 
 <body>
+
+    
+<div id="beelinx-splash">
+    <img src="../beelinx_bee.png" alt="Beelinx">
+</div>
+
 
 
 <!-- =====================================================
@@ -235,6 +310,21 @@ Everything in one place.
 <script src="../js/main.js"></script>
 
 <script src="../js/home-products.js"></script>
+
+
+<script>
+    window.addEventListener("load", function () {
+        const splash = document.getElementById("beelinx-splash");
+
+        if (!splash || document.documentElement.classList.contains("skip-splash")) {
+            return;
+        }
+
+        setTimeout(function () {
+            splash.classList.add("fade-out");
+        }, 1700);
+    });
+</script>
 
 
 </body>

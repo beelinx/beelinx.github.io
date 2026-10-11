@@ -1281,6 +1281,25 @@ margin: 40px auto;
 transform: translateY(-3px);
 }
 
+
+@keyframes beelinxPageZoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body > *:not(header):not(#beelinx-splash) {
+    animation: beelinxPageZoomIn 0.4s ease-out both;
+    transform-origin: center center;
+}
+
+
 /* =========================================================
 25. TABLET
 ========================================================= */

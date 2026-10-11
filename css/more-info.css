@@ -422,6 +422,24 @@ nav a:hover {
     text-align: center;
 }
 
+/* =========================================
+   ==== BEELINX PAGE TRANSITION ====
+========================================= */
+
+@keyframes beelinxPageExpand {
+    from {
+        transform: scale(0.45);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+body > *:not(header):not(#beelinx-splash) {
+    animation: beelinxPageExpand 0.4s ease-out both;
+    transform-origin: center center;
+}
 
 /* =========================================
    TABLET / MOBILE
