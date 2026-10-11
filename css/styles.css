@@ -260,28 +260,18 @@ position: relative;
 opacity: 1;
 transform: none;
 pointer-events: auto;
-
-
 flex: 0 0 72vw;
 width: 72vw;
-
 min-height: 330px;
-
 background: #000000;
 color: #ffffff;
-
 border-radius: 14px;
 overflow: hidden;
-
 display: flex;
 flex-direction: row;
 align-items: center;
-
 scroll-snap-align: start;
-
 flex-shrink: 0;
-
-
 }
 
 .featured-clone {
@@ -346,16 +336,10 @@ flex-shrink: 0;
 .featured-slide .clothe-image {
 width: 100%;
 height: 260px;
-
-
 object-fit: contain;
-
 padding: 0;
 margin: 0;
-
-border-radius: 0;
-
-
+border-radius: 50px;
 }
 
 /* =========================================================
@@ -1632,18 +1616,12 @@ body > *:not(header):not(#beelinx-splash) {
 
 .featured-slide .clothe-image {
     width: 100%;
-
-    height: 210px;
-
+    height: 260px;
     max-width: 100%;
-
     object-fit: contain;
-
     padding: 0;
-
     margin: 0;
-
-    border-radius: 0;
+    border-radius: 50px;
 }
 
 /* =====================================================

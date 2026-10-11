@@ -59,19 +59,19 @@ return "₦" + new Intl.NumberFormat("en-NG", {
 const featuredProducts = [
 
     /* =========================================
-       FEATURED PRODUCT 1 (Great Legacy, LEGACY JORST)
+       FEATURED PRODUCT 1 (Great Legacy, GL-MADE IN IKOYI)
     ========================================= */
 
     {
 
-        productId: "legacy-jorst",
+        productId: "GL-MADE IN IKOYI",
 
-        name: "LEGACY JORST",
+        name: "GL-MADE IN IKOYI",
 
-        price: "28000",
+        price: "29000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3445.PNG",
+            "../images-fsn/great-legacy/miiredblack.jpg",
 
         brand:
             "Great Legacy",
@@ -83,25 +83,25 @@ const featuredProducts = [
             "brandpage-template.html?brand=Great%20Legacy",
 
         description:
-            "The LEGACY JORST is a modern take on classic denim. Cut from durable, mid-weight jean fabric with a relaxed fit, it’s built for everyday wear without losing its edge. Subtle detailing and a structured silhouette give it a standout look that works effortlessly with tees, hoodies, or layered fits."
+            "Inspired by Lagos' vibrant street life, the MADE IN IKOYI collection celebrates the city's rich heritag The collection blends traditional local craftsmanship withcontemporary fashion through bold prints and intricate embroidery. Highlighting the creativity of local artisans while honoring the city's history, these unique, detailed designs are perfect for making a bold fashion statement."
 
     },
 
 
     /* =========================================
-       FEATURED PRODUCT 2 (Great Legacy, LEGACY SKULL CAP)
+       FEATURED PRODUCT 2 (Great Legacy, MOTION IS THE MOTIVE)
     ========================================= */
 
     {
 
-        productId: "legacy-skull-cap",
+        productId: "MOTION IS THE MOTIVE",
 
-        name: "LEGACY SKULL CAP",
+        name: "MOTION IS THE MOTIVE",
 
-        price: "16000",
+        price: "20000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3720.PNG",
+            "../images-fsn/great-legacy/mitmwhiteb.jpg",
 
         brand:
             "Great Legacy",
@@ -113,7 +113,7 @@ const featuredProducts = [
             "brandpage-template.html?brand=Great%20Legacy",
 
         description:
-            "Built for everyday presence, the Legacy Skull Cap blends minimal design with timeless identity. Crafted from soft, durable knit, it delivers warmth, comfort, and a clean silhouette that fits effortlessly into any look."
+            "MOTION IS THE MOTIVE is a bold statement piece that embodies the spirit of movement and progress. Crafted from premium materials, it features a unique graphic print and a comfortable fit, making it perfect for those who want to stand out in style."
 
     },
 
@@ -147,19 +147,18 @@ const featuredProducts = [
 
 
     /* =========================================
-       FEATURED PRODUCT 4 (Great Legacy, LEGACY CROP TEE)
+       FEATURED PRODUCT 4 (Great Legacy, GTL WARCORE)
     ========================================= */
 
     {
+        productId: "GTL WARCORE",
 
-        productId: "legacy-crop-tee",
+        name: "GTL WARCORE",
 
-        name: "LEGACY CROP TEE",
-
-        price: "22000",
+        price: "35000",
 
         image:
-            "../images-fsn/great-legacy/IMG_3467.PNG",
+            "../images-fsn/great-legacy/gtlwarcorewhiteb.jpg",
 
         brand:
             "Great Legacy",
@@ -171,7 +170,7 @@ const featuredProducts = [
             "brandpage-template.html?brand=Great%20Legacy",
 
         description:
-            "The LEGACY CROP TEE brings a clean, contemporary edge to the Great Legacy collection. Designed with a cropped silhouette and bold character, it’s an easy statement piece that pairs effortlessly with relaxed trousers, denim, or layered fits."
+            "GTL WARCORE is a bold and aggressive statement piece that blends streetwear aesthetics with military like design. Crafted from premium materials, it features a unique graphic print and a comfortable fit, making it perfect for those who want to stand out in style."
 
     },
 
@@ -366,7 +365,7 @@ const products = {
     "GTL WARCORE": {
 
         name:
-            "GTL WARCORE LONG SLEEVE",
+            "GTL WARCORE",
 
         price:
             "35000",
@@ -385,7 +384,7 @@ const products = {
 
     },
 
-    "gl-made-in-ikoyi": {
+    "GL-MADE IN IKOYI": {
 
         name:
             "GL-MADE IN IKOYI",
