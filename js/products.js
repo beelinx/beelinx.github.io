@@ -83,7 +83,7 @@ const featuredProducts = [
             "brandpage-template.html?brand=Great%20Legacy",
 
         description:
-            "Inspired by Lagos' vibrant street life, the MADE IN IKOYI collection celebrates the city's rich heritag The collection blends traditional local craftsmanship withcontemporary fashion through bold prints and intricate embroidery. Highlighting the creativity of local artisans while honoring the city's history, these unique, detailed designs are perfect for making a bold fashion statement."
+            "Inspired by Lagos vibrant street life, the MADE IN IKOYI collection celebrates the city's rich heritage and blends traditional local smokesmanship with contemporary fashion through bold prints. Highlighting the creative street culture, perfect for making a bold fashion statement."
 
     },
 
