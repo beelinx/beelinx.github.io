@@ -343,6 +343,20 @@ nav a:hover {
     opacity: 0.7;
 }
 
+.more-product-brand {
+    display: inline-block;
+    font-size: smaller !important;
+    color: #777 !important;
+    margin-bottom: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: text-decoration 0.2s ease;
+}
+
+.more-product-brand:hover {
+    text-decoration: underline;
+}
+
 .more-product-card img {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -353,12 +367,6 @@ nav a:hover {
 
 .more-product-info {
     padding-top: 10px;
-}
-
-.more-product-brand {
-    font-size: 12px;
-    color: #777;
-    margin-bottom: 5px;
 }
 
 .more-product-name {

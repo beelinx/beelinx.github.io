@@ -79,9 +79,10 @@ if (product && brand && moreProductsContainer) {
         const info = document.createElement("div");
         info.className = "more-product-info";
 
-        const brandName = document.createElement("p");
+        const brandName = document.createElement("a");
         brandName.className = "more-product-brand";
         brandName.textContent = brand.name;
+        brandName.href = brand.page || `brandpage-template.html?brand=${encodeURIComponent(brand.name)}`;
 
         const name = document.createElement("p");
         name.className = "more-product-name";

@@ -661,46 +661,6 @@ padding-top: 4px;
 
 }
 
-.buy-button {
-display: inline-block;
-
-
-border-radius: 10px;
-
-width: 200px;
-
-cursor: pointer;
-
-align-content: center;
-
-padding: 5px 10px;
-
-align-items: center;
-
-text-decoration: none;
-
-color: #ffffff;
-
-font-weight: bolder;
-
-font-size: smaller;
-
-background-color: #ffffff;
-
-
-}
-
-.buy-button:hover {
-background-color: #ffffff;
-
-
-color: #000000;
-
-font-style: italic;
-
-
-}
-
 /* =========================================================
 15. PRODUCT GRID
 MATCHES MORE-INFO.CSS GRID LAYOUT
@@ -807,7 +767,7 @@ min-width: 0;
 
 .brand-page-link {
 text-decoration: none;
-color: grey;
+color: #777;
 font-weight: lighter;
 font-size: smaller;
 }
