@@ -43,6 +43,32 @@ function searchFunction() {
 
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const searchIcon = document.querySelector(".search-btn");
+
+    if (!searchInput || !searchIcon) return;
+
+    let closingTimer;
+
+    searchIcon.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(closingTimer);
+
+        if (searchInput.classList.contains("search-open")) {
+            searchInput.classList.remove("search-open");
+
+            closingTimer = setTimeout(function () {
+                searchInput.blur();
+            }, 400);
+        } else {
+            searchInput.classList.add("search-open");
+            searchInput.focus();
+        }
+    });
+});
 
 /* =========================================================
    2. MENU TOGGLE

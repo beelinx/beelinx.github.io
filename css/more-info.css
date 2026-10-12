@@ -134,22 +134,58 @@ nav a:hover {
     margin-top: 14px;
 }
 
-.search-input {
-    width: 0;
-    padding: 0;
-    border: none;
-    outline: none;
-    transition:
-        width 0.4s ease,
-        padding 0.4s ease;
-    font-size: 17px;
+/* =========================================================
+     SEARCH & SEARCH BAR ANIMATION
+========================================================= */
+
+.search-container {
+position: relative;
+margin-left: auto;
+margin-right: 4px;
+margin-top: 14px;
 }
 
-.search-input:focus {
-    width: 200px;
-    padding: 5px;
-    border-radius: 5px;
-}
+.search-input {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        box-sizing: border-box;
+        width: 0;
+        height: 40px;
+        padding: 0;
+        border: 0 solid #000000;
+        border-radius: 20px;
+        background: #ffffff;
+        color: #000000;
+        z-index: 1001;
+        opacity: 1;
+        visibility: hidden;
+        overflow: hidden;
+        transition:
+            width 0.4s ease,
+            padding 0.4s ease,
+            border-width 0.4s ease,
+            opacity 0.4s ease,
+            visibility 0s linear 0.4s;
+    }
+
+    .search-input.search-open {
+        width: 100%;
+        padding: 10px 15px;
+        border-width: 2px;
+        opacity: 1;
+        visibility: visible;
+        transition:
+            width 0.4s ease,
+            padding 0.4s ease,
+            border-width 0.4s ease,
+            opacity 0.4s ease,
+            visibility 0s;
+    }
+
+    body:has(.search-input.search-open) .featured-section-container {
+        margin-top: 45px;
+    }
 
 .search-btn {
     cursor: pointer;
@@ -454,7 +490,7 @@ body > *:not(header):not(#beelinx-splash) {
    KEEP MAIN PRODUCT HORIZONTAL
 ========================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
 
     .product-page {
         width: 95%;
