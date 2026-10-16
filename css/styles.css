@@ -2109,9 +2109,14 @@ body > *:not(header):not(#beelinx-splash) {
 ========================================================= */
 
 .hero-spotlight {
+    /* >>> CHANGE THIS to make the hero taller or shorter <<<
+       desktop value. Phones/tablets have their own value
+       inside the "tablets and phones" block further down. */
+    --hero-height: clamp(470px, 68vh, 600px);
+
     position: relative;
     width: 100%;
-    height: clamp(560px, 82vh, 720px);
+    height: var(--hero-height);
     background: #0a0a0a;
     color: #ffffff;
     overflow: hidden;
@@ -2511,7 +2516,8 @@ body > *:not(header):not(#beelinx-splash) {
 @media (max-width: 768px) {
 
     .hero-spotlight {
-        height: 640px;
+        /* >>> phone / tablet hero height <<< */
+        --hero-height: 540px;
     }
 
     .hero-slide {
@@ -2519,14 +2525,14 @@ body > *:not(header):not(#beelinx-splash) {
         grid-template-rows: auto 1fr;
         justify-items: center;
         align-items: start;
-        padding: 64px 6vw 62px;
+        padding: 58px 6vw 56px;
     }
 
     .hero-media {
         grid-column: 1;
         grid-row: 1;
         height: auto;
-        width: min(58vw, 260px);
+        width: min(46vw, 190px);
         border-radius: 20px;
     }
 
@@ -2541,12 +2547,16 @@ body > *:not(header):not(#beelinx-splash) {
         align-self: start;
         justify-self: center;
         max-width: none;
-        padding: 26px 0 0;
+        padding: 20px 0 0;
         text-align: center;
     }
 
     .hero-title {
-        font-size: 26px;
+        font-size: 24px;
+    }
+
+    .hero-cta {
+        margin-top: 18px;
     }
 
     .hero-desc {
@@ -2555,7 +2565,7 @@ body > *:not(header):not(#beelinx-splash) {
 
     .hero-ghost {
         top: auto;
-        bottom: 52px;
+        bottom: 40px;
         transform: none;
     }
 
