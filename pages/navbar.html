@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Beelinx Shared Navbar</title>
+</head>
+
+<body>
+
+    <!-- =========================================
+         BEELINX SHARED NAVBAR
+    ========================================= -->
+
+    <nav class="navbar">
+
+        <!-- HAMBURGER MENU -->
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- CENTERED LOGO -->
+        <div class="nav-center">
+            <a href="index.html" class="logo-link">
+                <img
+                    src="../beelinx_logo.png"
+                    alt="Beelinx Logo"
+                    class="logo-img">
+            </a>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="search-container">
+
+            <input
+                type="text"
+                class="search-input"
+                id="searchInput"
+                placeholder="Search...">
+
+            <label for="searchInput">
+                <i class="fas fa-search search-btn"></i>
+            </label>
+
+        </div>
+
+    </nav>
+
+    <!-- SIDE MENU -->
+    <div id="sideMenu" class="side-menu">
+
+        <div class="close-btn" onclick="closeMenu()">
+            <i class="fas fa-times"></i>
+        </div>
+
+        <a href="index.html">Home</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="my-list.html">My List</a>
+        <a href="about.html">About</a>
+        <a href="login.html">Login</a>
+
+    </div>
+
+</body>
+
+</html>

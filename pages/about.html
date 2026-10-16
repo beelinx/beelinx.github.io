@@ -25,44 +25,10 @@
     </head>
 
     <body>
-		<header>
-			<nav class="navbar">
-                <!-- Hamburger -->
-                <div class="hamburger" onclick="toggleMenu()">
-                    <i class="fas fa-bars"></i>
-                </div>
-
-                <!-- Logo -->
-	            <div class="nav-center">
-                    <a href="index.html" class="logo-link">
-                        <img src="../beelinx_logo.png" alt="Beelinx Logo" class="logo-img">
-                    </a>
-                </div>
-
-                <!-- Search -->
-                <div class="search-container">
-                    <input type="text" class="search-input" id="searchInput" placeholder="Search..." onkeyup="searchFunction()">
-                        <label for="searchInput">
-                        <i class="fas fa-search search-btn"></i>
-                        </label>
-                </div>
-			</nav>
-
-			<!-- Side Menu -->
-			<div id="sideMenu" class="side-menu">
-
-            <div class="close-btn" onclick="closeMenu()">
-                <i class="fas fa-times"></i>
-            </div>
-
-			<a href="index.html">Home</a>
-            <a href="catalogue.html">Catalogue</a>
-            <a href="about.html">About</a>
-
-            </div>
-
-			</nav>
-		</header>
+		
+        <header>
+            <div id="navbar-placeholder"></div>
+        </header>
 
 		<h1>About Beelinx</h1>
 	
@@ -140,9 +106,10 @@
         </div>
 	</footer>
 
-	<!-- JAVA SCRIPT -->
-	<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-	<script src="../js/main.js"></script>
+<!-- JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/navbar.js"></script>
 
     </body>
 </html>

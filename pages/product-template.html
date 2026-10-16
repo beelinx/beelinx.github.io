@@ -24,7 +24,7 @@ brands on Beelinx. Explore products and find out where to shop them.">
 <!-- Google Fonts -->
 
 <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap"
     rel="stylesheet">
 
 
@@ -53,115 +53,19 @@ brands on Beelinx. Explore products and find out where to shop them.">
 
 <body>
 
-
 <!-- =========================================
      HEADER
 ========================================= -->
 
 <header>
-
-    <nav class="navbar">
-
-
-        <!-- Hamburger -->
-
-        <div
-            class="hamburger"
-            onclick="toggleMenu()">
-
-            <i class="fas fa-bars"></i>
-
-        </div>
-
-
-        <!-- Logo -->
-
-        <div class="nav-center">
-
-            <!-- CHANGED:
-                 ../pages/index.html
-                 becomes
-                 index.html
-            -->
-
-            <a
-                href="index.html"
-                class="logo-link">
-
-                <img
-                    src="../beelinx_logo.png"
-                    alt="Beelinx Logo"
-                    class="logo-img">
-
-            </a>
-
-        </div>
-
-
-        <!-- Search -->
-
-        <div class="search-container">
-
-            <input
-                type="text"
-                class="search-input"
-                id="searchInput"
-                placeholder="Search..."
-                onkeyup="searchFunction()">
-
-            <label for="searchInput">
-
-                <i class="fas fa-search search-btn"></i>
-
-            </label>
-
-        </div>
-
-    </nav>
-
-
-    <!-- =========================================
-         SIDE MENU
-    ========================================= -->
-
-    <div
-        id="sideMenu"
-        class="side-menu">
-
-
-        <div
-            class="close-btn"
-            onclick="closeMenu()">
-
-            <i class="fas fa-times"></i>
-
-        </div>
-
-
-        <a href="index.html">
-            Home
-        </a>
-
-
-        <a href="catalogue.html">
-            Catalogue
-        </a>
-
-
-        <a href="about.html">
-            About
-        </a>
-
-
-    </div>
-
+    <div id="navbar-placeholder"></div>
 </header>
-
-
 
 <!-- =========================================
      PRODUCT
 ========================================= -->
+
+<section class="product-stage">
 
 <main class="product-page">
 
@@ -170,7 +74,7 @@ brands on Beelinx. Explore products and find out where to shop them.">
 
     <a
         id="product-image-link"
-        class="clothe-image"
+        class="clothe-image product-media"
         href="">
 
         <img
@@ -183,15 +87,16 @@ brands on Beelinx. Explore products and find out where to shop them.">
     </a>
 
 
-    <!-- Product information -->
+    <!-- Product information + comments -->
 
-    <div class="clothe-text">
+    <div class="clothe-text product-panel">
 
 
         <!-- Brand -->
 
         <a
             id="brand-link"
+            class="panel-brand"
             href="">
 
             <img
@@ -200,43 +105,108 @@ brands on Beelinx. Explore products and find out where to shop them.">
                 src=""
                 alt="Brand Logo">
 
+            <span id="brand-name-text" class="panel-brand-name"></span>
+
         </a>
 
 
         <!-- Product name + price -->
 
-        <p class="product-description">
-
+        <h1 class="product-title">
             <span id="product-name"></span>
+        </h1>
 
-            <br><br>
-
-            <span
-                id="product-price"
-                class="price">
-            </span>
-
-        </p>
+        <span
+            id="product-price"
+            class="price">
+        </span>
 
 
-        <br>
+        <!-- Order + Like + Save to My List -->
+
+        <div class="panel-actions">
+
+            <a
+                id="order-link"
+                class="order-link"
+                href="">
+
+                Find Order
+
+            </a>
+
+            <div class="product-actions">
+
+                <button
+                    id="like-btn"
+                    class="action-btn"
+                    type="button"
+                    aria-pressed="false">
+
+                    <i class="fa-regular fa-heart"></i>
+                    <span id="like-count"></span>
+
+                </button>
+
+                <button
+                    id="save-btn"
+                    class="action-btn"
+                    type="button"
+                    aria-pressed="false">
+
+                    <i class="fa-regular fa-bookmark"></i>
+                    <span id="save-label">Save to My List</span>
+
+                </button>
+
+            </div>
+
+        </div>
 
 
-        <!-- Order -->
+        <!-- Comments -->
 
-        <a
-            id="order-link"
-            class="order-link"
-            href="">
+        <section class="comments-section">
 
-            Find Order
+            <div class="comments-head">
 
-        </a>
+                <h2>
+                    Comments
+                    <span id="comments-count"></span>
+                </h2>
+
+                <!-- Social icons -->
+
+                <div
+                    id="brand-socials"
+                    class="brand-socials">
+                </div>
+
+            </div>
+
+            <div id="comments-list"></div>
+
+            <form id="comment-form" class="comment-form">
+
+                <input
+                    id="comment-input"
+                    type="text"
+                    placeholder="Add a comment"
+                    autocomplete="off"
+                    aria-label="Add a comment">
+
+                <button type="submit">Post</button>
+
+            </form>
+
+        </section>
 
 
     </div>
 
 </main>
+
+</section>
 
 
 
@@ -248,14 +218,6 @@ brands on Beelinx. Explore products and find out where to shop them.">
 
 
     <div class="more-products-header">
-
-
-        <!-- Social icons -->
-
-        <div
-            id="brand-socials"
-            class="brand-socials">
-        </div>
 
 
         <!-- Title -->
@@ -284,59 +246,70 @@ brands on Beelinx. Explore products and find out where to shop them.">
 </section>
 
 
-         <!-- FOOTER -->
 
 <!-- =========================================
-     BRAND WEBSITE + SLOGAN
+     FOOTER: SLOGAN + BRAND WEBSITE + COPYRIGHT
 ========================================= -->
 
-<div class="product-brand-website">
+<footer class="product-footer">
 
-    <a
-        id="productBrandWebsite"
-        class="website-link"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer">
+    <p
+        id="productBrandSlogan"
+        class="product-brand-slogan">
+    </p>
 
-        Official Website
+    <div class="product-brand-website">
 
-    </a>
+        <a
+            id="productBrandWebsite"
+            class="website-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer">
 
-</div>
+            Official Website
 
+        </a>
 
-<p
-    id="productBrandSlogan"
-    class="product-brand-slogan">
-</p>
+    </div>
 
+    <div class="product-brand-copyright">
 
-<div class="product-brand-copyright">
+        © 2026 Beelinx. All rights reserved.
 
-    © 2026 Beelinx. All rights reserved.
+    </div>
 
-</div>
-
+</footer>
 
 
 <!-- =========================================
      JAVASCRIPT
 ========================================= -->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js">
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
 <script src="../js/main.js"></script>
 
-
 <script src="../js/products.js"></script>
-
 
 <script src="../js/more-info.js"></script>
 
+<script src="../js/engagement.js"></script>
+
+<script src="../js/navbar.js" defer></script>
+
+<script>
+    // shows the brand name next to the logo (read from the logo's alt text)
+    (function () {
+        var logo = document.getElementById("brand-logo");
+        var label = document.getElementById("brand-name-text");
+        if (!logo || !label) return;
+        var alt = (logo.getAttribute("alt") || "").trim();
+        if (alt && alt !== "Brand Logo") {
+            label.textContent = alt.replace(/\s*Logo$/i, "");
+        }
+    })();
+</script>
 
 </body>
 

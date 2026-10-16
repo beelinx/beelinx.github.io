@@ -22,6 +22,9 @@
         Beelinx | Discover Brands
     </title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap"
+          rel="stylesheet">
+
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
@@ -34,94 +37,15 @@
 </head>
 
 
-<body>
+<body class="brand-page">
 
+<!-- =========================================
+     HEADER
+========================================= -->
 
-    <!-- =========================================
-         HEADER
-    ========================================= -->
-
-    <header>
-
-        <nav class="navbar">
-
-            <!-- Hamburger -->
-
-            <div class="hamburger"
-                 onclick="toggleMenu()">
-
-                <i class="fas fa-bars"></i>
-
-            </div>
-
-
-            <!-- Logo -->
-
-            <div class="nav-center">
-
-                <a href="index.html"
-                   class="logo-link">
-
-                    <img src="../beelinx_logo.png"
-                         alt="Beelinx Logo"
-                         class="logo-img">
-
-                </a>
-
-            </div>
-
-
-            <!-- Search -->
-
-            <div class="search-container">
-
-                <input type="text"
-                       class="search-input"
-                       id="searchInput"
-                       placeholder="Search..."
-                       onkeyup="searchFunction()">
-
-                <label for="searchInput">
-
-                    <i class="fas fa-search search-btn"></i>
-
-                </label>
-
-            </div>
-
-        </nav>
-
-
-        <!-- Side Menu -->
-
-        <div id="sideMenu"
-             class="side-menu">
-
-            <div class="close-btn"
-                 onclick="closeMenu()">
-
-                <i class="fas fa-times"></i>
-
-            </div>
-
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="catalogue.html">
-                Catalogue
-            </a>
-
-            <a href="about.html">
-                About
-            </a>
-
-        </div>
-
-    </header>
-
-
+<header>
+    <div id="navbar-placeholder"></div>
+</header>
 
     <!-- =========================================
          BRAND INFORMATION
@@ -129,16 +53,31 @@
 
     <main>
 
+        <section class="brand-hero">
 
-        <img id="brand-logo"
-             class="brand-product-logo"
-             src=""
-             alt="Brand Logo">
+            <!-- giant faint brand name (text is copied from #brand-name by the script at the bottom) -->
+            <div id="brand-ghost" class="brand-ghost" aria-hidden="true"></div>
 
+            <img id="brand-logo"
+                 class="brand-product-logo brand-hero-logo"
+                 src=""
+                 alt="Brand Logo">
 
-        <h1 id="brand-name"
-            class="brand-name-h">
-        </h1>
+            <h1 id="brand-name"
+                class="brand-name-h"></h1>
+
+            <p id="brand-slogan" class="brand-hero-slogan"></p>
+
+            <a id="brand-website"
+               class="hero-cta"
+               href=""
+               target="_blank"
+               rel="noopener noreferrer">
+                Official Website
+                <span class="hero-cta-arrow">&rarr;</span>
+            </a>
+
+        </section>
 
 
 
@@ -162,32 +101,9 @@
          FOOTER
     ========================================= -->
 
-    <footer>
+    <footer class="brand-footer">
 
         <section class="footer-section">
-
-
-            <p class="brand-web-link">
-
-                <a id="brand-website"
-                   class="website-link"
-                   href=""
-                   target="_blank"
-                   rel="noopener noreferrer">
-
-                    Official Website
-
-                </a>
-
-            </p>
-
-
-            <p id="brand-slogan"
-               class="footer-text">
-
-            </p>
-
-
 
             <!-- Social Media -->
 
@@ -198,14 +114,11 @@
 
             </div>
 
-
-
             <p class="copyrights">
 
                 © 2026 Beelinx — Fashion Worth Discovering
 
             </p>
-
 
         </section>
 
@@ -218,13 +131,27 @@
     ========================================= -->
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-
     <script src="../js/main.js"></script>
-
     <script src="../js/products.js"></script>
-
+    <script src="../js/engagement.js"></script>
     <script src="../js/brand-page.js"></script>
+    <script src="../js/navbar.js" defer></script>
 
+    <script>
+        // keeps the big faint background name in sync with the brand name
+        (function () {
+            var name = document.getElementById("brand-name");
+            var ghost = document.getElementById("brand-ghost");
+            if (!name || !ghost) return;
+
+            function sync() { ghost.textContent = name.textContent.trim(); }
+
+            sync();
+            new MutationObserver(sync).observe(name, {
+                childList: true, characterData: true, subtree: true
+            });
+        })();
+    </script>
 
 </body>
 

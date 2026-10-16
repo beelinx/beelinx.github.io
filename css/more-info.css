@@ -127,13 +127,6 @@ nav a:hover {
     opacity: 0.7;
 }
 
-.search-container {
-    position: relative;
-    margin-left: auto;
-    margin-right: 4px;
-    margin-top: 14px;
-}
-
 /* =========================================================
      SEARCH & SEARCH BAR ANIMATION
 ========================================================= */
@@ -199,82 +192,419 @@ margin-top: 14px;
 
 
 /* =========================================
-   MAIN PRODUCT
+   PRODUCT SECTION (compact, white)
+   Product on a grey studio panel on the left,
+   one column on the right with brand, title,
+   actions and comments. Kept short so the
+   "More by" row is visible without long scrolling.
 ========================================= */
 
+.product-stage {
+    background: #ffffff;
+    padding: 26px 0 6px;
+}
+
 .product-page {
-    width: 90%;
-    max-width: 1100px;
-    margin: 60px auto 100px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 70px;
-    align-items: center;
-}
-
-.product-page .clothe-image {
-    width: 100%;
-    max-width: 550px;
-    height: auto;
-    display: block;
+    width: 92%;
+    max-width: 1040px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 44px;
+    align-items: stretch;
 }
 
-.product-page .clothe-text {
-    width: 100%;
-    text-align: center;
-}
+/* ---------- product on grey studio panel ---------- */
 
-.product-page .brand-product-logo {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
+.product-page .product-media.clothe-image {
+    position: relative;
     display: block;
-    margin: 0 auto 20px;
+    width: 100%;
+    max-width: none;
+    min-height: 280px;
+    margin: 0;
+    background: radial-gradient(ellipse at 50% 30%, #fafafa 0%, #ececec 65%, #dcdcdc 100%);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 1px #e6e6e6,
+        0 18px 40px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.3s ease;
+}
+
+.product-page .product-media.clothe-image:hover {
+    box-shadow:
+        0 0 0 1px #d4d4d4,
+        0 22px 48px rgba(0, 0, 0, 0.16);
+}
+
+.product-page .product-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 18%);
+    pointer-events: none;
+}
+
+.product-page .product-media img.clothe-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    padding: 7%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: brightness(1.04) contrast(1.05);
+    transition: transform 0.5s ease;
+}
+
+.product-page .product-media:hover img.clothe-image {
+    transform: scale(1.03);
+}
+
+/* ---------- right column ---------- */
+
+.product-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 2px 0;
+    text-align: left;
+}
+
+.panel-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    align-self: flex-start;
+    text-decoration: none;
+    color: #444444;
+    transition: color 0.2s ease;
+}
+
+.panel-brand:hover {
+    color: #000000;
+}
+
+.product-panel .brand-product-logo {
+    width: 40px;
+    height: 40px;
+    margin: 0;
     border-radius: 50%;
+    object-fit: cover;
+    background: #000000;
+    box-shadow: 0 0 0 1px #e0e0e0;
 }
 
-.product-page .brand-product-logo:hover {
-    transition: transform 0.2s ease;
-    transform: scale(1.08);
-    opacity: 0.7;
+.product-panel .brand-product-logo:hover {
+    transform: none;
+    opacity: 1;
 }
 
-.product-page #product-name {
-    font-size: 28px;
-    margin-bottom: 6px;
+.panel-brand-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    letter-spacing: 0.04em;
 }
 
-.product-page .price {
-    color: grey;
-    font-size: 20px;
-    text-align: center;
-    margin-bottom: 8px;
+.product-title {
+    margin: 16px 0 6px;
+    padding: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(24px, 2.6vw, 34px);
+    font-weight: 400;
+    line-height: 1.1;
+    text-align: left;
+    letter-spacing: 0;
+    color: #000000;
 }
 
-.product-description {
-    text-align: center;
-    font-size: larger;
-    line-height: 1.4;
-    margin-bottom: 4px;
+.product-panel .price {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-align: left;
+    color: #777777;
+}
+
+/* ---------- actions ---------- */
+
+.panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
 }
 
 .order-link {
-    text-align: center;
-    display: inline-block;
-    color: white;
-    background-color: black;
-    border-radius: 30px;
-    padding: 12px 70px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 12px 30px;
+    border: 1px solid #000000;
+    border-radius: 999px;
+    background: #000000;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     text-decoration: none;
-    margin-top: 12px;
-    font-weight: bold;
-    transition: transform 0.2s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .order-link:hover {
-    transform: translateY(-5px);
-    opacity: 0.8;
+    background: transparent;
+    color: #000000;
+    transform: none;
+    opacity: 1;
+}
+
+.order-link[aria-disabled="true"] {
+    opacity: 0.45;
+}
+
+.product-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border: 1px solid #cfcfcf;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #000000;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.action-btn:hover {
+    background: #f4f4f4;
+    border-color: #000000;
+    transform: none;
+}
+
+.action-btn.is-active {
+    background: #000000;
+    border-color: #000000;
+    color: #ffffff;
+}
+
+#like-btn.is-active i {
+    color: #ff4d6d;
+}
+
+.action-btn:focus-visible,
+.order-link:focus-visible,
+.comment-form button:focus-visible {
+    outline: 2px solid #000000;
+    outline-offset: 3px;
+}
+
+/* ---------- comments + social icons ---------- */
+
+.product-panel .comments-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: none;
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid #ececec;
+}
+
+.comments-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.product-panel .comments-section h2 {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: left;
+    color: #000000;
+}
+
+#comments-count {
+    margin-left: 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #999999;
+}
+
+/* social icons sit on the right of the comments title */
+.comments-head .brand-socials {
+    position: static;
+    transform: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: transparent;
+}
+
+.comments-head .brand-social-link {
+    width: 30px;
+    height: 30px;
+    font-size: 17px;
+    color: #000000;
+    text-decoration: none;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.comments-head .brand-social-link:hover {
+    color: #000000;
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+#comments-list {
+    flex: 1;
+    min-height: 0;
+    max-height: 130px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #cccccc transparent;
+}
+
+.comments-empty {
+    margin-bottom: 12px;
+    font-size: 14px;
+    text-align: left;
+    color: #777777;
+}
+
+.comment {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.comment-avatar {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #000000;
+    color: #ffffff;
+    font-size: 13px;
+}
+
+.comment-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.comment-meta {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 13px;
+    color: #000000;
+}
+
+.comment-meta span {
+    font-size: 12px;
+    color: #999999;
+}
+
+.comment-text {
+    margin-top: 2px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #333333;
+    overflow-wrap: anywhere;
+}
+
+.comment-delete {
+    padding: 2px 0;
+    border: none;
+    background: none;
+    color: #999999;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.comment-delete:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.comment-form {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 6px;
+}
+
+.comment-form input {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+    padding: 0 18px;
+    border: 1px solid #cccccc;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.comment-form input::placeholder {
+    color: #999999;
+}
+
+.comment-form input:focus {
+    border-color: #000000;
+}
+
+.comment-form button {
+    height: 42px;
+    padding: 0 24px;
+    border: 1px solid #000000;
+    border-radius: 999px;
+    background: #000000;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.comment-form button:hover {
+    background: transparent;
+    color: #000000;
+    opacity: 1;
 }
 
 
@@ -285,130 +615,76 @@ margin-top: 14px;
 .more-products-section {
     width: 95%;
     max-width: 1400px;
-    margin: 0 auto 80px;
+    margin: 26px auto 60px;
     padding-top: 0;
 }
 
-
-/* =========================================
-   SOCIAL MEDIA + TITLE HEADER
-========================================= */
-
 .more-products-header {
-    position: relative;
-    border-top: 1px solid #ddd;
-    padding-top: 18px;
-    padding-bottom: 30px;
-    margin-bottom: 35px;
+    border-top: 1px solid #ececec;
+    padding-top: 22px;
+    padding-bottom: 0;
+    margin-bottom: 20px;
 }
-
-.brand-socials {
-    position: absolute;
-    left: 50%;
-    top: -20px;
-    transform: translateX(-50%);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-
-    padding: 0 15px;
-    background-color: white;
-
-    z-index: 2;
-}
-
-.brand-social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: black;
-    text-decoration: none;
-
-    font-size: 20px;
-
-    width: 25px;
-    height: 25px;
-
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.brand-social-link:hover {
-    color: gray;
-    transform: translateY(-3px);
-}
-
-
-/* =========================================
-   SECTION TITLE
-========================================= */
 
 .more-products-section h2 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 400;
     margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
 }
-
-
-/* =========================================
-   SUGGESTION GRID
-========================================= */
 
 .more-products-container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 25px;
     width: 100%;
 }
 
-
-/* =========================================
-   SUGGESTION CARD
-========================================= */
-
 .more-product-card {
     width: 100%;
+    padding-bottom: 12px;
     text-align: center;
-    transition: transform 0.2s ease;
+    background: #ffffff;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .more-product-card:hover {
-    transform: translateY(-20px);
-    opacity: 0.7;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+}
+
+.more-product-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+.more-product-info {
+    padding: 10px 8px 0;
 }
 
 .more-product-brand {
     display: inline-block;
-    font-size: smaller !important;
-    color: #777 !important;
     margin-bottom: 5px;
-    text-decoration: none;
+    font-size: smaller !important;
     font-weight: bold;
-    transition: text-decoration 0.2s ease;
+    color: #777 !important;
+    text-decoration: none;
 }
 
 .more-product-brand:hover {
     text-decoration: underline;
 }
 
-.more-product-card img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
-}
-
-.more-product-info {
-    padding-top: 10px;
-}
-
 .more-product-name {
-    font-size: 14px;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
 .more-product-price {
@@ -423,60 +699,86 @@ margin-top: 14px;
 
 
 /* =========================================
-   PRODUCT BRAND FOOTER
+   FOOTER (slogan, website, copyright)
 ========================================= */
 
-.product-brand-website {
+.product-footer {
+    padding: 44px 20px 26px;
+    background: #ffffff;
+    border-top: 1px solid #ececec;
     text-align: center;
-    padding-top: 50px;
-    padding-bottom: 10px;
+}
+
+.product-brand-slogan {
+    max-width: 480px;
+    margin: 0 auto 22px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: normal;
+    line-height: 1.7;
+    color: #777777;
+}
+
+.product-brand-slogan:empty {
+    display: none;
+}
+
+.product-brand-website {
+    padding: 0;
 }
 
 .product-brand-website .website-link,
 .product-brand-website .website-link:visited,
 .product-brand-website .website-link:active {
-    text-decoration: none !important;
-    text-align: center;
-    font-style: italic;
+    display: inline-block;
+    padding: 12px 28px;
+    border: 1px solid #000000;
+    border-radius: 999px;
+    background: transparent;
     color: #000000 !important;
-    padding-bottom: 20px;
-    font-size: inherit;
-    transition: font-size 0.2s ease;
+    font-size: 12px;
+    font-style: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .product-brand-website .website-link:hover {
-    font-size: larger !important;
-    color: #000000 !important;
+    background: #000000;
+    color: #ffffff !important;
+    font-size: 12px !important;
 }
 
-.product-brand-slogan {
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    font-style: italic;
-    font-weight: lighter;
-    opacity: 0.65;
-    margin-bottom: 18px;
-    text-align: center;
+/* no website saved for this brand: hide the empty button */
+.product-brand-website .website-link[href="#"] {
+    display: none;
 }
 
 .product-brand-copyright {
-    font-size: 12px;
-    font-style: italic;
-    color: #000000;
-    opacity: 0.7;
-    text-align: center;
+    margin-top: 34px;
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: 1px;
+    color: #999999;
+    opacity: 1;
 }
 
+
 /* =========================================
-   ==== BEELINX PAGE TRANSITION ====
+   PAGE TRANSITION (same soft zoom as the
+   rest of the site)
 ========================================= */
 
 @keyframes beelinxPageExpand {
     from {
-        transform: scale(0.45);
+        opacity: 0;
+        transform: scale(0.96);
     }
 
     to {
+        opacity: 1;
         transform: scale(1);
     }
 }
@@ -486,86 +788,53 @@ body > *:not(header):not(#beelinx-splash) {
     transform-origin: center center;
 }
 
+
 /* =========================================
    TABLET / MOBILE
-   KEEP MAIN PRODUCT HORIZONTAL
+   Product on top, details underneath
 ========================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
+
+    .product-stage {
+        padding: 20px 0 4px;
+    }
 
     .product-page {
-        width: 95%;
-        margin: 40px auto 80px;
-        grid-template-columns: 1fr 1fr;
-        gap: 25px;
-        align-items: center;
+        width: 90%;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
     }
 
-    .product-page .clothe-image {
-        width: 100%;
-        max-width: 450px;
-        height: auto;
+    .product-page .product-media.clothe-image {
+        width: min(72vw, 320px);
+        min-height: 0;
+        aspect-ratio: 4 / 5;
+        margin: 0 auto;
+        border-radius: 18px;
     }
 
-    .product-page .clothe-text {
-        text-align: center;
-        width: 100%;
-    }
-
-    .product-page .brand-product-logo {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 12px;
-    }
-
-    .product-page #product-name {
-        font-size: 22px;
-        margin-bottom: 4px;
-    }
-
-    .product-page .price {
-        font-size: 18px;
-        margin-bottom: 5px;
-    }
-
-    .product-description {
-        line-height: 1.35;
-        margin-bottom: 2px;
-    }
-
-    .product-page .order-link {
-        padding: 10px 30px;
-        font-size: 14px;
-        margin-top: 8px;
+    #comments-list {
+        max-height: none;
+        overflow: visible;
     }
 
     .more-products-container {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 20px;
     }
 
-    .more-products-header {
-        margin-bottom: 30px;
+    .more-product-card {
+        border-radius: 10px;
+        padding-bottom: 8px;
     }
 
-    .brand-socials {
-        gap: 13px;
-    }
-
-    .brand-social-link {
-        font-size: 18px;
+    .more-product-info {
+        padding: 8px 5px 0;
     }
 }
 
-
-/* =========================================
-   SMALL PHONES
-   STILL HORIZONTAL
-========================================= */
-
 @media (max-width: 600px) {
-
-    /* NAVBAR — MATCH HOMEPAGE */
 
     .navbar {
         padding: 10px 20px;
@@ -576,94 +845,34 @@ body > *:not(header):not(#beelinx-splash) {
         height: 40px;
     }
 
-
-    /* =====================================
-       MAIN PRODUCT
-    ===================================== */
-
-    .product-page {
-        width: 96%;
-        margin: 25px auto 50px;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        align-items: center;
+    .order-link {
+        flex: 1 1 100%;
+        padding: 13px 24px;
     }
 
-    .product-page .clothe-image {
-        width: 100%;
-        max-width: none;
-        height: auto;
+    .product-actions {
+        flex: 1 1 100%;
+        gap: 8px;
     }
 
-    .product-page .clothe-text {
-        text-align: center;
-        width: 100%;
-    }
-
-    .product-page .brand-product-logo {
-        width: 55px;
-        height: 55px;
-        margin: 0 auto 8px;
-    }
-
-    .product-page #product-name {
-        font-size: 16px;
-        line-height: 1.15;
-        margin-bottom: 3px;
-    }
-
-    .product-page .price {
-        font-size: 15px;
-        line-height: 1.2;
-        margin-bottom: 4px;
-    }
-
-    .product-description {
-        font-size: 13px;
-        line-height: 1.3;
-        margin-bottom: 0;
-    }
-
-    .product-page .order-link {
-        padding: 7px 18px;
+    .action-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 11px 14px;
         font-size: 12px;
-        margin-top: 7px;
     }
-
-
-    /* =====================================
-       MORE BY BRAND
-    ===================================== */
 
     .more-products-section {
         width: 94%;
-    }
-
-    .more-products-header {
-        padding-top: 15px;
-        margin-bottom: 25px;
+        margin-top: 20px;
     }
 
     .more-products-section h2 {
-        font-size: 22px;
-        margin: 0;
+        font-size: 20px;
     }
 
     .more-products-container {
-        grid-template-columns: repeat(3, 1fr);
         gap: 15px 8px;
-    }
-
-    .brand-socials {
-        top: -18px;
-        gap: 12px;
-        padding: 0 12px;
-    }
-
-    .brand-social-link {
-        width: 22px;
-        height: 22px;
-        font-size: 17px;
     }
 
     .more-product-name {
@@ -678,72 +887,20 @@ body > *:not(header):not(#beelinx-splash) {
         font-size: 10px;
     }
 
-
-    /* =====================================
-       PRODUCT BRAND FOOTER
-    ===================================== */
-
-    .product-brand-website {
-        padding-top: 25px;
-        padding-bottom: 10px;
-    }
-
-    .product-brand-website .website-link,
-    .product-brand-website .website-link:visited,
-    .product-brand-website .website-link:active {
-        font-size: 11px;
-        color: #000000 !important;
-        text-decoration: none !important;
+    .product-footer {
+        padding: 36px 20px 20px;
     }
 
     .product-brand-slogan {
-        font-size: 13px;
-        margin-bottom: 12px;
+        font-size: 14px;
     }
 
     .product-brand-copyright {
-        font-size: 8px;
+        font-size: 9px;
     }
 }
 
-
-/* =========================================
-   VERY SMALL PHONES
-========================================= */
-
 @media (max-width: 380px) {
-
-    .product-page {
-        gap: 7px;
-        margin-top: 20px;
-    }
-
-    .product-page #product-name {
-        font-size: 14px;
-        margin-bottom: 2px;
-    }
-
-    .product-page .price {
-        font-size: 13px;
-        margin-bottom: 3px;
-    }
-
-    .product-page .brand-product-logo {
-        width: 48px;
-        height: 48px;
-        margin-bottom: 6px;
-    }
-
-    .product-description {
-        font-size: 12px;
-        line-height: 1.25;
-    }
-
-    .product-page .order-link {
-        padding: 6px 14px;
-        font-size: 11px;
-        margin-top: 6px;
-    }
 
     .more-products-container {
         gap: 12px 8px;
@@ -755,36 +912,5 @@ body > *:not(header):not(#beelinx-splash) {
 
     .more-product-price {
         font-size: 10px;
-    }
-
-    .brand-socials {
-        top: -17px;
-        gap: 10px;
-    }
-
-    .brand-social-link {
-        font-size: 15px;
-    }
-
-    .product-brand-website {
-        padding-top: 20px;
-        padding-bottom: 8px;
-    }
-
-    .product-brand-website .website-link,
-    .product-brand-website .website-link:visited,
-    .product-brand-website .website-link:active {
-        font-size: 10px;
-        color: #000000 !important;
-        text-decoration: none !important;
-    }
-
-    .product-brand-slogan {
-        font-size: 12px;
-        margin-bottom: 10px;
-    }
-
-    .product-brand-copyright {
-        font-size: 7px;
     }
 }

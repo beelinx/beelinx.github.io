@@ -76,6 +76,11 @@ if (!brand) {
 
             text.append(brandLink, document.createElement("br"), productLabel);
             productCard.append(imageLink, text, price);
+
+            /* Save to My List button (engagement.js) */
+            if (typeof BeelinxEngage !== "undefined") {
+                productCard.appendChild(BeelinxEngage.createSaveButton(id));
+            }
             productsContainer.appendChild(productCard);
         });
     }

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Log In | Beelinx</title>
+
+    <style>
+
+        /* =========================================
+           BEELINX LOGIN PAGE
+        ========================================= */
+
+        /* GLOBAL RESET */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* PAGE */
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+
+            background-color: #000;
+            color: #fff;
+
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px 20px;
+        }
+
+
+        /* LOGIN CONTAINER */
+
+        .login-container {
+            width: 100%;
+            max-width: 380px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        /* BEELINX LOGO */
+
+        .login-logo {
+            display: block;
+
+            width: 180px;
+            max-width: 80%;
+            height: auto;
+
+            object-fit: contain;
+
+            margin-bottom: 55px;
+        }
+
+
+        /* LOGIN FORM */
+
+        .login-form {
+            width: 100%;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 20px;
+        }
+
+
+        /* INPUT FIELDS */
+
+        .login-input {
+            width: 100%;
+            height: 52px;
+
+            background-color: #000;
+            color: #fff;
+
+            border: 1px solid #444;
+            border-radius: 5px;
+
+            padding: 0 16px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: border-color 0.2s ease;
+        }
+
+        .login-input::placeholder {
+            color: #888;
+        }
+
+        .login-input:focus {
+            border-color: #aaa;
+        }
+
+
+        /* FORGOT PASSWORD */
+
+        .forgot-password {
+            align-self: flex-end;
+
+            margin-top: -8px;
+
+            color: #aaa;
+
+            font-size: 13px;
+            text-decoration: none;
+
+            transition: color 0.2s ease;
+        }
+
+        .forgot-password:hover {
+            color: #fff;
+        }
+
+
+        /* LOG IN BUTTON */
+
+        .login-button {
+            width: 100%;
+            height: 52px;
+
+            margin-top: 5px;
+
+            background-color: #fff;
+            color: #000;
+
+            border: 1px solid #fff;
+            border-radius: 5px;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .login-button:hover {
+            background-color: #d9d9d9;
+        }
+
+
+/* =========================================
+   SPLASH SCREEN
+========================================= */
+
+#splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    background: #000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    transition: opacity 0.4s ease,
+                visibility 0.4s ease;
+}
+
+.splash-logo {
+    width: 180px;
+    max-width: 70%;
+    height: auto;
+    object-fit: contain;
+
+    margin-bottom: 30px;
+}
+
+.loading-track {
+    width: 150px;
+    height: 2px;
+
+    background: #333;
+
+    overflow: hidden;
+}
+
+#loading-bar {
+    width: 0;
+    height: 100%;
+
+    background: #fff;
+
+    animation: fill-loading 0.8s ease-in-out forwards;
+}
+
+@keyframes fill-loading {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+/* HIDE SPLASH SCREEN */
+
+#splash-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* PREVENT PAGE SCROLL DURING SPLASH */
+
+body.loading {
+    overflow: hidden;
+}
+
+
+        /* MOBILE ADJUSTMENTS */
+
+        @media (max-width: 480px) {
+
+            .login-container {
+                max-width: 340px;
+            }
+
+            .login-logo {
+                width: 155px;
+                margin-bottom: 45px;
+            }
+
+            .login-input,
+            .login-button {
+                height: 50px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================================
+         LOGIN PAGE
+    ========================================= -->
+
+<!-- =========================================
+     BEELINX SPLASH SCREEN
+========================================= -->
+
+<div id="splash-screen">
+
+    <img
+        src="../beelinx_logo.png"
+        alt="Beelinx Logo"
+        class="splash-logo">
+
+    <div class="loading-track">
+        <div id="loading-bar"></div>
+    </div>
+
+</div>
+
+    <main class="login-container">
+
+        <!-- BEELINX LOGO -->
+
+        <a href="index.html" aria-label="Return to Beelinx home">
+
+            <img
+                src="../beelinx_bee.png"
+                alt="Beelinx Logo"
+                class="login-logo">
+
+        </a>
+
+
+        <!-- LOGIN FORM -->
+
+        <form class="login-form">
+
+            <!-- EMAIL -->
+
+            <input
+                type="email"
+                class="login-input"
+                id="login-email"
+                name="email"
+                placeholder="Enter email"
+                autocomplete="email"
+                required>
+
+
+            <!-- PASSWORD -->
+
+            <input
+                type="password"
+                class="login-input"
+                id="login-password"
+                name="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required>
+
+
+            <!-- FORGOT PASSWORD -->
+
+            <a
+                href="#"
+                class="forgot-password">
+
+                Forgot password?
+
+            </a>
+
+
+            <!-- LOG IN BUTTON -->
+
+            <button
+                type="submit"
+                class="login-button">
+
+                Log In
+
+            </button>
+
+        </form>
+
+    </main>
+
+<script>
+    document.body.classList.add("loading");
+
+    window.addEventListener("load", function () {
+
+        const splash = document.getElementById("splash-screen");
+
+        setTimeout(function () {
+
+            splash.classList.add("hide");
+            document.body.classList.remove("loading");
+
+        }, 850);
+
+    });
+</script>
+
+</body>
+
+</html>

@@ -71,7 +71,7 @@ const featuredProducts = [
         price: "29000",
 
         image:
-            "../images-fsn/great-legacy/miiredblack.jpg",
+            "../images-fsn/great-legacy/miiblackuse.jpg",
 
         brand:
             "Great Legacy",
@@ -101,7 +101,7 @@ const featuredProducts = [
         price: "20000",
 
         image:
-            "../images-fsn/great-legacy/mitmwhiteb.jpg",
+            "../images-fsn/great-legacy/mitmwhite.webp",
 
         brand:
             "Great Legacy",
@@ -130,7 +130,7 @@ const featuredProducts = [
         price: "15750",
 
         image:
-            "../images-fsn/r4ndom-drip/IMG_0776.PNG",
+            "../images-fsn/r4ndom-drip/IMG_0771.WEBP",
 
         brand:
             "R4ndom Drip",
@@ -158,7 +158,7 @@ const featuredProducts = [
         price: "35000",
 
         image:
-            "../images-fsn/great-legacy/gtlwarcorewhiteb.jpg",
+            "../images-fsn/great-legacy/gtlwarcorewhite.webp",
 
         brand:
             "Great Legacy",
@@ -187,7 +187,7 @@ const featuredProducts = [
         price: "31500",
 
         image:
-            "../images-fsn/r4ndom-drip/IMG_0872.PNG",
+            "../images-fsn/r4ndom-drip/IMG_0770.WEBP",
 
         brand:
             "R4ndom Drip",

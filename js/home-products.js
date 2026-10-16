@@ -61,6 +61,12 @@ if (productsContainer && typeof products !== "undefined") {
 
         productText.append(brandLink, document.createElement("br"), productName, price);
         productCard.append(productLink, productText);
+
+        /* Save to My List button (engagement.js) */
+        if (typeof BeelinxEngage !== "undefined") {
+            productCard.appendChild(BeelinxEngage.createSaveButton(id));
+        }
+
         return productCard;
     }
 
