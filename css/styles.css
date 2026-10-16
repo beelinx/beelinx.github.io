@@ -2116,7 +2116,10 @@ body > *:not(header):not(#beelinx-splash) {
 
     position: relative;
     width: 100%;
-    height: var(--hero-height);
+    /* the hero starts under the navbar so the glass has something to blur;
+       --hero-height is the visible height BELOW the navbar */
+    margin-top: calc(-1 * var(--nav-h));
+    height: calc(var(--hero-height) + var(--nav-h));
     background: #0a0a0a;
     color: #ffffff;
     overflow: hidden;
@@ -2158,7 +2161,7 @@ body > *:not(header):not(#beelinx-splash) {
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: 100%;
     align-items: center;
-    padding: 0 6vw;
+    padding: var(--nav-h) 6vw 0;
 }
 
 /* ---------- giant faint brand name ---------- */
@@ -2345,7 +2348,6 @@ body > *:not(header):not(#beelinx-splash) {
     text-align: right;
     color: #8f8f8f;
     z-index: 2;
-
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 5;
@@ -2371,7 +2373,7 @@ body > *:not(header):not(#beelinx-splash) {
 
 .hero-counter {
     position: absolute;
-    top: 26px;
+    top: calc(26px + var(--nav-h));
     left: 6vw;
     z-index: 5;
     font-family: 'Playfair Display', Georgia, serif;
@@ -2395,7 +2397,7 @@ body > *:not(header):not(#beelinx-splash) {
 
 .hero-arrows {
     position: absolute;
-    top: 18px;
+    top: calc(18px + var(--nav-h));
     right: 6vw;
     z-index: 5;
     display: flex;
@@ -2525,7 +2527,7 @@ body > *:not(header):not(#beelinx-splash) {
         grid-template-rows: auto 1fr;
         justify-items: center;
         align-items: start;
-        padding: 58px 6vw 56px;
+        padding: calc(58px + var(--nav-h)) 6vw 56px;
     }
 
     .hero-media {
@@ -2570,7 +2572,7 @@ body > *:not(header):not(#beelinx-splash) {
     }
 
     .hero-counter {
-        top: 22px;
+        top: calc(22px + var(--nav-h));
     }
 }
 
@@ -2599,8 +2601,13 @@ body > *:not(header):not(#beelinx-splash) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: clamp(520px, 78vh, 680px);
-    padding: 70px 6vw 80px;
+    /* >>> CHANGE THIS to make the brand hero taller or shorter <<<
+       visible height BELOW the navbar (desktop). Phone value is in the
+       @media (max-width: 768px) block at the bottom of this section. */
+    --brand-hero-height: clamp(500px, 58vh, 600px);
+
+    height: calc(var(--brand-hero-height) + var(--nav-h));
+    padding: calc(var(--nav-h) + 22px) 6vw 28px;
     background: radial-gradient(ellipse at 50% 42%, #151515 0%, #0a0a0a 68%);
     color: #ffffff;
     text-align: center;
@@ -2611,12 +2618,12 @@ body > *:not(header):not(#beelinx-splash) {
 .brand-hero .brand-ghost {
     position: absolute;
     left: 50%;
-    top: 46%;
+    top: 56%;
     transform: translate(-50%, -50%);
     white-space: nowrap;
     font-family: 'Playfair Display', Georgia, serif;
     font-weight: 400;
-    font-size: clamp(90px, 15vw, 230px);
+    font-size: clamp(80px, 12vw, 180px);
     line-height: 1;
     letter-spacing: 0.02em;
     color: #171717;
@@ -2629,8 +2636,8 @@ body > *:not(header):not(#beelinx-splash) {
     position: relative;
     z-index: 2;
     display: block;
-    width: clamp(160px, 21vw, 250px);
-    height: clamp(160px, 21vw, 250px);
+    width: clamp(120px, 14vw, 180px);
+    height: clamp(120px, 14vw, 180px);
     margin: 0 auto;
     padding: 0;
     border-radius: 50%;
@@ -2654,10 +2661,10 @@ body > *:not(header):not(#beelinx-splash) {
 .brand-hero .brand-name-h {
     position: relative;
     z-index: 2;
-    margin: 34px 0 0;
+    margin: 22px 0 0;
     padding: 0;
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(32px, 4.4vw, 58px);
+    font-size: clamp(30px, 3.6vw, 46px);
     font-weight: 400;
     line-height: 1.1;
     letter-spacing: 0.04em;
@@ -2668,7 +2675,7 @@ body > *:not(header):not(#beelinx-splash) {
     position: relative;
     z-index: 2;
     max-width: 460px;
-    margin: 14px auto 0;
+    margin: 10px auto 0;
     font-family: 'Playfair Display', Georgia, serif;
     font-style: italic;
     font-size: 15px;
@@ -2683,6 +2690,12 @@ body > *:not(header):not(#beelinx-splash) {
 .brand-hero .hero-cta {
     position: relative;
     z-index: 2;
+    margin-top: 20px;
+}
+
+/* brand page: hero runs under the glass navbar */
+body.brand-page {
+    padding-top: 0;
 }
 
 /* ---------- product section ---------- */
@@ -2714,6 +2727,13 @@ body.brand-page .products-container {
     color: #8f8f8f;
 }
 
+/* official website button, just under the social icons */
+.brand-footer .hero-cta {
+    margin-top: 26px;
+    padding: 12px 26px;
+    font-size: 11px;
+}
+
 .brand-footer .copyrights {
     padding-top: 28px;
     font-size: 11px;
@@ -2726,20 +2746,21 @@ body.brand-page .products-container {
 @media (max-width: 768px) {
 
     .brand-hero {
-        min-height: 520px;
-        padding: 56px 6vw 64px;
+        /* >>> phone / tablet brand hero height <<< */
+        --brand-hero-height: 450px;
+        padding: calc(var(--nav-h) + 18px) 6vw 24px;
     }
 
     .brand-hero .brand-ghost {
         top: auto;
-        bottom: 36px;
+        bottom: 24px;
         transform: translateX(-50%);
-        font-size: 96px;
+        font-size: 80px;
     }
 
     .brand-hero .brand-name-h {
-        margin-top: 28px;
-        font-size: 30px;
+        margin-top: 18px;
+        font-size: 28px;
     }
 
     .brand-hero .brand-hero-slogan {
@@ -2748,10 +2769,457 @@ body.brand-page .products-container {
 
     .brand-hero .hero-cta {
         padding: 12px 24px;
-        margin-top: 22px;
+        margin-top: 16px;
     }
 
     body.brand-page .products-container {
         margin: 36px auto 56px;
+    }
+}
+
+
+/* =========================================================
+   NAVBAR COLOURS
+   Pages with a dark hero (home + brand pages): at the very top
+   the bar is fully transparent, so the hero's own background
+   shows straight through and the bar is invisible. Once you
+   scroll (navbar.js adds .navbar-scrolled) it turns into a
+   solid dark bar with a hairline underneath.
+   Other pages (product page): always the solid bar.
+   Bar colour:     --nav-solid
+   Scroll trigger: `threshold` in initializeNavbarScroll() in navbar.js
+========================================================= */
+
+:root {
+    --nav-h: 50px;
+    --nav-solid: #0a0a0a;
+}
+
+.navbar {
+    background: var(--nav-solid);
+    border-bottom: 1px solid #1f1f1f;
+    box-shadow: none;
+    transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+/* dark-hero pages: invisible until you scroll away */
+body.brand-page .navbar:not(.navbar-scrolled),
+body:has(.hero-spotlight) .navbar:not(.navbar-scrolled) {
+    background: transparent;
+    border-bottom-color: transparent;
+}
+
+
+/* =========================================================
+   NAVBAR LAYOUT
+   top bar = logo on the left, search on the right
+   (navigation lives in the bottom dock, see BOTTOM DOCK)
+========================================================= */
+
+.navbar {
+    justify-content: flex-end;
+}
+
+
+/* =========================================================
+   NAVBAR DESIGN
+   - taller, calmer bar: logo 34px with real breathing room
+   - on scroll the bar and logo shrink slightly, a hairline that
+     fades out at both ends appears along the bottom, and a soft
+     shadow lifts the bar off the page
+   - search is a round outlined button (same family as the
+     floating menu button and the menu's close button); it opens
+     a centred white pill instead of a full-width bar
+   Sizes:  --nav-h (bar height at the top), logo `height`,
+           search button `width`/`height`, pill `width`
+========================================================= */
+
+:root {
+    --nav-h: 64px;
+}
+
+body {
+    padding-top: var(--nav-h);
+}
+
+.navbar {
+    --nav-cur: var(--nav-h);   /* current height: shrinks when scrolled */
+    height: var(--nav-cur);
+    padding: 0 24px;
+    border-bottom: 0;
+    transition:
+        height 0.35s ease,
+        background-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.navbar.navbar-scrolled {
+    --nav-cur: calc(var(--nav-h) - 10px);
+    box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* hairline along the bottom edge, fading out toward both sides */
+.navbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.22) 18%,
+        rgba(255, 255, 255, 0.22) 82%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.navbar.navbar-scrolled::after {
+    opacity: 1;
+}
+
+/* logo */
+.nav-center {
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.logo-img {
+    height: 34px;
+    width: auto;
+    transition: height 0.35s ease, opacity 0.2s ease;
+}
+
+.navbar.navbar-scrolled .logo-img {
+    height: 28px;
+}
+
+/* search button: the icon itself is the whole circle, so every click lands on it */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.search-container label {
+    display: block;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.search-container .search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.search-container .search-btn:hover,
+body:has(.search-input.search-open) .search-container .search-btn {
+    opacity: 1;
+    color: #000000;
+    background: #ffffff;
+    border-color: #ffffff;
+}
+
+/* search field: a centred pill that grows out from the middle, just under the bar */
+.search-input {
+    top: calc(var(--nav-cur) + 12px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 0;
+    height: 48px;
+    padding: 0;
+    border: 0 solid transparent;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 16px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition:
+        width 0.4s ease,
+        padding 0.4s ease,
+        opacity 0.3s ease,
+        top 0.35s ease,
+        visibility 0s linear 0.4s;
+}
+
+.search-input.search-open {
+    width: min(560px, 90vw);
+    padding: 0 24px;
+    border-width: 0;
+    opacity: 1;
+    transition:
+        width 0.4s ease,
+        padding 0.4s ease,
+        opacity 0.3s ease,
+        top 0.35s ease,
+        visibility 0s;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+.search-input::placeholder {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    color: #8a8a8a;
+}
+
+@media (max-width: 600px) {
+
+    :root {
+        --nav-h: 56px;
+    }
+
+    .navbar {
+        padding: 0 18px;
+    }
+
+    .nav-center {
+        left: 18px;
+    }
+
+    .logo-img {
+        height: 30px;
+    }
+
+    .navbar.navbar-scrolled .logo-img {
+        height: 26px;
+    }
+
+    .search-container label {
+        width: 38px;
+        height: 38px;
+    }
+
+    .search-input {
+        height: 44px;
+    }
+}
+
+
+/* home page: the search pill floats over the hero, so don't push the hero down any more */
+body:has(.search-input.search-open) .featured-section-container {
+    margin-top: calc(-1 * var(--nav-h));
+}
+
+
+/* =========================================================
+   BOTTOM DOCK
+   Five icons in a floating black pill at the bottom of the
+   screen. White circle = the page you are on.
+   Scrolling down shrinks it to a small pill (.dock-min, set by
+   navbar.js); tapping the pill or scrolling up brings it back.
+   Circle size: width/height in .dock-link    Icon size: its font-size
+   Distance from the bottom edge: `bottom` in .dock (and .dock-min)
+   Small pill width: `width` in .dock-grip when minimised
+========================================================= */
+
+:root {
+    --dock-space: 58px;   /* room kept free at the bottom of pages so the dock never covers content */
+}
+
+.dock {
+    position: fixed;
+    left: 50%;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 5px;
+
+    /* slightly see-through glass: raise the last number (0.72) for more solid, lower for clearer */
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 60%),
+        rgba(10, 10, 10, 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        0 10px 30px rgba(0, 0, 0, 0.35);
+
+    transform: translateX(-50%);
+    animation: dockIn 0.6s cubic-bezier(0.22, 0.8, 0.26, 1) 0.2s backwards;
+    transition:
+        bottom 0.4s cubic-bezier(0.22, 0.8, 0.26, 1),
+        gap 0.35s ease,
+        padding 0.35s ease;
+}
+
+@keyframes dockIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 18px);
+    }
+}
+
+.dock-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 13px;
+    color: #a3a3a3;
+    text-decoration: none;
+    transition:
+        width 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
+        height 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
+        opacity 0.25s ease,
+        color 0.25s ease,
+        background-color 0.25s ease,
+        transform 0.2s ease;
+}
+
+.dock-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dock-link:active {
+    transform: scale(0.92);
+}
+
+.dock-link.active {
+    color: #000000;
+    background: #ffffff;
+}
+
+.dock-link:focus-visible,
+.dock-grip:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* the little chevron button: invisible until the dock shrinks */
+.dock-grip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0;
+    height: 20px;
+    margin-left: -3px;      /* cancels the flex gap while it is hidden */
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 10px;
+    opacity: 0;
+    overflow: hidden;
+    cursor: pointer;
+    pointer-events: none;
+    transition:
+        width 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
+        margin 0.35s ease,
+        opacity 0.25s ease 0.1s;
+}
+
+/* ---------- shrunk state ---------- */
+
+.dock.dock-min {
+    bottom: calc(9px + env(safe-area-inset-bottom, 0px));
+    gap: 0;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.dock.dock-min .dock-link {
+    width: 0;
+    height: 20px;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.dock.dock-min .dock-grip {
+    width: 42px;
+    margin-left: 0;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* little name tag above the icon (mouse devices only) */
+@media (hover: hover) {
+
+    .dock-link::after {
+        content: attr(data-label);
+        position: absolute;
+        bottom: calc(100% + 12px);
+        left: 50%;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #000000;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translate(-50%, 6px);
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .dock-link:hover::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@media (max-width: 380px) {
+
+    .dock-link {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+}
+
+/* keep the last lines of every page clear of the dock */
+footer {
+    padding-bottom: var(--dock-space);
+}
+
+.copyrights-gen-home {
+    padding-bottom: calc(20px + var(--dock-space));
+}
+
+.brand-footer .footer-section {
+    padding-bottom: calc(36px + var(--dock-space));
+}
+
+.product-footer {
+    padding-bottom: calc(26px + var(--dock-space));
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dock,
+    .dock-link,
+    .dock-grip {
+        animation: none;
+        transition: none;
     }
 }

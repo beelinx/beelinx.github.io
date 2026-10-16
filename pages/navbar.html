@@ -11,17 +11,12 @@
 <body>
 
     <!-- =========================================
-         BEELINX SHARED NAVBAR
+         BEELINX SHARED NAVBAR (top: logo + search)
     ========================================= -->
 
     <nav class="navbar">
 
-        <!-- HAMBURGER MENU -->
-        <div class="hamburger" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <!-- CENTERED LOGO -->
+        <!-- LOGO -->
         <div class="nav-center">
             <a href="index.html" class="logo-link">
                 <img
@@ -48,20 +43,61 @@
 
     </nav>
 
-    <!-- SIDE MENU -->
-    <div id="sideMenu" class="side-menu">
 
-        <div class="close-btn" onclick="closeMenu()">
-            <i class="fas fa-times"></i>
-        </div>
+    <!-- =========================================
+         BOTTOM DOCK (replaces the old side menu)
+         Shrinks to a small pill while you scroll down,
+         tap the pill (or scroll up) to bring it back.
+         data-label is the little tooltip on desktop,
+         aria-label is for screen readers.
+    ========================================= -->
 
-        <a href="index.html">Home</a>
-        <a href="catalogue.html">Catalogue</a>
-        <a href="my-list.html">My List</a>
-        <a href="about.html">About</a>
-        <a href="login.html">Login</a>
+    <nav class="dock" aria-label="Main">
 
-    </div>
+        <a href="index.html"
+           class="dock-link"
+           data-label="Home"
+           aria-label="Home">
+            <i class="fas fa-house"></i>
+        </a>
+
+        <a href="catalogue.html"
+           class="dock-link"
+           data-label="Catalogue"
+           aria-label="Catalogue">
+            <i class="fas fa-book"></i>
+        </a>
+
+        <a href="my-list.html"
+           class="dock-link"
+           data-label="My List"
+           aria-label="My List">
+            <i class="fas fa-list"></i>
+        </a>
+
+        <a href="about.html"
+           class="dock-link"
+           data-label="About"
+           aria-label="About">
+            <i class="fas fa-circle-info"></i>
+        </a>
+
+        <a href="login.html"
+           class="dock-link"
+           data-label="Login"
+           aria-label="Login">
+            <i class="fas fa-user"></i>
+        </a>
+
+        <!-- shown only when the dock has shrunk (scrolling down); tap it to bring the dock back -->
+        <button type="button"
+                class="dock-grip"
+                aria-label="Show menu"
+                tabindex="-1">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+
+    </nav>
 
 </body>
 

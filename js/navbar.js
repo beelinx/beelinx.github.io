@@ -47,6 +47,52 @@ function initializeNavbar() {
 
     initializeSearch();
     initializeSearchIcon();
+    initializeNavbarScroll();
+    initializeDock();
+
+}
+
+
+// =========================================
+// 0. NAVBAR SCROLL STATE
+//    Adds .navbar-scrolled once the page has
+//    scrolled past `threshold` pixels. The css
+//    uses it to make the bar solid (it is
+//    invisible at the top of dark-hero pages).
+// =========================================
+
+function initializeNavbarScroll() {
+
+    const navbar =
+        document.querySelector(".navbar");
+
+    if (!navbar) return;
+
+    // pixels scrolled before the bar turns solid
+    const threshold = 40;
+
+    function updateNavbar() {
+
+        const scrolled =
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            0;
+
+        navbar.classList.toggle(
+            "navbar-scrolled",
+            scrolled > threshold
+        );
+
+    }
+
+    // run once now (page may load already scrolled)
+    updateNavbar();
+
+    window.addEventListener(
+        "scroll",
+        updateNavbar,
+        { passive: true }
+    );
 
 }
 
@@ -151,36 +197,137 @@ function initializeSearchIcon() {
 
 
 // =========================================
-// 4. MENU TOGGLE
+// 4. BOTTOM DOCK
+//    a) marks the icon of the page you are on
+//    b) shrinks to a small pill when you scroll
+//       down, and expands again when you tap it
+//       or scroll back up (like Safari on iPhone)
 // =========================================
 
-function toggleMenu() {
+function initializeDock() {
 
-    const menu =
-        document.getElementById("sideMenu");
+    const dock =
+        document.querySelector(".dock");
 
-    if (menu) {
+    if (!dock) return;
 
-        menu.classList.add("active");
+    const links =
+        dock.querySelectorAll(".dock-link");
+
+    const grip =
+        dock.querySelector(".dock-grip");
+
+
+    // ---- a) current page ----
+
+    const currentPage =
+        (window.location.pathname.split("/").pop() ||
+            "index.html").toLowerCase();
+
+    links.forEach(function (link) {
+
+        const target =
+            (link.getAttribute("href") || "")
+                .split("?")[0]
+                .split("#")[0]
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+        if (target === currentPage) {
+
+            link.classList.add("active");
+            link.setAttribute("aria-current", "page");
+
+        }
+
+    });
+
+
+    // ---- b) shrink on scroll down, expand on scroll up / tap ----
+
+    let minimized = false;
+    let lastY = window.scrollY || 0;
+    let travelled = 0;      // pixels scrolled in the current direction
+    let lockUntil = 0;      // brief pause after a tap so it doesn't snap shut again
+
+    // how far you must scroll before the dock reacts
+    const SHRINK_AFTER = 16;
+    const EXPAND_AFTER = 16;
+
+    // the dock always stays open this close to the top of the page
+    const ALWAYS_OPEN_ABOVE = 40;
+
+    function setMinimized(value) {
+
+        if (value === minimized) return;
+
+        minimized = value;
+
+        dock.classList.toggle("dock-min", value);
+
+        // keep hidden controls out of the keyboard tab order
+        links.forEach(function (link) {
+            link.tabIndex = value ? -1 : 0;
+        });
+
+        if (grip) grip.tabIndex = value ? 0 : -1;
 
     }
 
-}
+    window.addEventListener("scroll", function () {
 
+        const y = Math.max(
+            0,
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            0
+        );
 
-// =========================================
-// 5. CLOSE MENU
-// =========================================
+        const delta = y - lastY;
+        lastY = y;
 
-function closeMenu() {
+        if (y <= ALWAYS_OPEN_ABOVE) {
 
-    const menu =
-        document.getElementById("sideMenu");
+            travelled = 0;
+            setMinimized(false);
+            return;
 
-    if (menu) {
+        }
 
-        menu.classList.remove("active");
+        if (!delta) return;
 
-    }
+        // direction changed: start counting again
+        if (Math.sign(delta) !== Math.sign(travelled)) {
+            travelled = 0;
+        }
+
+        travelled += delta;
+
+        if (travelled > SHRINK_AFTER && Date.now() > lockUntil) {
+
+            setMinimized(true);
+
+        } else if (travelled < -EXPAND_AFTER) {
+
+            setMinimized(false);
+
+        }
+
+    }, { passive: true });
+
+    // tapping the small pill brings the full dock back
+    dock.addEventListener("click", function (event) {
+
+        if (!minimized) return;
+
+        event.preventDefault();
+
+        setMinimized(false);
+
+        travelled = 0;
+        lockUntil = Date.now() + 800;
+
+    });
 
 }
