@@ -1325,7 +1325,7 @@ body:has(.search-input.search-open) .search-container .search-btn {
 @media (max-width: 768px) {
 
     .dock {
-        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        bottom: calc(4px + env(safe-area-inset-bottom, 0px));
         width: 60%;
         max-width: 264px;
         padding: 4px;
@@ -1334,7 +1334,7 @@ body:has(.search-input.search-open) .search-container .search-btn {
         background: #0a0a0a;
         border: 1px solid #1f1f1f;
         border-radius: 999px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        box-shadow: none;
     }
 
     .dock-link {
