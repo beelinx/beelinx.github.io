@@ -632,28 +632,72 @@ opacity: 0.7;
 13. HOMEPAGE MOTTO
 ========================================================= */
 
+/* =========================================================
+13. HOMEPAGE MOTTO
+Spaced capitals in the wordmark font, flanked by thin black lines
+that grow outward on load. Pure black on white.
+Size:       font-size
+Spacing:    letter-spacing (between letters), gap (text to lines)
+Distance:   margin-top (gap under the hero), padding-bottom (gap above products)
+========================================================= */
+
 .motto {
-font-family: 'Playfair Display', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 3vw, 36px);
 
+    width: 92%;
+    max-width: 1100px;
+    margin: 24px auto 0;
+    padding: 0 0 36px;
 
-text-align: center;
+    font-family: var(--brand-font, 'Bodoni Moda', 'Playfair Display', Georgia, serif);
+    font-style: normal;
+    font-weight: 500;
+    font-size: clamp(12px, 1.9vw, 20px);
+    line-height: 1.3;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
 
-text-decoration: none;
+    color: #000000;
+    opacity: 1;
+}
 
-font-weight: lighter;
-font-style: italic;
+/* the lines on each side of the text */
+.motto::before,
+.motto::after {
+    content: "";
+    flex: 1 1 0;
+    height: 1px;
+    background: #000000;
+}
 
-font-size: large;
+@media (prefers-reduced-motion: no-preference) {
 
-letter-spacing: 0;
+    .motto {
+        animation: mottoIn 1s ease 0.1s backwards;
+    }
 
-opacity: 0.6;
+    .motto::before {
+        transform-origin: right center;
+        animation: mottoLine 1.2s cubic-bezier(0.22, 0.8, 0.26, 1) 0.2s backwards;
+    }
 
-padding-bottom: 2em;
+    .motto::after {
+        transform-origin: left center;
+        animation: mottoLine 1.2s cubic-bezier(0.22, 0.8, 0.26, 1) 0.2s backwards;
+    }
 
-color: #000000;
+    @keyframes mottoIn {
+        from { opacity: 0; }
+    }
 
-
+    @keyframes mottoLine {
+        from { transform: scaleX(0); }
+    }
 }
 
 /* =========================================================
@@ -854,7 +898,7 @@ border-radius: 300px;
 ========================================================= */
 
 h1 {
-margin-top: 50px;
+margin-top: 30px;
 
 
 text-align: center;
@@ -1659,7 +1703,7 @@ body > *:not(header):not(#beelinx-splash) {
 ===================================================== */
 
 .motto {
-    font-size: small;
+    padding-bottom: 28px;
 }
 
 /* =====================================================
@@ -2114,7 +2158,7 @@ body > *:not(header):not(#beelinx-splash) {
     /* >>> CHANGE THIS to make the hero taller or shorter <<<
        desktop value. Phones/tablets have their own value
        inside the "tablets and phones" block further down. */
-    --hero-height: clamp(470px, 68vh, 600px);
+    --hero-height: clamp(300px, 68vh,350px);
 
     position: relative;
     width: 100%;
@@ -2520,8 +2564,9 @@ body > *:not(header):not(#beelinx-splash) {
 @media (max-width: 768px) {
 
     .hero-spotlight {
-        /* >>> phone / tablet hero height <<< */
-        --hero-height: 540px;
+        /* >>> phone / tablet hero height <<<
+           keep this at least ~340px, or the content gets cut off */
+        --hero-height: 380px;
     }
 
     .hero-slide {
@@ -2529,20 +2574,27 @@ body > *:not(header):not(#beelinx-splash) {
         grid-template-rows: auto 1fr;
         justify-items: center;
         align-items: start;
-        padding: calc(58px + var(--nav-h)) 6vw 56px;
+        padding: calc(44px + var(--nav-h)) 6vw 36px;
     }
 
     .hero-media {
         grid-column: 1;
         grid-row: 1;
-        height: auto;
-        width: min(46vw, 190px);
-        border-radius: 20px;
+        height: 150px;      /* card size: the width follows automatically (4:5) */
+        width: auto;
+        border-radius: 16px;
     }
 
     .hero-plate,
     .hero-plate::after {
-        border-radius: 20px;
+        border-radius: 16px;
+    }
+
+    .hero-media .save-btn {
+        top: 8px;
+        right: 8px;
+        width: 30px;
+        height: 30px;
     }
 
     .hero-info {
@@ -2551,16 +2603,23 @@ body > *:not(header):not(#beelinx-splash) {
         align-self: start;
         justify-self: center;
         max-width: none;
-        padding: 20px 0 0;
+        padding: 14px 0 0;
         text-align: center;
     }
 
     .hero-title {
-        font-size: 24px;
+        margin: 8px 0 6px;
+        font-size: 20px;
+    }
+
+    .hero-price {
+        font-size: 14px;
     }
 
     .hero-cta {
-        margin-top: 18px;
+        margin-top: 12px;
+        padding: 10px 22px;
+        font-size: 11px;
     }
 
     .hero-desc {
@@ -2569,12 +2628,12 @@ body > *:not(header):not(#beelinx-splash) {
 
     .hero-ghost {
         top: auto;
-        bottom: 40px;
+        bottom: 30px;
         transform: none;
     }
 
     .hero-counter {
-        top: calc(22px + var(--nav-h));
+        top: calc(18px + var(--nav-h));
     }
 }
 
@@ -2585,7 +2644,7 @@ body > *:not(header):not(#beelinx-splash) {
     }
 
     .hero-cta {
-        padding: 12px 24px;
+        padding: 10px 22px;
     }
 }
 
@@ -2605,11 +2664,14 @@ body > *:not(header):not(#beelinx-splash) {
     justify-content: center;
     /* >>> CHANGE THIS to make the brand hero taller or shorter <<<
        visible height BELOW the navbar (desktop). Phone value is in the
-       @media (max-width: 768px) block at the bottom of this section. */
-    --brand-hero-height: clamp(500px, 58vh, 600px);
+       @media (max-width: 768px) block at the bottom of this section.
+       Same size as the logo (see .brand-hero-logo) so no space is left over. */
+    --brand-hero-height: clamp(120px, 14vw, 180px);
 
     height: calc(var(--brand-hero-height) + var(--nav-h));
-    padding: calc(var(--nav-h) + 22px) 6vw 28px;
+    /* the logo starts 20px above the bottom of the top bar, level with the
+       wordmark. Raise the 20px to move it down, lower it to move it up. */
+    padding: calc(var(--nav-h) - 20px) 6vw 20px;
     background: radial-gradient(ellipse at 50% 42%, #151515 0%, #0a0a0a 68%);
     color: #ffffff;
     text-align: center;
@@ -2660,17 +2722,20 @@ body > *:not(header):not(#beelinx-splash) {
         0 40px 80px rgba(0, 0, 0, 0.6);
 }
 
+/* brand name text: hidden from view, the giant faint name behind the logo
+   shows it instead. It stays in the page (not removed) because the script
+   copies its text into that background name, and screen readers and search
+   engines still read it as the page heading. */
 .brand-hero .brand-name-h {
-    position: relative;
-    z-index: 2;
-    margin: 22px 0 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
     padding: 0;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(30px, 3.6vw, 46px);
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: 0.04em;
-    color: #ffffff;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
 }
 
 .brand-hero .brand-hero-slogan {
@@ -2693,6 +2758,18 @@ body > *:not(header):not(#beelinx-splash) {
     position: relative;
     z-index: 2;
     margin-top: 20px;
+}
+
+/* brand slogan: shown under the hero, same look as the home page motto
+   (the element also carries the .motto class, so edit the style there) */
+.motto.brand-slogan-line {
+    margin-top: 32px;
+    padding-bottom: 0;
+}
+
+/* a brand with no slogan: no empty gap, no stray lines */
+.motto.brand-slogan-line:empty {
+    display: none;
 }
 
 /* brand page: hero runs under the glass navbar */
@@ -2748,9 +2825,13 @@ body.brand-page .products-container {
 @media (max-width: 768px) {
 
     .brand-hero {
-        /* >>> phone / tablet brand hero height <<< */
-        --brand-hero-height: 450px;
-        padding: calc(var(--nav-h) + 18px) 6vw 24px;
+        /* >>> phone / tablet brand hero height <<<
+           = the logo height (120px) so nothing is left over */
+        --brand-hero-height: 120px;
+        /* the logo starts 20px above the bottom of the top bar (it sits
+           level with the wordmark), so there is no empty band under it.
+           Raise the 20px to move the logo down, lower it to move it up. */
+        padding: calc(var(--nav-h) - 20px) 6vw 20px;
     }
 
     .brand-hero .brand-ghost {
