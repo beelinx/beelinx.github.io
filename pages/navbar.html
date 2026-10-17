@@ -16,14 +16,9 @@
 
     <nav class="navbar">
 
-        <!-- LOGO -->
+        <!-- WORDMARK (text, no image: change the font in the css, see --brand-font) -->
         <div class="nav-center">
-            <a href="index.html" class="logo-link">
-                <img
-                    src="../beelinx_logo.png"
-                    alt="Beelinx Logo"
-                    class="logo-img">
-            </a>
+            <a href="index.html" class="logo-link wordmark">Beelinx</a>
         </div>
 
         <!-- SEARCH -->
@@ -45,9 +40,10 @@
 
 
     <!-- =========================================
-         BOTTOM DOCK (replaces the old side menu)
-         Shrinks to a small pill while you scroll down,
-         tap the pill (or scroll up) to bring it back.
+         NAVIGATION (replaces the old side menu)
+         Phone: flat full-width bar at the bottom. It shrinks to a small
+         pill while you scroll down; tap the pill (or scroll up) to bring it back.
+         Computer: the same icons stacked in a slim bar on the left.
          data-label is the little tooltip on desktop,
          aria-label is for screen readers.
     ========================================= -->
@@ -89,12 +85,12 @@
             <i class="fas fa-user"></i>
         </a>
 
-        <!-- shown only when the dock has shrunk (scrolling down); tap it to bring the dock back -->
+        <!-- shown only when the bar has shrunk (scrolling down on a phone); tap it to bring the bar back -->
         <button type="button"
                 class="dock-grip"
                 aria-label="Show menu"
                 tabindex="-1">
-            <i class="fas fa-chevron-up"></i>
+            <i class="fas fa-ellipsis"></i>
         </button>
 
     </nav>

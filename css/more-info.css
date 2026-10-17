@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,600&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -1141,49 +1143,90 @@ body:has(.search-input.search-open) .search-container .search-btn {
 
 
 /* =========================================================
-   BOTTOM DOCK
-   Five icons in a floating black pill at the bottom of the
-   screen. White circle = the page you are on.
-   Scrolling down shrinks it to a small pill (.dock-min, set by
-   navbar.js); tapping the pill or scrolling up brings it back.
-   Circle size: width/height in .dock-link    Icon size: its font-size
-   Distance from the bottom edge: `bottom` in .dock (and .dock-min)
-   Small pill width: `width` in .dock-grip when minimised
+   PINTEREST-STYLE NAVIGATION
+   1. Top bar: just the "Beelinx" wordmark (text) + a plain search icon
+   2. Phone  (768px and under): flat black bar across the bottom,
+      icons spread evenly. Scrolling down shrinks it to a small pill,
+      tap the pill (or scroll up) to bring it back.
+   3. Computer (769px and up): the same icons stacked vertically in a
+      slim black bar on the left.
+   Wordmark font:   --brand-font (top of this block)
+   Left bar width:  --rail-w
 ========================================================= */
 
 :root {
-    --dock-space: 58px;   /* room kept free at the bottom of pages so the dock never covers content */
+    --brand-font: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --rail-w: 0px;
+    --dock-space: calc(64px + env(safe-area-inset-bottom, 0px));   /* room kept free at the bottom of pages on phones */
 }
+
+/* ---------- 1. top bar ---------- */
+
+.logo-link.wordmark {
+    display: block;
+    padding: 4px 0;
+    font-family: var(--brand-font);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #ffffff;
+    text-decoration: none;
+    transition: font-size 0.35s ease, opacity 0.2s ease;
+}
+
+.logo-link.wordmark:hover {
+    opacity: 0.8;
+}
+
+.navbar.navbar-scrolled .logo-link.wordmark {
+    font-size: 26px;
+}
+
+/* search: plain icon, no ring */
+.search-container .search-btn {
+    font-size: 19px;
+    color: #ffffff;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.search-container .search-btn:hover,
+body:has(.search-input.search-open) .search-container .search-btn {
+    opacity: 0.7;
+    color: #ffffff;
+    background: transparent;
+    border-color: transparent;
+}
+
+/* ---------- 2. phone: flat bottom bar ---------- */
 
 .dock {
     position: fixed;
     left: 50%;
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    bottom: 0;
     z-index: 1000;
 
     display: flex;
     align-items: center;
-    gap: 3px;
-    padding: 5px;
+    justify-content: space-around;
+    gap: 0;
+    width: 100%;
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px));
 
-    /* slightly see-through glass: raise the last number (0.72) for more solid, lower for clearer */
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 60%),
-        rgba(10, 10, 10, 0.72);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    backdrop-filter: blur(14px) saturate(160%);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 999px;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.14),
-        0 10px 30px rgba(0, 0, 0, 0.35);
+    background: #0a0a0a;
+    border-top: 1px solid #1f1f1f;
+    border-radius: 0;
 
     transform: translateX(-50%);
     animation: dockIn 0.6s cubic-bezier(0.22, 0.8, 0.26, 1) 0.2s backwards;
     transition:
+        width 0.4s cubic-bezier(0.22, 0.8, 0.26, 1),
         bottom 0.4s cubic-bezier(0.22, 0.8, 0.26, 1),
-        gap 0.35s ease,
-        padding 0.35s ease;
+        padding 0.35s ease,
+        border-radius 0.4s ease;
 }
 
 @keyframes dockIn {
@@ -1198,14 +1241,14 @@ body:has(.search-input.search-open) .search-container .search-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    font-size: 13px;
-    color: #a3a3a3;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 46px;
+    font-size: 22px;
+    color: #7a7a7a;
     text-decoration: none;
     transition:
-        width 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
+        flex 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
         height 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
         opacity 0.25s ease,
         color 0.25s ease,
@@ -1213,18 +1256,13 @@ body:has(.search-input.search-open) .search-container .search-btn {
         transform 0.2s ease;
 }
 
-.dock-link:hover {
+.dock-link:hover,
+.dock-link.active {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
 }
 
 .dock-link:active {
-    transform: scale(0.92);
-}
-
-.dock-link.active {
-    color: #000000;
-    background: #ffffff;
+    transform: scale(0.9);
 }
 
 .dock-link:focus-visible,
@@ -1233,14 +1271,13 @@ body:has(.search-input.search-open) .search-container .search-btn {
     outline-offset: 2px;
 }
 
-/* the little chevron button: invisible until the dock shrinks */
+/* the small chevron button: invisible until the bar shrinks */
 .dock-grip {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 0;
     height: 20px;
-    margin-left: -3px;      /* cancels the flex gap while it is hidden */
     padding: 0;
     border: 0;
     background: transparent;
@@ -1252,35 +1289,150 @@ body:has(.search-input.search-open) .search-container .search-btn {
     pointer-events: none;
     transition:
         width 0.35s cubic-bezier(0.22, 0.8, 0.26, 1),
-        margin 0.35s ease,
         opacity 0.25s ease 0.1s;
 }
 
-/* ---------- shrunk state ---------- */
+@media (max-width: 768px) {
 
-.dock.dock-min {
-    bottom: calc(9px + env(safe-area-inset-bottom, 0px));
-    gap: 0;
-    padding: 3px;
-    cursor: pointer;
+    /* shrunk: a small floating pill with a chevron */
+    .dock.dock-min {
+        width: 60px;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+        padding: 3px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 999px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+    }
+
+    .dock.dock-min .dock-link {
+        flex: 0 0 0;
+        height: 20px;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .dock.dock-min .dock-grip {
+        width: 52px;
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
 
-.dock.dock-min .dock-link {
-    width: 0;
-    height: 20px;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
+/* ---------- phone: small floating black bar ---------- */
+
+@media (max-width: 768px) {
+
+    .dock {
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        width: 60%;
+        max-width: 264px;
+        padding: 4px;
+        gap: 2px;
+
+        background: #0a0a0a;
+        border: 1px solid #1f1f1f;
+        border-radius: 999px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .dock-link {
+        height: 28px;
+        font-size: 13px;
+        color: #ffffff;
+        border-radius: 999px;
+    }
+
+    /* the page you're on: white pill, black icon (same as the computer side bar) */
+    .dock-link.active {
+        color: #000000;
+        background: #ffffff;
+    }
+
+    /* the pop-open button on the shrunk pill: three dots */
+    .dock-grip {
+        font-size: 15px;
+    }
 }
 
-.dock.dock-min .dock-grip {
-    width: 42px;
-    margin-left: 0;
-    opacity: 1;
-    pointer-events: auto;
+/* ---------- 3. computer: slim bar on the left ---------- */
+
+@media (min-width: 769px) {
+
+    :root {
+        --rail-w: 72px;
+        --dock-space: 0px;
+    }
+
+    /* page content moves over to make room */
+    body {
+        padding-left: var(--rail-w);
+    }
+
+    .navbar {
+        left: var(--rail-w);
+        width: calc(100% - var(--rail-w));
+    }
+
+    .search-input {
+        left: calc(50% + var(--rail-w) / 2);
+    }
+
+    /* the home page ad slides were sized to the full window */
+    .brand-ad-slide {
+        flex: 0 0 100%;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .dock {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: var(--rail-w);
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 6px;
+        padding: 10px 0 20px;
+        border-top: 0;
+        border-right: 1px solid #1f1f1f;
+        transform: none;
+        animation: railIn 0.5s ease 0.1s backwards;
+    }
+
+    @keyframes railIn {
+        from {
+            opacity: 0;
+            transform: translateX(-12px);
+        }
+    }
+
+    .dock-link {
+        flex: 0 0 auto;
+        align-self: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        font-size: 18px;
+    }
+
+    .dock-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .dock-link.active {
+        color: #000000;
+        background: #ffffff;
+    }
+
+    .dock-grip {
+        display: none;
+    }
+
 }
 
-/* little name tag above the icon (mouse devices only) */
+/* name tag next to the icon (mouse devices only) */
 @media (hover: hover) {
 
     .dock-link::after {
@@ -1307,16 +1459,21 @@ body:has(.search-input.search-open) .search-container .search-btn {
     }
 }
 
-@media (max-width: 380px) {
+@media (hover: hover) and (min-width: 769px) {
 
-    .dock-link {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
+    .dock-link::after {
+        bottom: auto;
+        top: 50%;
+        left: calc(100% + 14px);
+        transform: translate(-6px, -50%);
+    }
+
+    .dock-link:hover::after {
+        transform: translate(0, -50%);
     }
 }
 
-/* keep the last lines of every page clear of the dock */
+/* keep the last lines of every page clear of the bottom bar */
 footer {
     padding-bottom: var(--dock-space);
 }
@@ -1340,5 +1497,79 @@ footer {
     .dock-grip {
         animation: none;
         transition: none;
+    }
+}
+
+
+/* =========================================================
+   PINTEREST-STYLE "MORE BY" TILES
+   (same idea as the product grids on the other pages)
+========================================================= */
+
+.more-products-container {
+    display: block;
+    column-count: 3;
+    column-gap: 6px;
+    width: 100%;
+}
+
+@media (min-width: 601px) {
+    .more-products-container { column-count: 3; column-gap: 12px; }
+}
+
+@media (min-width: 900px) {
+    .more-products-container { column-count: 4; }
+}
+
+@media (min-width: 1200px) {
+    .more-products-container { column-count: 6; }
+}
+
+.more-product-card {
+    display: block;
+    margin: 0 0 14px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+    text-align: left;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+}
+
+.more-product-card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.more-product-card img {
+    aspect-ratio: auto;
+    height: auto;
+    object-fit: cover;
+    border-radius: 16px;
+    filter: brightness(0.965);
+    transition: filter 0.25s ease;
+}
+
+.more-product-card a:hover img {
+    filter: brightness(0.86);
+}
+
+.more-product-info {
+    padding: 8px 4px 0;
+}
+
+@media (max-width: 600px) {
+    .more-product-card {
+        margin-bottom: 10px;
+    }
+
+    .more-product-card img {
+        border-radius: 12px;
+    }
+
+    .more-product-info {
+        padding: 5px 2px 0;
     }
 }

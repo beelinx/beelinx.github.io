@@ -56,9 +56,10 @@ function initializeNavbar() {
 // =========================================
 // 0. NAVBAR SCROLL STATE
 //    Adds .navbar-scrolled once the page has
-//    scrolled past `threshold` pixels. The css
+//    scrolled past SOLID_AFTER pixels. The css
 //    uses it to make the bar solid (it is
 //    invisible at the top of dark-hero pages).
+//    The top bar itself is always visible.
 // =========================================
 
 function initializeNavbarScroll() {
@@ -69,7 +70,7 @@ function initializeNavbarScroll() {
     if (!navbar) return;
 
     // pixels scrolled before the bar turns solid
-    const threshold = 40;
+    const SOLID_AFTER = 40;
 
     function updateNavbar() {
 
@@ -80,7 +81,7 @@ function initializeNavbarScroll() {
 
         navbar.classList.toggle(
             "navbar-scrolled",
-            scrolled > threshold
+            scrolled > SOLID_AFTER
         );
 
     }
@@ -197,11 +198,13 @@ function initializeSearchIcon() {
 
 
 // =========================================
-// 4. BOTTOM DOCK
+// 4. NAVIGATION DOCK
 //    a) marks the icon of the page you are on
-//    b) shrinks to a small pill when you scroll
-//       down, and expands again when you tap it
-//       or scroll back up (like Safari on iPhone)
+//    b) phones only: the bottom bar shrinks to a
+//       small pill when you scroll down and
+//       expands again when you tap it or scroll
+//       back up (like Safari on iPhone).
+//       The side bar on computers never shrinks.
 // =========================================
 
 function initializeDock() {
@@ -251,14 +254,24 @@ function initializeDock() {
     let travelled = 0;      // pixels scrolled in the current direction
     let lockUntil = 0;      // brief pause after a tap so it doesn't snap shut again
 
-    // how far you must scroll before the dock reacts
+    // how far you must scroll before the bar reacts
     const SHRINK_AFTER = 16;
     const EXPAND_AFTER = 16;
 
-    // the dock always stays open this close to the top of the page
+    // the bar always stays open this close to the top of the page
     const ALWAYS_OPEN_ABOVE = 40;
 
+    // on computers the dock is a side bar and never shrinks
+    const desktop =
+        window.matchMedia("(min-width: 769px)");
+
+    desktop.addEventListener("change", function () {
+        setMinimized(false);
+    });
+
     function setMinimized(value) {
+
+        if (desktop.matches) value = false;
 
         if (value === minimized) return;
 
@@ -316,7 +329,7 @@ function initializeDock() {
 
     }, { passive: true });
 
-    // tapping the small pill brings the full dock back
+    // tapping the small pill brings the full bar back
     dock.addEventListener("click", function (event) {
 
         if (!minimized) return;
