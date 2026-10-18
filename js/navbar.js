@@ -2,6 +2,22 @@
 // BEELINX SHARED NAVBAR
 // =========================================
 
+// =========================================
+// WORDMARK FONT (Syne), loaded once for every page
+// =========================================
+
+(function () {
+
+    if (document.querySelector('link[href*="family=Syne"]')) return;
+
+    const fontLink = document.createElement("link");
+    fontLink.rel = "stylesheet";
+    fontLink.href = "https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap";
+    document.head.appendChild(fontLink);
+
+})();
+
+
 document.addEventListener("DOMContentLoaded", async function () {
 
     const navbarPlaceholder =
@@ -12,9 +28,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
-    try {
+    // The navbar is remembered for this tab, so after the first page it
+    // appears instantly instead of waiting for a download.
+    const CACHE_KEY = "beelinxNavbarHTML";
 
-        // LOAD SHARED NAVBAR HTML
+    function mountNavbar(html) {
+
+        navbarPlaceholder.innerHTML = html;
+
+        // INITIALIZE NAVIGATION AFTER HTML LOADS
+        initializeNavbar();
+
+    }
+
+    async function downloadNavbar() {
+
         const response = await fetch("navbar.html");
 
         if (!response.ok) {
@@ -23,12 +51,32 @@ document.addEventListener("DOMContentLoaded", async function () {
             );
         }
 
-        const navbarHTML = await response.text();
+        const html = await response.text();
 
-        navbarPlaceholder.innerHTML = navbarHTML;
+        try { sessionStorage.setItem(CACHE_KEY, html); } catch (error) { /* ignore */ }
 
-        // INITIALIZE NAVIGATION AFTER HTML LOADS
-        initializeNavbar();
+        return html;
+
+    }
+
+    try {
+
+        let remembered = null;
+
+        try { remembered = sessionStorage.getItem(CACHE_KEY); } catch (error) { /* ignore */ }
+
+        if (remembered) {
+
+            mountNavbar(remembered);
+
+            // quietly refresh the saved copy for the next page
+            downloadNavbar().catch(function () {});
+
+        } else {
+
+            mountNavbar(await downloadNavbar());
+
+        }
 
     } catch (error) {
 
@@ -47,6 +95,7 @@ function initializeNavbar() {
 
     initializeSearch();
     initializeSearchIcon();
+    initializeSearchClear();
     initializeNavbarScroll();
     initializeDock();
     initializeRail();
@@ -192,6 +241,41 @@ function initializeSearchIcon() {
             searchInput.focus();
 
         }
+
+    });
+
+}
+
+
+// =========================================
+// 3b. SEARCH CANCEL (the X in the search panel)
+//     Clears what was typed, shows every product
+//     again and closes the panel, so a finished
+//     search no longer sticks to the page.
+// =========================================
+
+function initializeSearchClear() {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const clearButton =
+        document.getElementById("searchClear");
+
+    if (!searchInput || !clearButton) return;
+
+    clearButton.addEventListener("click", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        // empty the box and put every product back
+        searchInput.value = "";
+        searchFunction();
+
+        // close the panel
+        searchInput.classList.remove("search-open");
+        searchInput.blur();
 
     });
 

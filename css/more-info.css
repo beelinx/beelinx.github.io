@@ -1,4 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@500..800&display=swap');
+
+/* =========================================================
+   SITE FONT
+   Syne, in two weights:
+     --weight-display  (800 ExtraBold)  headings, wordmark, buttons
+     --weight-text     (500 Medium)     everything you read: descriptions,
+                                        names, prices, comments, captions
+   Syne gets wider as it gets heavier, so reading text uses the Medium
+   weight to keep paragraphs short and the screen calm.
+   Want the reading text bolder? Set --weight-text to 600.
+   Syne has no italic, so italics are set to normal.
+========================================================= */
+
+:root {
+    --site-font: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+    --weight-text: 500;
+    --weight-display: 800;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select {
+    font-family: var(--site-font);
+    font-weight: var(--weight-text);
+}
 
 * {
     box-sizing: border-box;
@@ -310,17 +338,18 @@ margin-top: 14px;
 }
 
 .panel-brand-name {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 16px;
+    font-family: var(--site-font);
+    font-size: 14px;
     letter-spacing: 0.04em;
+    font-weight: 600;
 }
 
 .product-title {
     margin: 16px 0 6px;
     padding: 0;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(24px, 2.6vw, 34px);
-    font-weight: 400;
+    font-family: var(--site-font);
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: var(--weight-display);
     line-height: 1.1;
     text-align: left;
     letter-spacing: 0;
@@ -331,10 +360,11 @@ margin-top: 14px;
     display: block;
     margin: 0;
     padding: 0;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 1px;
     text-align: left;
     color: #777777;
+    font-weight: 600;
 }
 
 /* ---------- actions ---------- */
@@ -357,9 +387,9 @@ margin-top: 14px;
     border-radius: 999px;
     background: #000000;
     color: #ffffff;
-    font-size: 12px;
-    font-weight: normal;
-    letter-spacing: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     text-decoration: none;
     transition: background-color 0.25s ease, color 0.25s ease;
@@ -393,9 +423,10 @@ margin-top: 14px;
     background: #ffffff;
     color: #000000;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    font-weight: 600;
 }
 
 .action-btn:hover {
@@ -445,17 +476,17 @@ margin-top: 14px;
 
 .product-panel .comments-section h2 {
     margin: 0;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 18px;
-    font-weight: 400;
+    font-family: var(--site-font);
+    font-size: 16px;
+    font-weight: var(--weight-display);
     text-align: left;
     color: #000000;
 }
 
 #comments-count {
     margin-left: 6px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    font-family: var(--site-font);
+    font-size: 11px;
     color: #999999;
 }
 
@@ -498,7 +529,7 @@ margin-top: 14px;
 
 .comments-empty {
     margin-bottom: 12px;
-    font-size: 14px;
+    font-size: 13px;
     text-align: left;
     color: #777777;
 }
@@ -531,18 +562,20 @@ margin-top: 14px;
     display: flex;
     gap: 8px;
     align-items: baseline;
-    font-size: 13px;
+    font-size: 12px;
     color: #000000;
+    font-weight: 700;
 }
 
 .comment-meta span {
-    font-size: 12px;
+    font-size: 11px;
     color: #999999;
+    font-weight: var(--weight-text);
 }
 
 .comment-text {
     margin-top: 2px;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.45;
     color: #333333;
     overflow-wrap: anywhere;
@@ -598,11 +631,12 @@ margin-top: 14px;
     border-radius: 999px;
     background: #000000;
     color: #ffffff;
-    font-size: 12px;
-    letter-spacing: 2px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     cursor: pointer;
     transition: background-color 0.25s ease, color 0.25s ease;
+    font-weight: 700;
 }
 
 .comment-form button:hover {
@@ -632,9 +666,9 @@ margin-top: 14px;
 
 .more-products-section h2 {
     margin: 0;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 24px;
-    font-weight: 400;
+    font-family: var(--site-font);
+    font-size: 19px;
+    font-weight: var(--weight-display);
     text-align: center;
 }
 
@@ -677,7 +711,7 @@ margin-top: 14px;
     display: inline-block;
     margin-bottom: 5px;
     font-size: smaller !important;
-    font-weight: bold;
+    font-weight: 600;
     color: #777 !important;
     text-decoration: none;
 }
@@ -688,11 +722,11 @@ margin-top: 14px;
 
 .more-product-name {
     margin-bottom: 5px;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .more-product-price {
-    font-size: 13px;
+    font-size: 12px;
     color: #777;
 }
 
@@ -716,10 +750,10 @@ margin-top: 14px;
 .product-brand-slogan {
     max-width: 480px;
     margin: 0 auto 22px;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 16px;
-    font-style: italic;
-    font-weight: normal;
+    font-family: var(--site-font);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: var(--weight-text);
     line-height: 1.7;
     color: #777777;
 }
@@ -741,18 +775,19 @@ margin-top: 14px;
     border-radius: 999px;
     background: transparent;
     color: #000000 !important;
-    font-size: 12px;
+    font-size: 11px;
     font-style: normal;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     text-decoration: none !important;
     transition: background-color 0.25s ease, color 0.25s ease;
+    font-weight: 700;
 }
 
 .product-brand-website .website-link:hover {
     background: #000000;
     color: #ffffff !important;
-    font-size: 12px !important;
+    font-size: 11px !important;
 }
 
 /* no website saved for this brand: hide the empty button */
@@ -863,7 +898,7 @@ body > *:not(header):not(#beelinx-splash) {
         flex: 1;
         justify-content: center;
         padding: 11px 14px;
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .more-products-section {
@@ -872,7 +907,7 @@ body > *:not(header):not(#beelinx-splash) {
     }
 
     .more-products-section h2 {
-        font-size: 20px;
+        font-size: 17px;
     }
 
     .more-products-container {
@@ -880,11 +915,11 @@ body > *:not(header):not(#beelinx-splash) {
     }
 
     .more-product-name {
-        font-size: 12px;
+        font-size: 11.5px;
     }
 
     .more-product-price {
-        font-size: 11px;
+        font-size: 10.5px;
     }
 
     .more-product-brand {
@@ -896,7 +931,7 @@ body > *:not(header):not(#beelinx-splash) {
     }
 
     .product-brand-slogan {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .product-brand-copyright {
@@ -911,11 +946,11 @@ body > *:not(header):not(#beelinx-splash) {
     }
 
     .more-product-name {
-        font-size: 11px;
+        font-size: 10.5px;
     }
 
     .more-product-price {
-        font-size: 10px;
+        font-size: 9.5px;
     }
 }
 
@@ -1104,8 +1139,8 @@ body:has(.search-input.search-open) .search-container .search-btn {
 }
 
 .search-input::placeholder {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
+    font-family: var(--site-font);
+    font-style: normal;
     color: #8a8a8a;
 }
 
@@ -1156,7 +1191,7 @@ body:has(.search-input.search-open) .search-container .search-btn {
 ========================================================= */
 
 :root {
-    --brand-font: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --brand-font: 'Syne', 'Helvetica Neue', Arial, sans-serif;
     --rail-w: 0px;
     --dock-space: calc(64px + env(safe-area-inset-bottom, 0px));   /* room kept free at the bottom of pages on phones */
 }
@@ -1166,12 +1201,13 @@ body:has(.search-input.search-open) .search-container .search-btn {
 .logo-link.wordmark {
     display: block;
     padding: 4px 0;
-    font-family: var(--brand-font);
-    font-style: italic;
-    font-weight: 600;
-    font-size: 30px;
+    font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 19px;
     line-height: 1;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: #ffffff;
     text-decoration: none;
     transition: font-size 0.35s ease, opacity 0.2s ease;
@@ -1182,7 +1218,7 @@ body:has(.search-input.search-open) .search-container .search-btn {
 }
 
 .navbar.navbar-scrolled .logo-link.wordmark {
-    font-size: 26px;
+    font-size: 17px;
 }
 
 /* search: plain icon, no ring */
@@ -1500,7 +1536,7 @@ body:has(.search-input.search-open) .search-container .search-btn {
         border-radius: 999px;
         background: #ffffff;
         color: #000000;
-        font-family: 'Playfair Display', Georgia, serif;
+        font-family: var(--site-font);
         font-size: 12px;
         white-space: nowrap;
         opacity: 0;
@@ -1627,5 +1663,108 @@ footer {
 
     .more-product-info {
         padding: 5px 2px 0;
+    }
+}
+
+/* =========================================================
+   WIDE FONT SAFETY
+   Syne is wider than the old font, so long names in the
+   "More by" cards are allowed to wrap instead of running
+   out of the card.
+========================================================= */
+
+.more-product-info,
+.more-product-name,
+.more-product-brand {
+    overflow-wrap: anywhere;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   HEADINGS KEEP THE EXTRABOLD LOOK
+   (anything above that sets its own weight still wins)
+========================================================= */
+
+h2, h3, h4, h5, h6 {
+    font-weight: var(--weight-display);
+}
+
+/* =========================================================
+   SEARCH CANCEL (X)
+   Round X at the right end of the search pill. It only shows
+   while the search panel is open. navbar.js clears the search
+   and closes the panel when it is clicked.
+   Size: width/height here      Look: background / color
+========================================================= */
+
+.search-clear {
+    position: fixed;
+    top: calc(var(--nav-cur) + 12px + 4px);
+    left: calc(50% + var(--rail-offset, 0px) / 2 + min(560px, 90vw) / 2 - 44px);
+    z-index: 1002;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #000000;
+    font-size: 14px;
+    cursor: pointer;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        top 0.35s ease,
+        visibility 0s linear 0.2s;
+}
+
+.search-input.search-open ~ .search-clear {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+        opacity 0.25s ease 0.15s,
+        background-color 0.2s ease,
+        color 0.2s ease,
+        top 0.35s ease,
+        visibility 0s;
+}
+
+.search-clear:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+.search-clear:focus-visible {
+    outline: 2px solid #000000;
+    outline-offset: 2px;
+}
+
+/* leave room for the X so typed text never runs underneath it */
+.search-input.search-open {
+    padding: 0 56px 0 24px;
+}
+
+@media (max-width: 600px) {
+
+    .search-clear {
+        width: 36px;
+        height: 36px;
+        left: calc(50% + min(560px, 90vw) / 2 - 40px);
+    }
+
+    .search-input.search-open {
+        padding: 0 50px 0 20px;
     }
 }

@@ -1,15 +1,17 @@
 /* =========================================
    BEELINX AUTH
-   Log in, sign up, Google, log out and password
-   reset, through Supabase Auth.
+   Log in, sign up (with a unique username and
+   account type), log out, password reset and
+   profiles, through Supabase.
 
    Needs the Supabase library loaded first:
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
    <script src="../js/auth.js"></script>
 
-   Other scripts (likes, comments, save) will later use:
-     BeelinxAuth.getUser()   -> the logged-in user, or null
-     BeelinxAuth.client      -> the Supabase client
+   Other scripts use:
+     BeelinxAuth.getUser()      -> logged-in user, or null
+     BeelinxAuth.getProfile()   -> their profile row, or null
+     BeelinxAuth.client         -> the Supabase client
 ========================================= */
 
 (function () {
@@ -24,14 +26,30 @@
     }
 
     /* "implicit" keeps email links working even when they are opened
-       in a different browser from the one the person signed up in
-       (for example Gmail's built-in browser on a phone). */
+       in a different browser from the one the person signed up in. */
     var client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
         auth: { flowType: "implicit" }
     });
 
-    /* The login page's own address, with no extra bits.
-       Supabase sends people back here after Google / email links. */
+    /* usernames: 3-20 letters, numbers, underscores or dots (saved lowercase) */
+    var USERNAME_PATTERN = /^[a-z0-9_.]{3,20}$/;
+
+    /* roles people can pick themselves. "brand" is given by Beelinx. */
+    var SIGNUP_TYPES = ["shopper", "model"];
+
+    function cleanUsername(value) {
+        return String(value || "").trim().replace(/^@/, "").toLowerCase();
+    }
+
+    function validateUsername(value) {
+        var name = cleanUsername(value);
+        if (!USERNAME_PATTERN.test(name)) {
+            return "Username must be 3-20 characters: letters, numbers, _ or . only.";
+        }
+        return null;
+    }
+
+    /* The login page's own address, with no extra bits. */
     function loginPageUrl() {
         return new URL("login.html", window.location.href).href;
     }
@@ -54,6 +72,11 @@
         if (lower.includes("already registered")) {
             return "An account with this email already exists. Try logging in.";
         }
+        if (lower.includes("database error saving new user") ||
+            lower.includes("profiles_username") ||
+            lower.includes("duplicate key")) {
+            return "That username is taken or not allowed. Please pick another.";
+        }
         if (lower.includes("password should be at least") || lower.includes("weak")) {
             return "Please choose a stronger password (at least 8 characters).";
         }
@@ -67,11 +90,47 @@
         return message || "Something went wrong. Please try again.";
     }
 
-    async function signUp(email, password) {
+
+    /* ---------- usernames ---------- */
+
+    /* true = free, false = taken, null = could not check */
+    async function usernameAvailable(value) {
+        var name = cleanUsername(value);
+        if (validateUsername(name)) return false;
+
+        var result = await client.rpc("username_available", { name: name });
+        if (result.error) {
+            console.warn("Beelinx: could not check the username.", result.error);
+            return null;
+        }
+        return result.data === true;
+    }
+
+
+    /* ---------- sign up / log in ---------- */
+
+    async function signUp(email, password, username, accountType) {
+        var name = cleanUsername(username);
+
+        var problem = validateUsername(name);
+        if (problem) return { error: problem };
+
+        var available = await usernameAvailable(name);
+        if (available === false) {
+            return { error: "That username is already taken. Please pick another." };
+        }
+
+        var type = SIGNUP_TYPES.indexOf(accountType) >= 0 ? accountType : "shopper";
+
+        /* username + account type travel with the signup; a database
+           trigger (profiles-setup.sql) saves them into the profiles table */
         var result = await client.auth.signUp({
             email: email,
             password: password,
-            options: { emailRedirectTo: loginPageUrl() }
+            options: {
+                emailRedirectTo: loginPageUrl(),
+                data: { username: name, role: type }
+            }
         });
 
         if (result.error) return { error: friendlyError(result.error) };
@@ -93,14 +152,6 @@
 
     async function signIn(email, password) {
         var result = await client.auth.signInWithPassword({ email: email, password: password });
-        return { error: friendlyError(result.error) };
-    }
-
-    async function signInWithGoogle() {
-        var result = await client.auth.signInWithOAuth({
-            provider: "google",
-            options: { redirectTo: loginPageUrl() }
-        });
         return { error: friendlyError(result.error) };
     }
 
@@ -130,15 +181,88 @@
         client.auth.onAuthStateChange(callback);
     }
 
+
+    /* ---------- profiles ---------- */
+
+    var PROFILE_FIELDS = "id, username, role, display_name, bio, avatar_url, created_at";
+
+    /* the logged-in person's profile (null if logged out) */
+    async function getProfile() {
+        var user = await getUser();
+        if (!user) return null;
+
+        var result = await client
+            .from("profiles")
+            .select(PROFILE_FIELDS)
+            .eq("id", user.id)
+            .maybeSingle();
+
+        if (result.error) {
+            console.warn("Beelinx: could not load your profile.", result.error);
+            return null;
+        }
+        return result.data;
+    }
+
+    /* anyone's profile, by username */
+    async function getProfileByUsername(username) {
+        var result = await client
+            .from("profiles")
+            .select(PROFILE_FIELDS)
+            .eq("username", cleanUsername(username))
+            .maybeSingle();
+
+        if (result.error) {
+            console.warn("Beelinx: could not load that profile.", result.error);
+            return null;
+        }
+        return result.data;
+    }
+
+    /* for accounts made before usernames existed: choose one (once) */
+    async function setUsername(username) {
+        var name = cleanUsername(username);
+
+        var problem = validateUsername(name);
+        if (problem) return { error: problem };
+
+        var user = await getUser();
+        if (!user) return { error: "Please log in first." };
+
+        var result = await client
+            .from("profiles")
+            .update({ username: name })
+            .eq("id", user.id)
+            .select("id")
+            .maybeSingle();
+
+        if (result.error) {
+            if (result.error.code === "23505") {
+                return { error: "That username is already taken. Please pick another." };
+            }
+            return { error: friendlyError(result.error) };
+        }
+        if (!result.data) {
+            return { error: "Could not save your username. Please try again." };
+        }
+        return { error: null };
+    }
+
+
     window.BeelinxAuth = {
         client: client,
+        cleanUsername: cleanUsername,
+        validateUsername: validateUsername,
+        usernameAvailable: usernameAvailable,
         signUp: signUp,
         signIn: signIn,
-        signInWithGoogle: signInWithGoogle,
         signOut: signOut,
         sendPasswordReset: sendPasswordReset,
         updatePassword: updatePassword,
         getUser: getUser,
+        getProfile: getProfile,
+        getProfileByUsername: getProfileByUsername,
+        setUsername: setUsername,
         onChange: onChange
     };
 

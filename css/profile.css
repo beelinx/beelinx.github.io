@@ -1,0 +1,573 @@
+/* =========================================================
+   BEELINX PROFILE PAGE
+   Loaded after styles.css, only by profile.html.
+   Clean white page, black and grey, Playfair serif.
+   Layout: big title on the left, the person's card on the
+   right, text tabs, then a grid of tiles.
+========================================================= */
+
+:root {
+    --pf-serif: 'Syne', 'Helvetica Neue', Arial, sans-serif;   /* the one font for this page (name kept so nothing else breaks) */
+    --pf-gutter: clamp(20px, 5vw, 90px);
+    --pf-line: #e6e6e6;
+    --pf-grey: #8f8f8f;
+    --pf-soft: #efefef;
+}
+
+[hidden] { display: none !important; }
+
+
+/* =========================================================
+   ONE FONT FOR THE WHOLE PAGE
+   Syne. Headings, the username, tabs and buttons are ExtraBold
+   (800); everything you read (bio, posts, names, captions) uses
+   the Medium weight from styles.css (--weight-text, 500) so the
+   text takes up less room. Sizes and capital / small letters are
+   set per item further down.
+========================================================= */
+
+.profile-page main,
+.profile-page .profile-copyright {
+    font-family: var(--pf-serif);
+    font-weight: var(--weight-text, 500);
+    font-style: normal;
+}
+
+/* My List cards come from styles.css, so they are matched here */
+.profile-page .profile-panel .clothe-text,
+.profile-page .profile-panel .brand-page-link,
+.profile-page .profile-panel .price {
+    font-family: var(--pf-serif);
+    font-weight: var(--weight-text, 500);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.profile-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 28px 40px;
+
+    padding: clamp(36px, 6vw, 70px) var(--pf-gutter) 8px;
+}
+
+.profile-hero .profile-title {
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 800;
+    font-size: clamp(14px, 1.5vw, 19px);
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: right;
+    color: #000;
+
+}
+
+/* right side: title with the buttons under it */
+.profile-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+
+    margin-left: auto;
+}
+
+/* the person: avatar, name + counts */
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    order: -1;
+
+    /* the card stretches across the row; only a short gap is left before the title */
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: clamp(0px, 5vw, 80px);
+}
+
+.profile-avatar {
+    --av: 116px;
+
+    flex-shrink: 0;
+
+    width: var(--av);
+    height: var(--av);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(circle at 35% 30%, #2a2a2a, #000 70%);
+    color: #fff;
+    border-radius: 50%;
+
+    font-family: var(--pf-serif);
+    font-size: 40px;
+}
+
+.profile-avatar i { font-size: 0.65em; color: #bdbdbd; }
+
+.profile-info { flex: 1; min-width: 0; }
+
+.profile-username {
+    margin: 0;
+
+    font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    color: #000;
+    word-break: break-all;
+}
+
+.profile-kicker {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #000;
+}
+
+.profile-kicker:empty { display: none; }
+
+.profile-bio {
+    max-width: 440px;
+    margin: 8px 0 0;
+
+    font-family: var(--pf-serif);
+    font-style: normal;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #000;
+}
+
+.profile-bio:empty { display: none; }
+
+
+/* ---------- counts: "0 posts · 0 followers · 0 following" ---------- */
+
+.profile-stats {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+
+    padding: 0;
+
+    background: none;
+    border: none;
+
+    font: inherit;
+    font-size: 14px;
+    color: #000;
+    cursor: pointer;
+}
+
+.stat:not(:last-child)::after {
+    content: "\00b7";
+    margin: 0 11px;
+    color: #000;
+}
+
+.stat strong { font-weight: 800; }
+.stat span { color: #000; }
+.stat:hover span { color: #000; text-decoration: underline; }
+
+
+/* ---------- pills ---------- */
+
+.profile-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 24px;
+
+    background: #000;
+    color: #fff;
+
+    border: 1px solid #000;
+    border-radius: 999px;
+
+    font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pill:hover { background: #2a2a2a; }
+
+/* soft grey pill (Log out, Following) */
+.pill-ghost {
+    background: var(--pf-soft);
+    color: #000;
+    border-color: var(--pf-soft);
+}
+
+.pill-ghost:hover { background: #e0e0e0; }
+
+.pill:disabled { opacity: 0.6; cursor: default; }
+
+.pill-dark { padding: 13px 26px; }
+
+
+/* ---------- header states ---------- */
+
+.profile-hero.is-loading .profile-title,
+.profile-hero.is-loading .profile-card {
+    opacity: 1;
+    animation: none;
+}
+
+/* grey placeholders while the real details arrive */
+.profile-hero.is-loading .profile-avatar {
+    background: var(--pf-soft);
+    color: transparent;
+    animation: pf-pulse 1.2s ease-in-out infinite;
+}
+
+.profile-hero.is-loading .profile-username,
+.profile-hero.is-loading .profile-kicker,
+.profile-hero.is-loading .profile-stats,
+.profile-hero.is-loading .profile-bio { visibility: hidden; }
+
+.profile-hero.is-loading .profile-username:empty { display: block; min-height: 24px; }
+
+@keyframes pf-pulse { 50% { opacity: 0.55; } }
+
+.profile-hero.is-guest .profile-stats,
+.profile-hero.is-missing .profile-stats { display: none; }
+
+.profile-hero.is-guest .profile-avatar,
+.profile-hero.is-missing .profile-avatar { background: var(--pf-soft); }
+
+
+/* ---------- entrance ---------- */
+
+.rise {
+    opacity: 1;
+}
+
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.profile-body { padding: 0 var(--pf-gutter) 70px; }
+
+
+/* ---------- choose a username ---------- */
+
+.username-form {
+    max-width: 520px;
+    margin: 26px 0 0;
+    padding: 20px;
+
+    background: #f5f5f5;
+    border-radius: 20px;
+
+    font-size: 13px;
+    color: #444;
+}
+
+.username-row { display: flex; gap: 10px; margin-top: 14px; }
+
+.username-row input {
+    flex: 1;
+    min-width: 0;
+    height: 46px;
+    padding: 0 18px;
+
+    border: 1px solid #c9c9c9;
+    border-radius: 999px;
+
+    font: inherit;
+}
+
+.username-row input:focus { outline: none; border-color: #000; }
+
+.profile-message { margin: 10px 0 0; color: #c0392b; font-size: 13px; }
+.profile-message:empty { display: none; }
+
+
+/* ---------- tabs: plain words with a line under the active one ---------- */
+
+.profile-tabs {
+    position: relative;
+    display: flex;
+    gap: 30px;
+
+    margin-top: 34px;
+}
+
+.tab {
+    padding: 0 0 10px;
+
+    background: none;
+    border: none;
+
+    font-family: var(--pf-serif);
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--pf-grey);
+
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.tab:hover,
+.tab.active { color: #000; }
+
+.tab-indicator {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0;
+
+    background: #000;
+    border-radius: 3px;
+
+    transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.3s ease;
+}
+
+.profile-panel { padding-top: 28px; min-height: 240px; }
+
+.panel-title {
+    margin: 0 0 18px;
+    padding: 0;
+    text-align: left;
+
+    font-family: var(--pf-serif);
+    font-weight: 800;
+    font-size: 21px;
+}
+
+.profile-empty {
+    margin: 40px 0;
+    text-align: left;
+
+    font-family: var(--pf-serif);
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--pf-grey);
+}
+
+
+/* ---------- posts: rounded tiles in columns ---------- */
+
+.post-list {
+    column-count: 4;
+    column-gap: 20px;
+}
+
+.post-card {
+    break-inside: avoid;
+    margin: 0 0 24px;
+}
+
+.post-image {
+    display: block;
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+
+    background: #f4f4f4;
+    border-radius: 20px;
+}
+
+.post-body {
+    margin: 0;
+    padding: 10px 4px 0;
+
+    font-family: var(--pf-serif);
+    font-size: 14.5px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* text-only posts become a soft tile */
+.post-card.is-text .post-body {
+    padding: 26px 22px;
+    background: #f4f4f4;
+    border-radius: 20px;
+    font-size: 16.5px;
+}
+
+.post-time {
+    display: block;
+    padding: 6px 4px 0;
+    font-size: 12px;
+    color: var(--pf-grey);
+}
+
+
+/* ---------- followers / following ---------- */
+
+.people-list { display: flex; flex-direction: column; max-width: 620px; }
+
+.person {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 14px 10px;
+
+    border-bottom: 1px solid var(--pf-line);
+
+    color: inherit;
+    text-decoration: none;
+
+    transition: background-color 0.2s ease;
+}
+
+a.person:hover { background: #f7f7f7; }
+
+a.person::after {
+    content: "\2192";
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+a.person:hover::after { opacity: 1; }
+
+.person-avatar {
+    flex-shrink: 0;
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(circle at 35% 30%, #2a2a2a, #000 70%);
+    color: #fff;
+    border-radius: 50%;
+
+    font-family: var(--pf-serif);
+    font-size: 19px;
+}
+
+.person-name { font-family: var(--pf-serif); font-size: 16px; }
+.person-type { font-size: 13px; color: var(--pf-grey); }
+
+.profile-panel .products-container { margin: 0; }
+
+
+/* ---------- footer: just the copyright line ---------- */
+
+.profile-copyright {
+    margin: 0;
+    padding: 30px 20px 40px;
+
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--pf-grey);
+}
+
+
+/* =========================================================
+   SMALLER SCREENS
+========================================================= */
+
+@media (max-width: 1100px) {
+    .post-list { column-count: 3; }
+}
+
+@media (max-width: 1100px) {
+
+    /* same layout as the big screen: person on the left, title + button on the right */
+    .profile-hero { flex-wrap: nowrap; align-items: center; gap: 16px; padding-top: 30px; }
+
+    .profile-card { margin-right: 0; gap: 16px; }
+    .profile-side { flex-shrink: 0; gap: 12px; }
+
+    .profile-hero .profile-title { font-size: 13px; }
+
+    .profile-avatar { --av: 80px; font-size: 32px; }
+
+    .profile-username { font-size: 15px; }
+    .profile-kicker { font-size: 11px; }
+
+    .profile-stats { column-gap: 14px; row-gap: 2px; }
+    .stat { font-size: 12px; }
+    .stat:not(:last-child)::after { content: none; }
+
+    .profile-bio { font-size: 12px; }
+
+    .pill { padding: 10px 18px; font-size: 10px; }
+
+}
+
+@media (max-width: 768px) {
+
+    .post-list { column-count: 2; column-gap: 14px; }
+
+    .tab { font-size: 16px; }
+
+}
+
+/* phones: everything scales with the screen width so the same layout fits */
+@media (max-width: 560px) {
+
+    .profile-hero { gap: 3vw; padding-top: 24px; }
+
+    .profile-card { gap: 3vw; }
+    .profile-side { gap: 8px; }
+
+    .profile-hero .profile-title {
+        font-size: clamp(8px, 2.25vw, 13px);
+        letter-spacing: 0.04em;
+    }
+
+    .profile-avatar {
+        --av: clamp(40px, 12.5vw, 64px);
+        font-size: calc(var(--av) * 0.4);
+    }
+
+    .profile-username { font-size: clamp(11px, 3.4vw, 17px); }
+    .profile-kicker { font-size: clamp(8px, 2.1vw, 12px); margin-top: 3px; }
+
+    .profile-stats { margin-top: 6px; column-gap: 2.4vw; }
+    .stat { font-size: clamp(8px, 2.3vw, 14px); gap: 3px; }
+
+    .profile-bio { font-size: clamp(8px, 2.2vw, 12px); margin-top: 6px; }
+
+    .pill { padding: 0.9em 1.6em; font-size: clamp(8px, 2.1vw, 11px); }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tab-indicator { transition: none; }
+
+}

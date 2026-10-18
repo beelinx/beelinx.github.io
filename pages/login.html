@@ -429,6 +429,75 @@
         }
 
 
+        /* USERNAME HINT + ACCOUNT TYPE PICKER */
+
+        .field-hint {
+            margin-top: -10px;
+
+            color: #888;
+
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .field-hint.is-error { color: #ff8f8f; }
+        .field-hint.is-ok { color: #8fdc9f; }
+
+        .login-form .field-hint[hidden],
+        .login-form .type-picker[hidden] {
+            display: none;
+        }
+
+        .type-picker {
+            width: 100%;
+
+            display: flex;
+            gap: 12px;
+        }
+
+        .type-option {
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .type-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .type-option span {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            height: 100%;
+            padding: 12px 14px;
+
+            border: 1px solid #444;
+            border-radius: 5px;
+
+            transition: border-color 0.2s ease;
+        }
+
+        .type-option small {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .type-option:hover span { border-color: #aaa; }
+
+        .type-option input:checked + span {
+            border-color: #fff;
+        }
+
+        .type-option input:focus-visible + span {
+            outline: 1px solid #aaa;
+            outline-offset: 3px;
+        }
+
+
 /* =========================================
    SPLASH SCREEN
 ========================================= */
@@ -605,31 +674,48 @@ body.loading {
         <h1 class="auth-heading" id="auth-heading" hidden></h1>
 
 
-        <!-- CONTINUE WITH GOOGLE -->
-
-        <button
-            type="button"
-            class="google-button"
-            id="google-button">
-
-            <svg viewBox="0 0 48 48" aria-hidden="true">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            </svg>
-
-            <span>Continue with Google</span>
-
-        </button>
-
-
-        <div class="auth-divider" id="auth-divider">or</div>
 
 
         <!-- FORM (used for both log in and sign up) -->
 
         <form class="login-form" id="auth-form">
+
+            <!-- USERNAME + ACCOUNT TYPE (sign up only) -->
+
+            <input
+                type="text"
+                class="login-input"
+                id="login-username"
+                name="username"
+                placeholder="Choose a username"
+                autocomplete="username"
+                autocapitalize="none"
+                spellcheck="false"
+                minlength="3"
+                maxlength="20"
+                hidden
+                disabled>
+
+            <p class="field-hint" id="username-hint" hidden></p>
+
+            <div class="type-picker" id="type-picker" role="radiogroup" aria-label="Account type" hidden>
+
+                <label class="type-option">
+                    <input type="radio" name="account_type" value="shopper" checked>
+                    <span><strong>Consumer</strong><small>Discover and save fashion</small></span>
+                </label>
+
+                <label class="type-option">
+                    <input type="radio" name="account_type" value="model">
+                    <span><strong>Model</strong><small>Show your work and style</small></span>
+                </label>
+
+            </div>
+
+            <p class="field-hint" id="type-note" hidden>
+                Own a brand? Email beelinxnetwork@gmail.com and we'll set up a brand account for you.
+            </p>
+
 
             <!-- EMAIL -->
 
@@ -728,7 +814,7 @@ body.loading {
 
         <div class="account-panel" id="account-panel" hidden>
 
-            <a href="index.html" class="login-button">Continue to Beelinx</a>
+            <a href="profile.html" class="login-button">Go to my profile</a>
 
             <button type="button" class="login-button secondary" id="logout-button">Log out</button>
 
@@ -773,8 +859,10 @@ body.loading {
         var tabsBox = document.querySelector(".auth-tabs");
         var tabs = document.querySelectorAll(".auth-tab");
         var heading = document.getElementById("auth-heading");
-        var googleButton = document.getElementById("google-button");
-        var divider = document.getElementById("auth-divider");
+        var usernameInput = document.getElementById("login-username");
+        var usernameHint = document.getElementById("username-hint");
+        var typePicker = document.getElementById("type-picker");
+        var typeNote = document.getElementById("type-note");
         var form = document.getElementById("auth-form");
         var email = document.getElementById("login-email");
         var password = document.getElementById("login-password");
@@ -809,13 +897,48 @@ body.loading {
         function setBusy(value) {
             busy = value;
             submitButton.disabled = value;
-            googleButton.disabled = value;
             if (value) {
                 submitButton.textContent = "Please wait...";
             } else {
                 submitButton.textContent = labels[mode] || labels.login;
             }
         }
+
+
+        /* ---------- username hint ---------- */
+
+        function hint(text, kind) {
+            usernameHint.textContent = text || "";
+            usernameHint.className = "field-hint" + (kind ? " is-" + kind : "");
+            usernameHint.hidden = !text;
+        }
+
+        var checkTimer = null;
+        var checkToken = 0;
+
+        usernameInput.addEventListener("input", function () {
+
+            clearTimeout(checkTimer);
+
+            var value = Auth ? Auth.cleanUsername(usernameInput.value) : "";
+
+            if (!value) { hint(""); return; }
+
+            var problem = Auth && Auth.validateUsername(value);
+            if (problem) { hint(problem, "error"); return; }
+
+            hint("Checking...");
+            var token = ++checkToken;
+
+            checkTimer = setTimeout(async function () {
+                var free = await Auth.usernameAvailable(value);
+                if (token !== checkToken) return;
+                if (free === true) hint("@" + value + " is available.", "ok");
+                else if (free === false) hint("@" + value + " is already taken.", "error");
+                else hint("");
+            }, 400);
+
+        });
 
 
         /* ---------- screen modes ---------- */
@@ -836,8 +959,6 @@ body.loading {
             });
 
             tabsBox.hidden = isAccount || isReset;
-            googleButton.hidden = isAccount || isReset;
-            divider.hidden = isAccount || isReset;
             form.hidden = isAccount;
             accountPanel.hidden = !isAccount;
 
@@ -864,6 +985,13 @@ body.loading {
             confirmInput.required = needConfirm;
             if (!needConfirm) confirmInput.value = "";
 
+            usernameInput.hidden = !isSignup;
+            usernameInput.disabled = !isSignup;
+            usernameInput.required = isSignup;
+            typePicker.hidden = !isSignup;
+            typeNote.hidden = !isSignup;
+            if (!isSignup) { usernameInput.value = ""; hint(""); }
+
             forgot.hidden = !isLogin;
 
             if (labels[mode]) submitButton.textContent = labels[mode];
@@ -874,12 +1002,20 @@ body.loading {
             accountMessage.textContent = "";
         }
 
-        function showAccount(user) {
-            setMode("account", "You're logged in", user && user.email ? user.email : "");
+        function showAccount(profile) {
+            setMode("account", "You're logged in",
+                profile && profile.username ? "@" + profile.username : "");
+        }
+
+        /* login.html?next=my-list.html sends people back where they came from.
+           Only plain page names are accepted (no other websites). */
+        function nextPage() {
+            var next = new URLSearchParams(window.location.search).get("next") || "";
+            return /^[a-z0-9_-]+\.html(\?[A-Za-z0-9_=&%.-]*)?$/i.test(next) ? next : HOME;
         }
 
         function goHome() {
-            window.location.replace(HOME);
+            window.location.replace(nextPage());
         }
 
 
@@ -940,6 +1076,15 @@ body.loading {
                 }
             }
 
+            if (mode === "signup") {
+                var usernameProblem = Auth.validateUsername(usernameInput.value);
+                if (usernameProblem) {
+                    say(usernameProblem, "error");
+                    usernameInput.focus();
+                    return;
+                }
+            }
+
             say("");
             setBusy(true);
 
@@ -955,7 +1100,13 @@ body.loading {
 
                 } else if (mode === "signup") {
 
-                    var signup = await Auth.signUp(emailValue, passwordValue);
+                    var chosen = form.querySelector('input[name="account_type"]:checked');
+                var signup = await Auth.signUp(
+                    emailValue,
+                    passwordValue,
+                    usernameInput.value,
+                    chosen ? chosen.value : "shopper"
+                );
 
                     if (signup.error) { say(signup.error, "error"); return; }
 
@@ -1026,31 +1177,6 @@ body.loading {
         });
 
 
-        /* ---------- continue with Google ---------- */
-
-        googleButton.addEventListener("click", async function () {
-
-            if (busy) return;
-
-            if (!Auth) {
-                say("Login is unavailable right now. Please try again later.", "error");
-                return;
-            }
-
-            say("");
-            setBusy(true);
-
-            var result = await Auth.signInWithGoogle();
-
-            /* on success the browser leaves for Google; only errors come back */
-            if (result.error) {
-                say(result.error, "error");
-                setBusy(false);
-            }
-
-        });
-
-
         /* ---------- log out ---------- */
 
         logoutButton.addEventListener("click", async function () {
@@ -1115,10 +1241,10 @@ body.loading {
 
             if (!user) return;
 
-            if (cameFromLink) {
+            if (cameFromLink || new URLSearchParams(window.location.search).get("next")) {
                 goHome();
             } else {
-                showAccount(user);
+                showAccount(await Auth.getProfile());
             }
 
         })();

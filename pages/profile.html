@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title id="page-title">Profile | Beelinx</title>
+
+<!-- open connections early so fonts, icons and data arrive sooner -->
+<link rel="preconnect" href="https://zjzygjflcjqvouitblne.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet">
+
+<!-- icons load without holding up the first paint -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</noscript>
+
+<link rel="stylesheet"
+      href="../css/styles.css">
+
+<link rel="stylesheet"
+      href="../css/profile.css">
+
+</head>
+
+<body class="profile-page">
+
+<!-- =========================================
+     SHARED HEADER
+========================================= -->
+
+<header>
+    <div id="navbar-placeholder"></div>
+</header>
+
+
+<main>
+
+    <!-- =========================================
+         HERO (always shown; profile.js fills it in)
+         states: is-loading | is-guest | is-missing | is-view
+    ========================================= -->
+
+    <section id="profile-hero" class="profile-hero is-loading">
+
+        <!-- kept for the script, not shown on this design -->
+        <div id="profile-ghost" hidden></div>
+
+        <!-- right: page title with the buttons under it -->
+        <div class="profile-side">
+
+            <h1 id="profile-title" class="profile-title rise" style="--d: 0">Your profile</h1>
+
+            <div class="profile-actions">
+
+                <a id="guest-login" class="pill" href="login.html?next=profile.html" hidden>Log in</a>
+
+                <button id="follow-btn" type="button" class="pill" hidden>Follow</button>
+
+                <button id="logout-btn" type="button" class="pill" hidden>Log out</button>
+
+            </div>
+
+        </div>
+
+        <!-- left: the person -->
+        <div class="profile-card rise" style="--d: 1">
+
+            <div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div>
+
+            <div class="profile-info">
+
+                <p id="profile-username" class="profile-username"></p>
+
+                <p id="profile-kicker" class="profile-kicker"></p>
+
+                <!-- tap one to open that list -->
+                <div class="profile-stats">
+
+                    <button type="button" class="stat" data-tab="posts">
+                        <strong id="count-posts">0</strong><span>posts</span>
+                    </button>
+
+                    <button type="button" class="stat" data-tab="followers">
+                        <strong id="count-followers">0</strong><span>followers</span>
+                    </button>
+
+                    <button type="button" class="stat" data-tab="following">
+                        <strong id="count-following">0</strong><span>following</span>
+                    </button>
+
+                </div>
+
+                <p id="profile-bio" class="profile-bio"></p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         BODY (hidden until a profile is showing)
+    ========================================= -->
+
+    <div id="profile-body" class="profile-body" hidden>
+
+        <!-- Choose a username (only for older accounts without one) -->
+        <form id="username-form" class="username-form" hidden>
+
+            <p>Pick a username so you can comment and be found. You can't change it later.</p>
+
+            <div class="username-row">
+                <input id="username-input"
+                       type="text"
+                       placeholder="Choose a username"
+                       autocomplete="username"
+                       autocapitalize="none"
+                       spellcheck="false"
+                       maxlength="20">
+
+                <button type="submit" class="pill pill-dark">Save</button>
+            </div>
+
+            <p id="username-message" class="profile-message" role="alert"></p>
+
+        </form>
+
+
+        <!-- Tabs -->
+        <div class="profile-tabs" role="tablist">
+
+            <button type="button" class="tab active" role="tab" data-tab="posts">Posts</button>
+            <button type="button" class="tab" role="tab" data-tab="lists" id="tab-lists" hidden>My List</button>
+
+            <span class="tab-indicator" aria-hidden="true"></span>
+
+        </div>
+
+        <div id="profile-panel" class="profile-panel"></div>
+
+    </div>
+
+</main>
+
+
+<p class="profile-copyright">
+
+    © 2026 Beelinx — Fashion Worth Discovering
+
+</p>
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+
+<!-- data.js, main.js and engagement.js are not needed to show a profile.
+     My List loads what it needs only when you open that tab. -->
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/profile.js"></script>
+<script defer src="../js/navbar.js"></script>
+
+</body>
+
+</html>
