@@ -65,7 +65,120 @@
 
             object-fit: contain;
 
-            margin-bottom: 55px;
+            margin-bottom: 40px;
+        }
+
+
+        /* LOG IN / SIGN UP SWITCH */
+
+        .auth-tabs {
+            width: 100%;
+
+            display: flex;
+
+            margin-bottom: 28px;
+
+            border-bottom: 1px solid #333;
+        }
+
+        .auth-tab {
+            flex: 1;
+
+            padding: 0 0 14px;
+
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+
+            margin-bottom: -1px;
+
+            color: #888;
+
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                color 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .auth-tab:hover {
+            color: #ccc;
+        }
+
+        .auth-tab.active {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .auth-tab:focus-visible {
+            outline: 1px solid #aaa;
+            outline-offset: 4px;
+        }
+
+
+        /* CONTINUE WITH GOOGLE */
+
+        .google-button {
+            width: 100%;
+            height: 52px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+
+            background-color: #000;
+            color: #fff;
+
+            border: 1px solid #444;
+            border-radius: 5px;
+
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: border-color 0.2s ease;
+        }
+
+        .google-button:hover {
+            border-color: #aaa;
+        }
+
+        .google-button svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+
+        /* "OR" DIVIDER */
+
+        .auth-divider {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            margin: 24px 0;
+
+            color: #666;
+
+            font-size: 13px;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #333;
         }
 
 
@@ -78,6 +191,10 @@
             flex-direction: column;
 
             gap: 20px;
+        }
+
+        .login-form [hidden] {
+            display: none;
         }
 
 
@@ -111,6 +228,62 @@
         }
 
 
+        /* PASSWORD FIELD + SHOW / HIDE EYE */
+
+        .password-field {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-field .login-input {
+            padding-right: 52px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: none;
+            border: none;
+
+            color: #888;
+
+            cursor: pointer;
+
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle:hover,
+        .password-toggle[aria-pressed="true"] {
+            color: #fff;
+        }
+
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .password-toggle .eye-off {
+            display: none;
+        }
+
+        .password-toggle[aria-pressed="true"] .eye-on {
+            display: none;
+        }
+
+        .password-toggle[aria-pressed="true"] .eye-off {
+            display: block;
+        }
+
+
         /* FORGOT PASSWORD */
 
         .forgot-password {
@@ -131,7 +304,24 @@
         }
 
 
-        /* LOG IN BUTTON */
+        /* MESSAGE (errors / confirmations, filled in by the login code later) */
+
+        .login-message {
+            min-height: 0;
+
+            color: #ccc;
+
+            font-size: 13px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .login-message:empty {
+            display: none;
+        }
+
+
+        /* MAIN BUTTON */
 
         .login-button {
             width: 100%;
@@ -157,6 +347,85 @@
 
         .login-button:hover {
             background-color: #d9d9d9;
+        }
+
+
+        /* MESSAGE COLOURS */
+
+        .login-message.is-error {
+            color: #ff8f8f;
+        }
+
+        .login-message.is-success {
+            color: #fff;
+        }
+
+
+        /* HEADING + ACCOUNT PANEL (set new password / already logged in) */
+
+        .auth-heading {
+            width: 100%;
+
+            margin-bottom: 24px;
+
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .auth-heading small {
+            display: block;
+
+            margin-top: 8px;
+
+            color: #888;
+
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .account-panel {
+            width: 100%;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 16px;
+        }
+
+        .account-panel[hidden],
+        .auth-heading[hidden],
+        .auth-tabs[hidden],
+        .google-button[hidden],
+        .auth-divider[hidden],
+        .login-form[hidden] {
+            display: none;
+        }
+
+        a.login-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-decoration: none;
+        }
+
+        .login-button.secondary {
+            background-color: #000;
+            color: #fff;
+
+            border-color: #444;
+        }
+
+        .login-button.secondary:hover {
+            background-color: #000;
+            border-color: #aaa;
+        }
+
+        .login-button:disabled,
+        .google-button:disabled {
+            opacity: 0.6;
+            cursor: default;
         }
 
 
@@ -242,11 +511,16 @@ body.loading {
 
             .login-logo {
                 width: 155px;
-                margin-bottom: 45px;
+                margin-bottom: 32px;
             }
 
             .login-input,
-            .login-button {
+            .login-button,
+            .google-button {
+                height: 50px;
+            }
+
+            .password-toggle {
                 height: 50px;
             }
 
@@ -260,25 +534,26 @@ body.loading {
 <body>
 
     <!-- =========================================
-         LOGIN PAGE
+         BEELINX SPLASH SCREEN
     ========================================= -->
 
-<!-- =========================================
-     BEELINX SPLASH SCREEN
-========================================= -->
+    <div id="splash-screen">
 
-<div id="splash-screen">
+        <img
+            src="../beelinx_logo.png"
+            alt="Beelinx Logo"
+            class="splash-logo">
 
-    <img
-        src="../beelinx_logo.png"
-        alt="Beelinx Logo"
-        class="splash-logo">
+        <div class="loading-track">
+            <div id="loading-bar"></div>
+        </div>
 
-    <div class="loading-track">
-        <div id="loading-bar"></div>
     </div>
 
-</div>
+
+    <!-- =========================================
+         LOGIN / SIGN UP PAGE
+    ========================================= -->
 
     <main class="login-container">
 
@@ -294,9 +569,67 @@ body.loading {
         </a>
 
 
-        <!-- LOGIN FORM -->
+        <!-- LOG IN / SIGN UP SWITCH -->
 
-        <form class="login-form">
+        <div class="auth-tabs" role="tablist" aria-label="Account">
+
+            <button
+                type="button"
+                class="auth-tab active"
+                id="tab-login"
+                role="tab"
+                aria-selected="true"
+                data-mode="login">
+
+                Log in
+
+            </button>
+
+            <button
+                type="button"
+                class="auth-tab"
+                id="tab-signup"
+                role="tab"
+                aria-selected="false"
+                data-mode="signup">
+
+                Sign up
+
+            </button>
+
+        </div>
+
+
+        <!-- HEADING (only for "set new password" and "already logged in") -->
+
+        <h1 class="auth-heading" id="auth-heading" hidden></h1>
+
+
+        <!-- CONTINUE WITH GOOGLE -->
+
+        <button
+            type="button"
+            class="google-button"
+            id="google-button">
+
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+
+            <span>Continue with Google</span>
+
+        </button>
+
+
+        <div class="auth-divider" id="auth-divider">or</div>
+
+
+        <!-- FORM (used for both log in and sign up) -->
+
+        <form class="login-form" id="auth-form">
 
             <!-- EMAIL -->
 
@@ -312,38 +645,96 @@ body.loading {
 
             <!-- PASSWORD -->
 
+            <div class="password-field">
+
+                <input
+                    type="password"
+                    class="login-input"
+                    id="login-password"
+                    name="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required>
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    id="password-toggle"
+                    aria-label="Show password"
+                    aria-pressed="false">
+
+                    <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+
+                    <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.06-5.94"/>
+                        <path d="M9.9 4.24A10.9 10.9 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                        <path d="M14.12 14.12A3 3 0 1 1 9.88 9.88"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+
+                </button>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD (sign up only) -->
+
             <input
                 type="password"
                 class="login-input"
-                id="login-password"
-                name="password"
-                placeholder="Enter password"
-                autocomplete="current-password"
-                required>
+                id="login-confirm"
+                name="confirm"
+                placeholder="Confirm password"
+                autocomplete="new-password"
+                hidden
+                disabled>
 
 
-            <!-- FORGOT PASSWORD -->
+            <!-- FORGOT PASSWORD (log in only) -->
 
             <a
                 href="#"
-                class="forgot-password">
+                class="forgot-password"
+                id="forgot-password">
 
                 Forgot password?
 
             </a>
 
 
-            <!-- LOG IN BUTTON -->
+            <!-- MESSAGE AREA (errors and confirmations) -->
+
+            <p class="login-message" id="login-message" role="alert"></p>
+
+
+            <!-- MAIN BUTTON -->
 
             <button
                 type="submit"
-                class="login-button">
+                class="login-button"
+                id="submit-button">
 
                 Log In
 
             </button>
 
         </form>
+
+
+        <!-- ALREADY LOGGED IN -->
+
+        <div class="account-panel" id="account-panel" hidden>
+
+            <a href="index.html" class="login-button">Continue to Beelinx</a>
+
+            <button type="button" class="login-button secondary" id="logout-button">Log out</button>
+
+            <p class="login-message" id="account-message" role="status"></p>
+
+        </div>
 
     </main>
 
@@ -362,6 +753,377 @@ body.loading {
         }, 850);
 
     });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
+
+<script src="../js/auth.js"></script>
+
+<script>
+    /* =========================================
+       LOG IN / SIGN UP / GOOGLE / RESET PASSWORD / LOG OUT
+       Uses BeelinxAuth from ../js/auth.js
+    ========================================= */
+
+    (function () {
+
+        var HOME = "index.html";
+        var MIN_PASSWORD = 8;
+
+        var tabsBox = document.querySelector(".auth-tabs");
+        var tabs = document.querySelectorAll(".auth-tab");
+        var heading = document.getElementById("auth-heading");
+        var googleButton = document.getElementById("google-button");
+        var divider = document.getElementById("auth-divider");
+        var form = document.getElementById("auth-form");
+        var email = document.getElementById("login-email");
+        var password = document.getElementById("login-password");
+        var confirmInput = document.getElementById("login-confirm");
+        var forgot = document.getElementById("forgot-password");
+        var submitButton = document.getElementById("submit-button");
+        var message = document.getElementById("login-message");
+        var toggle = document.getElementById("password-toggle");
+        var accountPanel = document.getElementById("account-panel");
+        var accountMessage = document.getElementById("account-message");
+        var logoutButton = document.getElementById("logout-button");
+
+        var mode = "login";          // login | signup | reset | account
+        var busy = false;
+
+        var labels = {
+            login: "Log In",
+            signup: "Create account",
+            reset: "Update password"
+        };
+
+        var Auth = window.BeelinxAuth;
+
+
+        /* ---------- messages ---------- */
+
+        function say(text, kind) {
+            message.textContent = text || "";
+            message.className = "login-message" + (kind ? " is-" + kind : "");
+        }
+
+        function setBusy(value) {
+            busy = value;
+            submitButton.disabled = value;
+            googleButton.disabled = value;
+            if (value) {
+                submitButton.textContent = "Please wait...";
+            } else {
+                submitButton.textContent = labels[mode] || labels.login;
+            }
+        }
+
+
+        /* ---------- screen modes ---------- */
+
+        function setMode(newMode, headingText, subText) {
+
+            mode = newMode;
+
+            var isAccount = mode === "account";
+            var isReset = mode === "reset";
+            var isSignup = mode === "signup";
+            var isLogin = mode === "login";
+
+            tabs.forEach(function (tab) {
+                var active = tab.dataset.mode === mode;
+                tab.classList.toggle("active", active);
+                tab.setAttribute("aria-selected", String(active));
+            });
+
+            tabsBox.hidden = isAccount || isReset;
+            googleButton.hidden = isAccount || isReset;
+            divider.hidden = isAccount || isReset;
+            form.hidden = isAccount;
+            accountPanel.hidden = !isAccount;
+
+            heading.hidden = !(isAccount || isReset);
+            heading.textContent = headingText || "";
+            if (subText) {
+                var small = document.createElement("small");
+                small.textContent = subText;
+                heading.appendChild(small);
+            }
+
+            /* email is not needed when choosing a new password */
+            email.hidden = isReset;
+            email.disabled = isReset;
+            email.required = !isReset;
+
+            password.placeholder = isReset ? "New password" : "Enter password";
+            password.autocomplete = isLogin ? "current-password" : "new-password";
+            password.minLength = isLogin ? 0 : MIN_PASSWORD;
+
+            var needConfirm = isSignup || isReset;
+            confirmInput.hidden = !needConfirm;
+            confirmInput.disabled = !needConfirm;
+            confirmInput.required = needConfirm;
+            if (!needConfirm) confirmInput.value = "";
+
+            forgot.hidden = !isLogin;
+
+            if (labels[mode]) submitButton.textContent = labels[mode];
+
+            document.title = (isSignup ? "Sign Up" : "Log In") + " | Beelinx";
+
+            say("");
+            accountMessage.textContent = "";
+        }
+
+        function showAccount(user) {
+            setMode("account", "You're logged in", user && user.email ? user.email : "");
+        }
+
+        function goHome() {
+            window.location.replace(HOME);
+        }
+
+
+        /* ---------- tabs ---------- */
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener("click", function () {
+                if (busy) return;
+                setMode(tab.dataset.mode);
+            });
+        });
+
+        /* login.html?mode=signup opens straight on sign up */
+        if (new URLSearchParams(window.location.search).get("mode") === "signup") {
+            setMode("signup");
+        }
+
+
+        /* ---------- show / hide password ---------- */
+
+        toggle.addEventListener("click", function () {
+
+            var show = password.type === "password";
+
+            password.type = show ? "text" : "password";
+            confirmInput.type = show ? "text" : "password";
+
+            toggle.setAttribute("aria-pressed", String(show));
+            toggle.setAttribute("aria-label", show ? "Hide password" : "Show password");
+
+        });
+
+
+        /* ---------- submit (log in / sign up / new password) ---------- */
+
+        form.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            if (busy) return;
+
+            if (!Auth) {
+                say("Login is unavailable right now. Please try again later.", "error");
+                return;
+            }
+
+            var emailValue = email.value.trim();
+            var passwordValue = password.value;
+
+            if (mode !== "login") {
+                if (passwordValue.length < MIN_PASSWORD) {
+                    say("Password must be at least " + MIN_PASSWORD + " characters.", "error");
+                    return;
+                }
+                if (passwordValue !== confirmInput.value) {
+                    say("Passwords do not match.", "error");
+                    return;
+                }
+            }
+
+            say("");
+            setBusy(true);
+
+            try {
+
+                if (mode === "login") {
+
+                    var login = await Auth.signIn(emailValue, passwordValue);
+
+                    if (login.error) { say(login.error, "error"); return; }
+
+                    goHome();
+
+                } else if (mode === "signup") {
+
+                    var signup = await Auth.signUp(emailValue, passwordValue);
+
+                    if (signup.error) { say(signup.error, "error"); return; }
+
+                    if (signup.loggedIn) { goHome(); return; }
+
+                    setMode("login");
+                    say("Account created. Check your email to confirm it, then log in.", "success");
+
+                } else if (mode === "reset") {
+
+                    var update = await Auth.updatePassword(passwordValue);
+
+                    if (update.error) { say(update.error, "error"); return; }
+
+                    say("Password updated. Taking you to Beelinx...", "success");
+                    setTimeout(goHome, 1200);
+
+                }
+
+            } catch (error) {
+
+                console.error("Beelinx login error:", error);
+                say("Something went wrong. Please try again.", "error");
+
+            } finally {
+
+                setBusy(false);
+
+            }
+
+        });
+
+
+        /* ---------- forgot password ---------- */
+
+        forgot.addEventListener("click", async function (event) {
+
+            event.preventDefault();
+
+            if (busy || !Auth) return;
+
+            var emailValue = email.value.trim();
+
+            if (!emailValue) {
+                say("Enter your email above first, then tap Forgot password.", "error");
+                email.focus();
+                return;
+            }
+
+            setBusy(true);
+
+            try {
+
+                var result = await Auth.sendPasswordReset(emailValue);
+
+                if (result.error) {
+                    say(result.error, "error");
+                } else {
+                    say("If an account exists for that email, a reset link is on its way.", "success");
+                }
+
+            } finally {
+
+                setBusy(false);
+
+            }
+
+        });
+
+
+        /* ---------- continue with Google ---------- */
+
+        googleButton.addEventListener("click", async function () {
+
+            if (busy) return;
+
+            if (!Auth) {
+                say("Login is unavailable right now. Please try again later.", "error");
+                return;
+            }
+
+            say("");
+            setBusy(true);
+
+            var result = await Auth.signInWithGoogle();
+
+            /* on success the browser leaves for Google; only errors come back */
+            if (result.error) {
+                say(result.error, "error");
+                setBusy(false);
+            }
+
+        });
+
+
+        /* ---------- log out ---------- */
+
+        logoutButton.addEventListener("click", async function () {
+
+            if (!Auth) return;
+
+            logoutButton.disabled = true;
+
+            var result = await Auth.signOut();
+
+            logoutButton.disabled = false;
+
+            if (result.error) {
+                accountMessage.textContent = result.error;
+                accountMessage.className = "login-message is-error";
+                return;
+            }
+
+            setMode("login");
+            say("You've been logged out.", "success");
+
+        });
+
+
+        /* ---------- when the page opens ---------- */
+
+        if (!Auth) {
+            say("Login is unavailable right now. Please try again later.", "error");
+            return;
+        }
+
+        var url = window.location.href;
+
+        /* arrived from a Google / email link? */
+        var cameFromLink = /access_token=|[?&#]code=/.test(url);
+        var isRecoveryLink = /type=recovery/.test(url);
+        var linkError = /error_description=([^&]*)/.exec(url);
+
+        Auth.onChange(function (event) {
+            if (event === "PASSWORD_RECOVERY") {
+                setMode("reset", "Choose a new password");
+            }
+        });
+
+        (async function start() {
+
+            if (isRecoveryLink) {
+                setMode("reset", "Choose a new password");
+                return;
+            }
+
+            if (linkError) {
+                var reason = decodeURIComponent(linkError[1].replace(/\+/g, " "));
+                setMode("login");
+                say(/expired|invalid/i.test(reason)
+                    ? "That link has expired. Please try again."
+                    : reason, "error");
+                return;
+            }
+
+            var user = await Auth.getUser();
+
+            if (!user) return;
+
+            if (cameFromLink) {
+                goHome();
+            } else {
+                showAccount(user);
+            }
+
+        })();
+
+    })();
 </script>
 
 </body>

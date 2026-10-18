@@ -18,7 +18,19 @@
 
         <!-- WORDMARK (text, no image: change the font in the css, see --brand-font) -->
         <div class="nav-center">
+
+            <!-- computer only: hover or click to open the side bar (it pushes the page, it does not cover it) -->
+            <button type="button"
+                    id="railToggle"
+                    class="rail-toggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                    aria-controls="mainDock">
+                <i class="fas fa-angles-right"></i>
+            </button>
+
             <a href="index.html" class="logo-link wordmark">Beelinx</a>
+
         </div>
 
         <!-- SEARCH -->
@@ -43,12 +55,14 @@
          NAVIGATION (replaces the old side menu)
          Phone: flat full-width bar at the bottom. It shrinks to a small
          pill while you scroll down; tap the pill (or scroll up) to bring it back.
-         Computer: the same icons stacked in a slim bar on the left.
+         Computer: the same icons stacked in a slim bar on the left. It is
+         hidden until you hover or click the arrow next to "Beelinx" and
+         it pushes the page across instead of covering it.
          data-label is the little tooltip on desktop,
          aria-label is for screen readers.
     ========================================= -->
 
-    <nav class="dock" aria-label="Main">
+    <nav class="dock" id="mainDock" aria-label="Main">
 
         <a href="index.html"
            class="dock-link"
@@ -84,6 +98,14 @@
            aria-label="Login">
             <i class="fas fa-user"></i>
         </a>
+
+        <!-- shown only when the bar has shrunk (scrolling down on a phone); tap it to bring the bar back -->
+        <button type="button"
+                class="dock-grip"
+                aria-label="Show menu"
+                tabindex="-1">
+            <i class="fas fa-ellipsis"></i>
+        </button>
 
     </nav>
 

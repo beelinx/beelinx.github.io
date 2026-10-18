@@ -2,117 +2,258 @@
    BEELINX ENGAGEMENT
    Likes, My List (saved products) and comments.
 
-   FRONTEND-ONLY STAND-IN
-   Everything is stored in this browser's localStorage,
-   so it is private to one browser and one device.
-   Nobody else can see your likes or comments yet.
+   Stored in Supabase and tied to the logged-in
+   account, so they follow a person to any phone or
+   computer. Needs an account: logged-out visitors
+   are sent to the login page and brought back.
 
-   BACKEND SWAP POINT
-   Only the functions in the "DATA LAYER" section below
-   touch storage. When the Supabase backend is ready,
-   replace the bodies of those functions with database
-   calls. They already return Promises, so the rest of
-   this file and the pages do not need to change.
+   Needs these scripts loaded BEFORE this file:
+     supabase library, ../js/auth.js, ../js/data.js
+   and the tables from engagement-setup.sql.
 ========================================= */
 
 (function () {
     "use strict";
 
-    const KEY_LIKES = "beelinx:likes";
-    const KEY_SAVED = "beelinx:saved";
-    const KEY_COMMENTS = "beelinx:comments";
     const MAX_COMMENT_LENGTH = 300;
+
+    const Auth = window.BeelinxAuth || null;
+    const db = Auth ? Auth.client : null;
+
+    if (!Auth) {
+        console.error("Beelinx: auth.js did not load, so likes, saves and comments are unavailable.");
+    }
 
 
     /* =========================================
-       DATA LAYER (replace with backend later)
+       WHO IS LOGGED IN + THEIR LIKES AND SAVES
+       Loaded once, then kept in memory so the
+       buttons on every product card are instant.
     ========================================= */
 
-    function read(key, fallback) {
-        try {
-            const raw = localStorage.getItem(key);
-            return raw ? JSON.parse(raw) : fallback;
-        } catch (error) {
-            return fallback;
-        }
-    }
-
-    function write(key, value) {
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-        } catch (error) {
-            console.warn("Beelinx: could not save to browser storage.", error);
-        }
-    }
+    let userId = null;
+    let username = null;
+    let liked = new Set();
+    let saved = [];                 /* newest first */
+    const likeCounts = {};          /* productId -> total likes */
+    const pending = new Set();      /* stops double taps */
 
     function notify() {
         document.dispatchEvent(new CustomEvent("beelinx:change"));
     }
 
+    async function loadState() {
+        userId = null;
+        username = null;
+        liked = new Set();
+        saved = [];
+
+        if (!Auth) return;
+
+        try {
+            const user = await Auth.getUser();
+            if (!user) return;
+
+            userId = user.id;
+
+            const [likesResult, savesResult, profile] = await Promise.all([
+                db.from("likes").select("product_id").eq("user_id", userId),
+                db.from("saves").select("product_id").eq("user_id", userId)
+                    .order("created_at", { ascending: false }),
+                Auth.getProfile()
+            ]);
+
+            if (likesResult.error) console.warn("Beelinx: could not load likes.", likesResult.error);
+            if (savesResult.error) console.warn("Beelinx: could not load saved list.", savesResult.error);
+
+            liked = new Set((likesResult.data || []).map(row => row.product_id));
+            saved = (savesResult.data || []).map(row => row.product_id);
+            username = profile ? profile.username : null;
+        } catch (error) {
+            console.warn("Beelinx: could not load your account data.", error);
+        }
+    }
+
+    let ready = loadState().then(notify);
+
+    /* log in / log out: reload everything */
+    if (Auth) {
+        Auth.onChange(function (event) {
+            if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+                /* deferred: auth callbacks must not call Supabase directly */
+                setTimeout(function () {
+                    ready = loadState().then(notify);
+                }, 0);
+            }
+        });
+    }
+
+    /* send logged-out visitors to log in, then bring them back here */
+    function goToLogin() {
+        const here = (window.location.pathname.split("/").pop() || "index.html") + window.location.search;
+        window.location.href = "login.html?next=" + encodeURIComponent(here);
+    }
+
+
+    /* =========================================
+       DATA LAYER (Supabase)
+    ========================================= */
+
     async function isLiked(productId) {
-        return read(KEY_LIKES, []).includes(productId);
+        await ready;
+        return liked.has(productId);
     }
 
     async function getLikeCount(productId) {
-        /* Local stand-in: only this browser's own like counts. */
-        return read(KEY_LIKES, []).includes(productId) ? 1 : 0;
+        if (productId in likeCounts) return likeCounts[productId];
+        if (!db) return 0;
+
+        const { data, error } = await db
+            .from("like_counts")
+            .select("like_count")
+            .eq("product_id", productId)
+            .maybeSingle();
+
+        const count = error || !data ? 0 : data.like_count;
+        likeCounts[productId] = count;
+        return count;
     }
 
     async function toggleLike(productId) {
-        let likes = read(KEY_LIKES, []);
-        likes = likes.includes(productId)
-            ? likes.filter(id => id !== productId)
-            : [...likes, productId];
-        write(KEY_LIKES, likes);
+        await ready;
+
+        if (!userId) { goToLogin(); return false; }
+        if (pending.has("like:" + productId)) return liked.has(productId);
+        pending.add("like:" + productId);
+
+        const wasLiked = liked.has(productId);
+        const oldCount = await getLikeCount(productId);
+
+        /* update the screen first, then save */
+        if (wasLiked) {
+            liked.delete(productId);
+            likeCounts[productId] = Math.max(0, oldCount - 1);
+        } else {
+            liked.add(productId);
+            likeCounts[productId] = oldCount + 1;
+        }
         notify();
-        return likes.includes(productId);
+
+        const result = wasLiked
+            ? await db.from("likes").delete().eq("user_id", userId).eq("product_id", productId)
+            : await db.from("likes").insert({ user_id: userId, product_id: productId });
+
+        /* 23505 = already liked, which is fine */
+        if (result.error && result.error.code !== "23505") {
+            console.warn("Beelinx: could not save your like.", result.error);
+            if (wasLiked) liked.add(productId); else liked.delete(productId);
+            likeCounts[productId] = oldCount;
+            notify();
+        }
+
+        pending.delete("like:" + productId);
+        return liked.has(productId);
     }
 
     async function isSaved(productId) {
-        return read(KEY_SAVED, []).includes(productId);
+        await ready;
+        return saved.includes(productId);
     }
 
     async function getSavedIds() {
         /* Newest saved first. */
-        return read(KEY_SAVED, []);
+        await ready;
+        return saved.slice();
     }
 
     async function toggleSave(productId) {
-        let saved = read(KEY_SAVED, []);
-        saved = saved.includes(productId)
+        await ready;
+
+        if (!userId) { goToLogin(); return false; }
+        if (pending.has("save:" + productId)) return saved.includes(productId);
+        pending.add("save:" + productId);
+
+        const wasSaved = saved.includes(productId);
+        const oldList = saved.slice();
+
+        saved = wasSaved
             ? saved.filter(id => id !== productId)
             : [productId, ...saved];
-        write(KEY_SAVED, saved);
         notify();
+
+        const result = wasSaved
+            ? await db.from("saves").delete().eq("user_id", userId).eq("product_id", productId)
+            : await db.from("saves").insert({ user_id: userId, product_id: productId });
+
+        if (result.error && result.error.code !== "23505") {
+            console.warn("Beelinx: could not save to your list.", result.error);
+            saved = oldList;
+            notify();
+        }
+
+        pending.delete("save:" + productId);
         return saved.includes(productId);
     }
 
     async function getComments(productId) {
-        const all = read(KEY_COMMENTS, {});
-        return all[productId] || [];
+        if (!db) return [];
+
+        const { data, error } = await db
+            .from("comments_public")
+            .select("id, user_id, username, body, created_at")
+            .eq("product_id", productId)
+            .order("created_at", { ascending: true });
+
+        if (error) {
+            console.warn("Beelinx: could not load comments.", error);
+            return [];
+        }
+
+        return (data || []).map(function (row) {
+            return {
+                id: row.id,
+                userId: row.user_id,
+                author: row.username,
+                text: row.body,
+                time: new Date(row.created_at).getTime()
+            };
+        });
     }
 
     async function addComment(productId, text) {
         const clean = String(text || "").trim().slice(0, MAX_COMMENT_LENGTH);
         if (!clean) return null;
 
-        const all = read(KEY_COMMENTS, {});
-        const comment = {
-            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-            author: "Guest",
-            text: clean,
-            time: Date.now()
-        };
-        all[productId] = [...(all[productId] || []), comment];
-        write(KEY_COMMENTS, all);
+        await ready;
+
+        /* needs an account, and the account needs a username */
+        if (!userId || !username) { goToLogin(); return null; }
+
+        const { error } = await db
+            .from("comments")
+            .insert({ user_id: userId, product_id: productId, body: clean });
+
+        if (error) {
+            console.warn("Beelinx: could not post your comment.", error);
+            return null;
+        }
+
         notify();
-        return comment;
+        return { text: clean };
     }
 
     async function deleteComment(productId, commentId) {
-        const all = read(KEY_COMMENTS, {});
-        all[productId] = (all[productId] || []).filter(c => c.id !== commentId);
-        write(KEY_COMMENTS, all);
+        await ready;
+        if (!userId) return;
+
+        const { error } = await db
+            .from("comments")
+            .delete()
+            .eq("id", commentId)
+            .eq("user_id", userId);
+
+        if (error) console.warn("Beelinx: could not delete your comment.", error);
+
         notify();
     }
 
@@ -150,12 +291,12 @@
     ========================================= */
 
     async function syncSaveButton(button) {
-        const saved = await isSaved(button.dataset.id);
-        button.classList.toggle("is-saved", saved);
-        button.setAttribute("aria-pressed", String(saved));
-        button.setAttribute("aria-label", saved ? "Remove from My List" : "Save to My List");
-        button.title = saved ? "Remove from My List" : "Save to My List";
-        setIcon(button, saved, "bookmark");
+        const savedNow = await isSaved(button.dataset.id);
+        button.classList.toggle("is-saved", savedNow);
+        button.setAttribute("aria-pressed", String(savedNow));
+        button.setAttribute("aria-label", savedNow ? "Remove from My List" : "Save to My List");
+        button.title = savedNow ? "Remove from My List" : "Save to My List";
+        setIcon(button, savedNow, "bookmark");
     }
 
     function createSaveButton(productId) {
@@ -199,24 +340,33 @@
         const commentInput = document.getElementById("comment-input");
 
         async function renderActions() {
-            const liked = await isLiked(productId);
+            await ready;
+
+            const likedNow = await isLiked(productId);
             const count = await getLikeCount(productId);
-            likeButton.classList.toggle("is-active", liked);
-            likeButton.setAttribute("aria-pressed", String(liked));
-            setIcon(likeButton, liked, "heart");
+            likeButton.classList.toggle("is-active", likedNow);
+            likeButton.setAttribute("aria-pressed", String(likedNow));
+            setIcon(likeButton, likedNow, "heart");
             if (likeCount) likeCount.textContent = count > 0 ? count : "";
 
             if (saveButton) {
-                const saved = await isSaved(productId);
-                saveButton.classList.toggle("is-active", saved);
-                saveButton.setAttribute("aria-pressed", String(saved));
-                setIcon(saveButton, saved, "bookmark");
-                if (saveLabel) saveLabel.textContent = saved ? "Saved" : "Save to My List";
+                const savedNow = await isSaved(productId);
+                saveButton.classList.toggle("is-active", savedNow);
+                saveButton.setAttribute("aria-pressed", String(savedNow));
+                setIcon(saveButton, savedNow, "bookmark");
+                if (saveLabel) saveLabel.textContent = savedNow ? "Saved" : "Save to My List";
+            }
+
+            if (commentInput) {
+                commentInput.placeholder = !userId
+                    ? "Log in to add a comment"
+                    : (!username ? "Choose a username to comment" : "Add a comment");
             }
         }
 
         async function renderComments() {
             if (!commentsList) return;
+            await ready;
             const items = await getComments(productId);
 
             if (commentsCount) commentsCount.textContent = items.length ? "(" + items.length + ")" : "";
@@ -236,7 +386,7 @@
 
                 const avatar = document.createElement("div");
                 avatar.className = "comment-avatar";
-                avatar.textContent = (item.author || "G").charAt(0).toUpperCase();
+                avatar.textContent = (item.author || "?").charAt(0).toUpperCase();
 
                 const body = document.createElement("div");
                 body.className = "comment-body";
@@ -245,7 +395,7 @@
                 meta.className = "comment-meta";
 
                 const author = document.createElement("strong");
-                author.textContent = item.author || "Guest";
+                author.textContent = item.author || "user";
 
                 const time = document.createElement("span");
                 time.textContent = timeAgo(item.time);
@@ -256,15 +406,20 @@
                 text.className = "comment-text";
                 text.textContent = item.text;
 
-                const remove = document.createElement("button");
-                remove.type = "button";
-                remove.className = "comment-delete";
-                remove.textContent = "Delete";
-                remove.addEventListener("click", function () {
-                    deleteComment(productId, item.id);
-                });
+                body.append(meta, text);
 
-                body.append(meta, text, remove);
+                /* only the person who wrote it can delete it */
+                if (userId && item.userId === userId) {
+                    const remove = document.createElement("button");
+                    remove.type = "button";
+                    remove.className = "comment-delete";
+                    remove.textContent = "Delete";
+                    remove.addEventListener("click", function () {
+                        deleteComment(productId, item.id);
+                    });
+                    body.appendChild(remove);
+                }
+
                 row.append(avatar, body);
                 commentsList.appendChild(row);
             });
@@ -275,10 +430,27 @@
 
         if (commentForm && commentInput) {
             commentInput.maxLength = MAX_COMMENT_LENGTH;
+
+            const status = document.createElement("p");
+            status.className = "comments-empty";
+            status.hidden = true;
+            commentForm.insertAdjacentElement("afterend", status);
+
             commentForm.addEventListener("submit", async function (event) {
                 event.preventDefault();
-                const posted = await addComment(productId, commentInput.value);
-                if (posted) commentInput.value = "";
+                status.hidden = true;
+
+                const text = commentInput.value;
+                if (!text.trim()) return;
+
+                const posted = await addComment(productId, text);
+
+                if (posted) {
+                    commentInput.value = "";
+                } else if (userId && username) {
+                    status.textContent = "Could not post your comment. Please try again.";
+                    status.hidden = false;
+                }
             });
         }
 
@@ -332,11 +504,17 @@
         return card;
     }
 
+    let emptyDefault = null;
+
     async function renderMyList() {
         const container = document.getElementById("my-list-container");
         if (!container) return;
 
         const empty = document.getElementById("my-list-empty");
+        if (empty && emptyDefault === null) emptyDefault = empty.innerHTML;
+
+        await ready;
+
         const ids = await getSavedIds();
         const available = typeof products !== "undefined" ? products : {};
         const validIds = ids.filter(id => available[id]);
@@ -344,14 +522,31 @@
         container.replaceChildren();
         validIds.forEach(id => container.appendChild(buildListCard(id, available[id])));
 
-        if (empty) empty.style.display = validIds.length ? "none" : "block";
+        if (empty) {
+            if (!userId) {
+                const link = document.createElement("a");
+                link.href = "login.html?next=my-list.html";
+                link.textContent = "Log in";
+                link.style.color = "inherit";
+                link.style.textDecoration = "underline";
+                empty.replaceChildren(
+                    document.createTextNode("Log in to see the products you saved."),
+                    document.createElement("br"),
+                    link
+                );
+            } else if (emptyDefault !== null) {
+                empty.innerHTML = emptyDefault;
+            }
+
+            empty.style.display = validIds.length ? "none" : "block";
+        }
     }
 
 
     /* =========================================
        KEEP EVERYTHING IN SYNC
        Runs after any like, save or comment change,
-       including changes made in another tab.
+       and after logging in or out.
     ========================================= */
 
     function refreshAll() {
@@ -359,11 +554,6 @@
     }
 
     document.addEventListener("beelinx:change", refreshAll);
-
-    window.addEventListener("storage", function (event) {
-        if (event.key && event.key.indexOf("beelinx:") === 0) notify();
-    });
-
     document.addEventListener("beelinx:change", renderMyList);
 
 
