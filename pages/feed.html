@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Feed | Beelinx</title>
+
+<meta name="description"
+      content="See what people on Beelinx are sharing: photos, style and thoughts.">
+
+<link rel="preconnect" href="https://zjzygjflcjqvouitblne.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</noscript>
+
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/social.css">
+
+</head>
+
+<body class="social-page">
+
+<!-- SHARED HEADER -->
+
+<header>
+    <div id="navbar-placeholder"></div>
+</header>
+
+
+<main class="sx-main sx-timeline">
+
+    <div class="sx-timeline-head">
+
+        <h1 class="sx-title">Feed</h1>
+
+        <div class="sx-tabs" role="tablist">
+            <button type="button" class="sx-tab active" role="tab" data-tab="all">For you</button>
+            <button type="button" class="sx-tab" role="tab" data-tab="following">Following</button>
+        </div>
+
+    </div>
+
+    <!-- write a post (built by feed.js) -->
+    <section id="sx-compose" class="sx-compose" aria-label="Write a post"></section>
+
+    <p id="sx-error" class="sx-note sx-pad" role="alert" hidden></p>
+
+    <p id="sx-empty" class="sx-note sx-pad" hidden></p>
+
+    <!-- posts are built here by feed.js -->
+    <div id="sx-feed" class="sx-timeline-list"></div>
+
+    <div class="sx-more">
+        <button id="sx-more" type="button" class="sx-pill sx-pill-ghost" hidden>Load more</button>
+    </div>
+
+</main>
+
+
+<!-- post / composer pop-up (filled by feed.js) -->
+<div id="sx-sheet" class="sx-sheet" role="dialog" aria-modal="true" hidden></div>
+
+
+<footer class="sx-footer">
+    <p>© 2026 Beelinx — Fashion Worth Discovering</p>
+</footer>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/social.js"></script>
+<script defer src="../js/feed.js"></script>
+<script defer src="../js/navbar.js"></script>
+
+</body>
+
+</html>

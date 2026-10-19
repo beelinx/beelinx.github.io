@@ -1,0 +1,936 @@
+/* =========================================================
+   BEELINX SOCIAL PAGES (search.html, feed.html)
+   Loaded after styles.css. White page, black pills, Syne type,
+   rounded tiles, same look as the profile page.
+========================================================= */
+
+:root {
+    --sx-gutter: clamp(16px, 4vw, 70px);
+    --sx-line: #e6e6e6;
+    --sx-grey: #8f8f8f;
+    --sx-soft: #f2f2f2;
+}
+
+[hidden] { display: none !important; }
+
+html.sx-lock,
+html.sx-lock body { overflow: hidden; }
+
+/* styles.css gives body its own overflow (overflow-x: hidden + overflow-y: auto), which
+   turns body into a scroll box and breaks position: sticky. The feed title + tabs were
+   pushed 54px down onto the post box and never stuck to the top. html already hides
+   sideways overflow for the whole page, so body does not need to. */
+body.social-page { overflow: visible; }
+
+.sx-main {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(26px, 4vw, 56px) var(--sx-gutter) 30px;
+}
+
+
+/* ---------- heading ---------- */
+
+.sx-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+}
+
+.sx-title {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: clamp(15px, 1.6vw, 20px);
+    font-weight: var(--weight-display, 800);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.sx-sub {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--sx-grey);
+}
+
+.sx-heading {
+    margin: 30px 0 6px;
+    padding: 0;
+    text-align: left;
+    font-size: 15px;
+    font-weight: var(--weight-display, 800);
+}
+
+.sx-note {
+    margin: 26px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: left;
+    color: var(--sx-grey);
+}
+
+.sx-problem { margin: 10px 0 0; color: #c0392b; }
+
+
+/* ---------- pills and small controls ---------- */
+
+.sx-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sx-pill:hover { background: #2a2a2a; }
+
+.sx-pill-ghost {
+    background: var(--sx-soft);
+    color: #000;
+    border-color: var(--sx-soft);
+}
+
+.sx-pill-ghost:hover { background: #e0e0e0; }
+
+.sx-pill-sm { padding: 9px 18px; font-size: 10px; }
+
+.sx-pill:disabled { opacity: 0.6; cursor: default; }
+
+.sx-link {
+    padding: 0;
+    background: none;
+    border: 0;
+    font: inherit;
+    font-size: 12px;
+    color: var(--sx-grey);
+    cursor: pointer;
+}
+
+.sx-link:hover { color: #000; text-decoration: underline; }
+.sx-danger:hover { color: #c0392b; }
+
+.sx-pill:focus-visible,
+.sx-link:focus-visible,
+.sx-stat:focus-visible,
+.sx-post-open:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+
+
+/* ---------- people avatars ---------- */
+
+.sx-avatar {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(circle at 35% 30%, #2a2a2a, #000 70%);
+    color: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.sx-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.sx-avatar.is-md { width: 36px; height: 36px; font-size: 14px; }
+.sx-avatar.is-sm { width: 26px; height: 26px; font-size: 11px; }
+
+
+/* =========================================================
+   PEOPLE SEARCH
+========================================================= */
+
+.sx-searchbar {
+    position: relative;
+    max-width: 640px;
+    margin: 24px 0 0;
+}
+
+.sx-searchbar input {
+    width: 100%;
+    height: 54px;
+    padding: 0 52px 0 52px;
+
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 16px;
+    color: #000;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    transition: border-color 0.2s ease;
+}
+
+.sx-searchbar input:focus { border-color: #000; }
+
+.sx-searchbar input::-webkit-search-cancel-button { display: none; }
+
+.sx-searchbar > i {
+    position: absolute;
+    left: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: var(--sx-grey);
+    pointer-events: none;
+}
+
+.sx-searchbar-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 38px;
+    height: 38px;
+
+    background: var(--sx-soft);
+    border: 0;
+    border-radius: 50%;
+    font-size: 13px;
+    color: #000;
+    cursor: pointer;
+}
+
+.sx-searchbar-clear:hover { background: #e0e0e0; }
+
+.sx-people {
+    max-width: 640px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sx-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--sx-line);
+}
+
+.sx-person-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.sx-person-link:hover strong { text-decoration: underline; }
+
+.sx-person-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+}
+
+.sx-person-text strong { font-size: 15px; font-weight: 800; }
+
+.sx-handle { font-size: 13px; color: var(--sx-grey); }
+
+.sx-bio {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #444;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sx-you { font-size: 12px; color: var(--sx-grey); }
+
+
+/* =========================================================
+   FEED (timeline, one column like Twitter)
+========================================================= */
+
+/* full width: the feed fills the screen, leaving only the side margin (--sx-gutter) */
+.sx-main.sx-timeline {
+    max-width: none;
+    padding: 0 var(--sx-gutter) 30px;
+}
+
+@media (min-width: 700px) {
+    .sx-main.sx-timeline {
+        min-height: calc(100vh - var(--nav-h));
+    }
+}
+
+/* photos keep a sensible size instead of stretching across a wide screen */
+.sx-timeline .sx-tweet-media { max-width: 720px; }
+
+.sx-pad { padding: 0 18px; }
+
+/* title + tabs stay under the top bar while you scroll */
+.sx-timeline-head {
+    position: sticky;
+    top: calc(var(--nav-h) - 10px);
+    z-index: 20;
+
+    background: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--sx-line);
+}
+
+.sx-timeline-head .sx-title { padding: 16px 18px 6px; }
+
+.sx-tabs { display: flex; }
+
+.sx-tab {
+    position: relative;
+    flex: 1;
+    padding: 14px 0 16px;
+
+    background: none;
+    border: 0;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--sx-grey);
+    cursor: pointer;
+
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.sx-tab:hover { background: #f7f7f7; color: #000; }
+.sx-tab.active { color: #000; }
+
+.sx-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 44px;
+    height: 3px;
+    background: #000;
+    border-radius: 3px;
+    transform: translateX(-50%);
+}
+
+.sx-tab:focus-visible { outline: 2px solid #000; outline-offset: -2px; }
+
+
+/* ---------- write a post ---------- */
+
+.sx-compose { border-bottom: 1px solid var(--sx-line); }
+
+.sx-compose-guest {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+}
+
+.sx-compose-guest p { margin: 0; font-size: 14px; color: var(--sx-grey); }
+
+.sx-compose-row {
+    display: flex;
+    gap: 12px;
+    padding: 16px 18px 12px;
+}
+
+.sx-compose-form { flex: 1; min-width: 0; }
+
+.sx-compose-text {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 0;
+
+    background: none;
+    border: 0;
+
+    font: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: #000;
+    resize: none;
+    outline: none;
+}
+
+.sx-compose-text::placeholder { color: var(--sx-grey); }
+
+.sx-compose-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--sx-line);
+}
+
+.sx-compose-spacer { flex: 1; }
+
+.sx-compose-icon {
+    width: 38px;
+    height: 38px;
+
+    background: none;
+    border: 0;
+    border-radius: 50%;
+
+    font-size: 17px;
+    color: #000;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.sx-compose-icon:hover { background: var(--sx-soft); }
+.sx-compose-icon:disabled { opacity: 0.5; cursor: default; }
+.sx-compose-icon:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+
+.sx-compose .sx-preview { margin: 8px 0 0; }
+.sx-compose .sx-problem { margin: 8px 0 0; }
+
+
+/* ---------- one post ---------- */
+
+.sx-tweet {
+    display: flex;
+    gap: 12px;
+    padding: 14px 18px;
+
+    border-bottom: 1px solid var(--sx-line);
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+.sx-tweet:hover { background: #fafafa; }
+
+.sx-tweet:focus-visible { outline: 2px solid #000; outline-offset: -2px; }
+
+.sx-tweet-avatar { flex-shrink: 0; text-decoration: none; }
+
+.sx-tweet-main { flex: 1; min-width: 0; }
+
+.sx-tweet-head {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    font-size: 14px;
+}
+
+.sx-tweet-name {
+    min-width: 0;
+    font-weight: 800;
+    color: #000;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sx-tweet-name:hover { text-decoration: underline; }
+
+.sx-tweet-handle,
+.sx-tweet-time {
+    flex-shrink: 0;
+    color: var(--sx-grey);
+    white-space: nowrap;
+}
+
+.sx-tweet-del {
+    flex-shrink: 0;
+    align-self: center;
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+
+    background: none;
+    border: 0;
+    border-radius: 50%;
+
+    font-size: 13px;
+    color: var(--sx-grey);
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sx-tweet-del:hover { background: var(--sx-soft); color: #c0392b; }
+
+.sx-tweet-body {
+    margin: 3px 0 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.sx-tweet-media {
+    margin-top: 10px;
+    border: 1px solid var(--sx-line);
+    border-radius: 16px;
+    background: var(--sx-soft);
+    overflow: hidden;
+}
+
+.sx-tweet-media img {
+    display: block;
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+}
+
+.sx-tweet-actions {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin: 6px 0 0 -6px;
+}
+
+.sx-post-archived {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 140px;
+    background: var(--sx-soft);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sx-grey);
+}
+
+.sx-post-archived i { font-size: 22px; }
+
+.sx-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+
+    background: none;
+    border: 0;
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 13px;
+    color: var(--sx-grey);
+}
+
+button.sx-stat { cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+
+button.sx-stat:hover { background: var(--sx-soft); color: #000; }
+
+.sx-stat.is-liked { color: #000; }
+
+.sx-stat:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+
+.sx-more { margin: 18px 0 0; text-align: center; }
+
+
+/* =========================================================
+   POP-UP SHEET (open post, new post)
+========================================================= */
+
+.sx-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.sx-sheet-panel {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+
+    width: min(1000px, 100%);
+    max-height: min(88vh, 860px);
+
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.sx-sheet-panel.is-narrow {
+    display: block;
+    width: min(520px, 100%);
+    padding: 26px;
+    overflow-y: auto;
+}
+
+.sx-sheet-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+
+    width: 38px;
+    height: 38px;
+
+    background: #fff;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    font-size: 14px;
+    color: #000;
+    cursor: pointer;
+}
+
+.sx-sheet-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    background: var(--sx-soft);
+    overflow: hidden;
+}
+
+.sx-sheet-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: min(88vh, 860px);
+    object-fit: contain;
+}
+
+.sx-sheet-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 22px 22px 18px;
+}
+
+.sx-sheet-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.sx-sheet-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 44px;
+    color: #000;
+    text-decoration: none;
+}
+
+.sx-sheet-author span { display: flex; flex-direction: column; }
+.sx-sheet-author strong { font-size: 14px; }
+.sx-sheet-author small { font-size: 12px; color: var(--sx-grey); }
+.sx-sheet-author:hover strong { text-decoration: underline; }
+
+.sx-sheet-body {
+    margin: 16px 0 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.sx-sheet-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0 0;
+    padding: 12px 0;
+    border-top: 1px solid var(--sx-line);
+    border-bottom: 1px solid var(--sx-line);
+}
+
+.sx-sheet-actions .sx-stat { font-size: 13px; }
+.sx-sheet-actions .sx-link { margin-left: auto; }
+
+.sx-sheet-heading {
+    margin: 16px 0 10px;
+    padding: 0;
+    text-align: left;
+    font-size: 14px;
+    font-weight: var(--weight-display, 800);
+}
+
+.sx-sheet-panel.is-narrow .sx-sheet-heading { margin-top: 0; }
+
+
+/* ---------- comments ---------- */
+
+.sx-comments {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sx-comment {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.sx-comment-body { min-width: 0; flex: 1; }
+
+.sx-comment-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+    font-size: 12px;
+}
+
+.sx-comment-head a { font-weight: 700; color: #000; text-decoration: none; }
+.sx-comment-head a:hover { text-decoration: underline; }
+.sx-comment-head span { color: var(--sx-grey); }
+
+.sx-comment-text {
+    margin: 2px 0 0;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.sx-comment-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.sx-comment-form input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 18px;
+
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 16px;
+    outline: none;
+}
+
+.sx-comment-form input:focus { border-color: #000; }
+
+
+/* ---------- composer ---------- */
+
+.sx-textarea {
+    display: block;
+    width: 100%;
+    min-height: 110px;
+    padding: 14px 16px;
+
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 16px;
+
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+}
+
+.sx-textarea:focus { border-color: #000; }
+
+.sx-composer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.sx-counter { font-size: 12px; color: var(--sx-grey); }
+
+.sx-preview {
+    position: relative;
+    margin-top: 14px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--sx-soft);
+}
+
+.sx-preview img {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+}
+
+.sx-preview-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: #fff;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.sx-composer-actions { margin-top: 18px; text-align: right; }
+
+
+/* ---------- footer ---------- */
+
+.sx-footer p {
+    margin: 0;
+    padding: 30px 20px 40px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--sx-grey);
+}
+
+
+/* =========================================================
+   SMALL SCREENS
+========================================================= */
+
+@media (max-width: 760px) {
+
+    .sx-sheet {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .sx-sheet-panel {
+        display: block;
+        width: 100%;
+        max-height: 92vh;
+        overflow-y: auto;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .sx-sheet-panel.is-narrow {
+        width: 100%;
+        padding: 22px 18px 26px;
+    }
+
+    .sx-sheet-media { min-height: 0; }
+
+    .sx-sheet-media img { max-height: 60vh; }
+
+    .sx-sheet-scroll { overflow: visible; }
+
+    .sx-sheet-info { padding: 18px 18px 22px; }
+}
+
+@media (max-width: 600px) {
+
+    .sx-avatar { width: 44px; height: 44px; font-size: 16px; }
+
+    .sx-person { gap: 10px; }
+
+    .sx-searchbar input { height: 50px; }
+}
+
+
+/* ---------- people rows: message button next to Follow ---------- */
+
+.sx-person-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.sx-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+
+    background: var(--sx-soft);
+    border-radius: 50%;
+
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+
+    transition: background-color 0.2s ease;
+}
+
+.sx-icon-link:hover { background: #e0e0e0; }
+
+.sx-icon-link:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+
+
+/* ---------- an open post (sheet) in the timeline style ---------- */
+
+.sx-sheet-panel.is-narrow .sx-sheet-media {
+    min-height: 0;
+    margin-top: 14px;
+    border-radius: 16px;
+}
+
+.sx-sheet-panel.is-narrow .sx-sheet-media img {
+    max-height: 60vh;
+    object-fit: contain;
+}
+
+.sx-sheet-panel.is-narrow .sx-post-archived { min-height: 160px; }
+
+.sx-sheet-panel.is-narrow .sx-sheet-body { font-size: 17px; }
+
+.sx-sheet-time {
+    margin: 14px 0 0;
+    font-size: 12px;
+    color: var(--sx-grey);
+}
+
+.sx-sheet-panel.is-narrow .sx-sheet-actions { margin-top: 10px; }
+
+.sx-sheet-panel.is-narrow .sx-comment-form { margin: 14px 0 6px; }
+
+.sx-sheet-panel.is-narrow .sx-comments { margin-top: 8px; }

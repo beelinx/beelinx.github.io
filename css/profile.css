@@ -229,6 +229,14 @@
 
 .pill:disabled { opacity: 0.6; cursor: default; }
 
+/* round icon button (the chat icon next to Follow) */
+.pill.pill-icon {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    font-size: 15px;
+}
+
 .pill-dark { padding: 13px 26px; }
 
 
@@ -399,6 +407,20 @@
     border-radius: 20px;
 }
 
+/* a post whose picture was archived to save space */
+.post-archived {
+    padding: 40px 20px;
+
+    background: #f4f4f4;
+    border-radius: 20px;
+
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pf-grey);
+}
+
 .post-body {
     margin: 0;
     padding: 10px 4px 0;
@@ -482,6 +504,39 @@ a.person:hover::after { opacity: 1; }
 .profile-panel .products-container { margin: 0; }
 
 
+/* ---------- People tab: search box + list ---------- */
+
+.people-input {
+    display: block;
+    width: 100%;
+    max-width: 620px;
+    height: 46px;
+    padding: 0 20px;
+
+    background: #fff;
+    border: 1px solid #c9c9c9;
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 14px;
+    color: #000;
+}
+
+.people-input::placeholder { color: var(--pf-grey); }
+.people-input:focus { outline: none; border-color: #000; }
+
+.people-results { margin-top: 22px; }
+
+.people-label {
+    margin: 0 0 6px;
+
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pf-grey);
+}
+
+
 /* ---------- footer: just the copyright line ---------- */
 
 .profile-copyright {
@@ -563,6 +618,13 @@ a.person:hover::after { opacity: 1; }
     .profile-bio { font-size: clamp(8px, 2.2vw, 12px); margin-top: 6px; }
 
     .pill { padding: 0.9em 1.6em; font-size: clamp(8px, 2.1vw, 11px); }
+
+    .pill.pill-icon {
+        width: clamp(30px, 8.5vw, 40px);
+        height: clamp(30px, 8.5vw, 40px);
+        padding: 0;
+        font-size: clamp(11px, 3.2vw, 15px);
+    }
 
 }
 

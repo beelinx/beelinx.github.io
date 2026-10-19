@@ -21,8 +21,12 @@ Explore fashion from different brands and find what fits your style.">
 <title>Beelinx | Discover Brands. Discover Style.</title>
 
 
+<!-- Syne loads straight from the page so the splash text has its font right away -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap"
     rel="stylesheet">
 
 
@@ -65,11 +69,13 @@ Explore fashion from different brands and find what fits your style.">
     pointer-events: none;
 }
 
-#beelinx-splash img {
-    width: 300px;
-    max-width: 55vw;
-    height: 100px;
-    object-fit: contain;
+#beelinx-splash .splash-text {
+    font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 800;
+    font-size: clamp(30px, 9vw, 46px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff;
     opacity: 0;
     animation: beelinxLogoFade 1.7s ease forwards;
 }
@@ -114,8 +120,8 @@ Explore fashion from different brands and find what fits your style.">
 <body>
 
     
-<div id="beelinx-splash">
-    <img src="../beelinx_bee.png" alt="Beelinx">
+<div id="beelinx-splash" role="img" aria-label="Beelinx">
+    <span class="splash-text" aria-hidden="true">BEELINX</span>
 </div>
 
 

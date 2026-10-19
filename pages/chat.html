@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Chat | Beelinx</title>
+
+<meta name="description"
+      content="Message people on Beelinx.">
+
+<link rel="preconnect" href="https://zjzygjflcjqvouitblne.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</noscript>
+
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/social.css">
+<link rel="stylesheet" href="../css/chat.css">
+
+</head>
+
+<body class="social-page cx-page">
+
+<!-- SHARED HEADER -->
+
+<header>
+    <div id="navbar-placeholder"></div>
+</header>
+
+
+<main class="cx-main">
+
+    <!-- shown when nobody is logged in -->
+    <section id="cx-login" class="cx-login" hidden>
+        <h1 class="sx-title">Chat</h1>
+        <p class="sx-note">Log in to message people on Beelinx.</p>
+        <a id="cx-login-link" class="sx-pill" href="login.html?next=chat.html">Log in</a>
+    </section>
+
+
+    <div id="cx-shell" class="cx-shell">
+
+        <!-- LEFT: conversations / find someone -->
+        <aside class="cx-list-pane">
+
+            <div class="cx-list-head">
+                <h1 class="sx-title">Chat</h1>
+            </div>
+
+            <form class="cx-find" role="search" autocomplete="off">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input id="cx-find"
+                       type="search"
+                       placeholder="Find someone to message"
+                       aria-label="Find someone to message"
+                       autocapitalize="none"
+                       spellcheck="false"
+                       maxlength="40">
+            </form>
+
+            <ul id="cx-convos" class="cx-convos"></ul>
+
+            <p id="cx-list-note" class="sx-note cx-list-note" hidden></p>
+
+        </aside>
+
+
+        <!-- RIGHT: the open conversation -->
+        <section class="cx-thread-pane">
+
+            <div id="cx-empty" class="cx-empty">
+                <i class="far fa-comment-dots" aria-hidden="true"></i>
+                <p>Pick a conversation, or find someone to message.</p>
+                <small>Chats are saved on this device only.</small>
+            </div>
+
+            <div id="cx-thread" class="cx-thread" hidden>
+
+                <header class="cx-thread-head">
+
+                    <button id="cx-back" type="button" class="cx-icon cx-back" aria-label="Back to chats">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+
+                    <a id="cx-peer" class="cx-peer" href="profile.html">
+                        <span id="cx-peer-avatar"></span>
+                        <span class="cx-peer-text">
+                            <strong id="cx-peer-name"></strong>
+                            <small id="cx-peer-handle"></small>
+                        </span>
+                    </a>
+
+                    <button id="cx-clear" type="button" class="cx-icon" aria-label="Clear this chat from this device" title="Clear this chat from this device">
+                        <i class="far fa-trash-can"></i>
+                    </button>
+
+                </header>
+
+                <div id="cx-messages" class="cx-messages" aria-live="polite"></div>
+
+                <form id="cx-form" class="cx-form">
+
+                    <textarea id="cx-input"
+                              rows="1"
+                              maxlength="1000"
+                              placeholder="Message"
+                              aria-label="Message"></textarea>
+
+                    <button type="submit" class="cx-send" aria-label="Send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/social.js"></script>
+<script defer src="../js/chat.js"></script>
+<script defer src="../js/navbar.js"></script>
+
+</body>
+
+</html>

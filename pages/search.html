@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>People | Beelinx</title>
+
+<meta name="description"
+      content="Find people on Beelinx by username or name and follow them.">
+
+<link rel="preconnect" href="https://zjzygjflcjqvouitblne.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</noscript>
+
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/social.css">
+
+</head>
+
+<body class="social-page">
+
+<!-- SHARED HEADER -->
+
+<header>
+    <div id="navbar-placeholder"></div>
+</header>
+
+
+<main class="sx-main">
+
+    <section class="sx-head">
+
+        <div>
+            <h1 class="sx-title">People</h1>
+            <p class="sx-sub">Find accounts by username or name</p>
+        </div>
+
+    </section>
+
+    <form class="sx-searchbar" role="search" autocomplete="off">
+
+        <i class="fas fa-search" aria-hidden="true"></i>
+
+        <input id="sx-q"
+               type="search"
+               placeholder="Search people"
+               aria-label="Search people"
+               autocapitalize="none"
+               spellcheck="false"
+               maxlength="40">
+
+        <button id="sx-clear" type="button" class="sx-searchbar-clear" aria-label="Clear" hidden>
+            <i class="fas fa-xmark"></i>
+        </button>
+
+    </form>
+
+    <h2 id="sx-heading" class="sx-heading"></h2>
+
+    <p id="sx-note" class="sx-note" role="status" hidden></p>
+
+    <!-- results are built here by search.js -->
+    <ul id="sx-results" class="sx-people"></ul>
+
+</main>
+
+
+<footer class="sx-footer">
+    <p>© 2026 Beelinx — Fashion Worth Discovering</p>
+</footer>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/social.js"></script>
+<script defer src="../js/search.js"></script>
+<script defer src="../js/navbar.js"></script>
+
+</body>
+
+</html>

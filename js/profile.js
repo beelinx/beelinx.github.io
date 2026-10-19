@@ -27,6 +27,7 @@
         kicker: $("profile-kicker"),
         bio: $("profile-bio"),
         follow: $("follow-btn"),
+        message: $("message-btn"),
         logout: $("logout-btn"),
         countPosts: $("count-posts"),
         countFollowers: $("count-followers"),
@@ -36,6 +37,7 @@
         usernameMessage: $("username-message"),
         tabs: document.querySelectorAll(".profile-tabs .tab"),
         listsTab: $("tab-lists"),
+        peopleTab: $("tab-people"),
         panel: $("profile-panel")
     };
 
@@ -84,6 +86,7 @@
 
         ui.login.hidden = !isGuest;
         ui.follow.hidden = true;
+        ui.message.hidden = true;
         ui.logout.hidden = true;
         document.title = (title || "Profile") + " | Beelinx";
     }
@@ -158,7 +161,7 @@
     function fetchPosts(userId) {
         return db
             .from("posts")
-            .select("id, body, image_url, created_at")
+            .select("id, body, image_url, media_archived, created_at")
             .eq("user_id", userId)
             .order("created_at", { ascending: false })
             .limit(50);
@@ -184,7 +187,7 @@
     /* ---------- tabs ---------- */
 
     function selectTab(name) {
-        if (name === "lists" && !isOwn) name = "posts";
+        if ((name === "lists" || name === "people") && !isOwn) name = "posts";
         activeTab = name;
 
         ui.tabs.forEach(function (tab) {
@@ -225,6 +228,7 @@
             if (tab === "posts") content = await buildPosts();
             else if (tab === "followers") content = await buildPeople("follower_id", "following_id");
             else if (tab === "following") content = await buildPeople("following_id", "follower_id");
+            else if (tab === "people") content = buildPeopleSearch();
             else content = await buildList();
         } catch (error) {
             console.warn("Beelinx: could not load this tab.", error);
@@ -263,7 +267,7 @@
         var wrap = el("div", "post-list");
 
         rows.forEach(function (row) {
-            var post = el("article", "post-card" + (row.image_url ? "" : " is-text"));
+            var post = el("article", "post-card" + (row.image_url || row.media_archived ? "" : " is-text"));
 
             if (row.image_url) {
                 var image = document.createElement("img");
@@ -272,6 +276,11 @@
                 image.alt = "Post photo";
                 image.loading = "lazy";
                 post.appendChild(image);
+            }
+
+            /* the picture was removed from the feed to save space */
+            if (!row.image_url && row.media_archived) {
+                post.appendChild(el("div", "post-archived", "Media archived"));
             }
 
             if (row.body) post.appendChild(el("p", "post-body", row.body));
@@ -324,6 +333,102 @@
         });
 
         return wrap;
+    }
+
+    /* one row in a people list (same look as followers / following) */
+    function personRow(name, role) {
+        var item = name ? el("a", "person") : el("div", "person");
+        if (name) item.href = profileHref(name);
+
+        item.appendChild(el("span", "person-avatar", (name || "?").charAt(0).toUpperCase()));
+        item.appendChild(el("span", "person-name", name ? "@" + name : "Unnamed user"));
+        item.appendChild(el("span", "person-type", TYPE_LABELS[role] || ""));
+        return item;
+    }
+
+    /* People tab: find other members by username.
+       With nothing typed it shows the newest members. */
+    function buildPeopleSearch() {
+        var box = el("div", "people-search");
+
+        var input = document.createElement("input");
+        input.type = "search";
+        input.className = "people-input";
+        input.placeholder = "Search people by username";
+        input.autocomplete = "off";
+        input.autocapitalize = "none";
+        input.spellcheck = false;
+        input.maxLength = 20;
+        input.setAttribute("aria-label", "Search people by username");
+
+        var results = el("div", "people-results");
+        box.append(input, results);
+
+        var timer = null;
+        var searchToken = 0;
+
+        async function run() {
+            var mine = ++searchToken;
+
+            /* usernames only contain letters, numbers and underscores */
+            var query = input.value.trim().replace(/[^A-Za-z0-9_]/g, "");
+
+            if (query) results.replaceChildren(note("Searching..."));
+
+            var request = db
+                .from("profiles")
+                .select("id, username, role, created_at")
+                .not("username", "is", null)
+                .order("created_at", { ascending: false })
+                .limit(30);
+
+            if (query) request = request.ilike("username", "%" + query + "%");
+            if (viewer) request = request.neq("id", viewer.id);
+
+            var result = await request;
+
+            /* a newer search started meanwhile: drop this answer */
+            if (mine !== searchToken) return;
+
+            if (result.error) {
+                console.warn("Beelinx: could not search people.", result.error);
+                results.replaceChildren(note("Search is unavailable right now. Please try again later."));
+                return;
+            }
+
+            var rows = result.data || [];
+
+            if (!rows.length) {
+                results.replaceChildren(note(query ? "No one found." : "No other members yet."));
+                return;
+            }
+
+            /* names that start with what was typed come first */
+            if (query) {
+                var lower = query.toLowerCase();
+                rows.sort(function (a, b) {
+                    var aStarts = a.username.toLowerCase().indexOf(lower) === 0 ? 0 : 1;
+                    var bStarts = b.username.toLowerCase().indexOf(lower) === 0 ? 0 : 1;
+                    return aStarts - bStarts || a.username.localeCompare(b.username);
+                });
+            }
+
+            var list = el("div", "people-list");
+            rows.forEach(function (row) { list.appendChild(personRow(row.username, row.role)); });
+
+            results.replaceChildren(
+                el("p", "people-label", query ? "Results" : "Newest members"),
+                list
+            );
+        }
+
+        input.addEventListener("input", function () {
+            clearTimeout(timer);
+            timer = setTimeout(run, 250);
+        });
+
+        run();
+        return box;
     }
 
     function money(price) {
@@ -529,7 +634,12 @@
         ui.login.hidden = true;
         ui.logout.hidden = !isOwn;
         ui.follow.hidden = isOwn;
+
+        /* the chat icon: opens a conversation with this person */
+        ui.message.hidden = isOwn || !name;
+        if (name) ui.message.href = "chat.html?with=" + encodeURIComponent(name);
         ui.listsTab.hidden = !isOwn;
+        ui.peopleTab.hidden = !isOwn;
         ui.usernameForm.hidden = !(isOwn && !name);
 
         if (counts) {

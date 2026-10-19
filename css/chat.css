@@ -1,0 +1,407 @@
+/* =========================================================
+   BEELINX CHAT (chat.html)
+   Loaded after styles.css and social.css.
+   Computer: chats on the left, conversation on the right.
+   Phone: one at a time (the list, then the conversation).
+========================================================= */
+
+/* the chat page fills the screen and scrolls inside its own panels */
+body.cx-page { overflow: hidden; }
+
+.cx-main {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 14px var(--sx-gutter);
+
+    height: calc(100vh - var(--nav-h) - var(--dock-space, 0px));
+    height: calc(100dvh - var(--nav-h) - var(--dock-space, 0px));
+}
+
+.cx-shell {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+
+    height: 100%;
+    background: #fff;
+    border: 1px solid var(--sx-line);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.cx-login {
+    padding-top: clamp(20px, 6vw, 70px);
+}
+
+.cx-login .sx-pill { margin-top: 6px; }
+
+
+/* ---------- left: chats ---------- */
+
+.cx-list-pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    border-right: 1px solid var(--sx-line);
+}
+
+.cx-list-head { padding: 22px 22px 0; }
+
+.cx-find {
+    position: relative;
+    margin: 16px 18px 10px;
+}
+
+.cx-find input {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px 0 44px;
+
+    background: var(--sx-soft);
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 16px;
+    color: #000;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cx-find input:focus { background: #fff; border-color: #000; }
+
+.cx-find input::-webkit-search-cancel-button { display: none; }
+
+.cx-find > i {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--sx-grey);
+    pointer-events: none;
+}
+
+.cx-convos {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0 8px 8px;
+    list-style: none;
+    overflow-y: auto;
+}
+
+.cx-list-note { margin: 18px 22px; }
+
+.cx-convo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+
+    background: none;
+    border: 0;
+    border-radius: 16px;
+
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.cx-convo:hover { background: #f7f7f7; }
+.cx-convo.is-active { background: var(--sx-soft); }
+
+.cx-convo:focus-visible { outline: 2px solid #000; outline-offset: -2px; }
+
+.cx-convo-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 2px;
+}
+
+.cx-convo-text strong { font-size: 14px; font-weight: 800; }
+
+.cx-convo-preview {
+    font-size: 13px;
+    color: var(--sx-grey);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cx-convo-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.cx-convo-side small { font-size: 11px; color: var(--sx-grey); }
+
+.cx-badge {
+    min-width: 20px;
+    padding: 2px 6px;
+    background: #000;
+    color: #fff;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+/* ---------- right: the conversation ---------- */
+
+.cx-thread-pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.cx-empty {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    text-align: center;
+    color: var(--sx-grey);
+}
+
+.cx-empty i { font-size: 34px; }
+.cx-empty p { margin: 0; font-size: 14px; }
+.cx-empty small { font-size: 12px; }
+
+.cx-thread {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.cx-thread[hidden] { display: none; }
+
+.cx-thread-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--sx-line);
+}
+
+.cx-peer {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 12px;
+    min-width: 0;
+    color: #000;
+    text-decoration: none;
+}
+
+.cx-peer-text { display: flex; flex-direction: column; min-width: 0; }
+
+.cx-peer-text strong {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cx-peer-text small { font-size: 12px; color: var(--sx-grey); }
+
+.cx-peer:hover strong { text-decoration: underline; }
+
+.cx-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+
+    background: none;
+    border: 0;
+    border-radius: 50%;
+
+    font-size: 15px;
+    color: #000;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.cx-icon:hover { background: var(--sx-soft); }
+
+.cx-icon:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+
+.cx-back { display: none; }
+
+
+/* ---------- messages ---------- */
+
+.cx-messages {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    padding: 18px;
+    overflow-y: auto;
+}
+
+.cx-hint {
+    margin: auto;
+    max-width: 300px;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--sx-grey);
+}
+
+.cx-day {
+    align-self: center;
+    margin: 12px 0 4px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--sx-grey);
+}
+
+.cx-msg {
+    max-width: min(78%, 520px);
+    padding: 10px 14px 8px;
+    border-radius: 18px;
+}
+
+.cx-msg.is-mine {
+    align-self: flex-end;
+    background: #000;
+    color: #fff;
+    border-bottom-right-radius: 6px;
+}
+
+.cx-msg.is-theirs {
+    align-self: flex-start;
+    background: var(--sx-soft);
+    color: #000;
+    border-bottom-left-radius: 6px;
+}
+
+.cx-text {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.cx-meta {
+    display: block;
+    margin-top: 4px;
+    font-size: 10.5px;
+    text-align: right;
+    opacity: 0.6;
+}
+
+.cx-msg.is-failed { cursor: pointer; }
+.cx-msg.is-failed .cx-meta { opacity: 1; color: #ff9a8f; }
+
+
+/* ---------- write a message ---------- */
+
+.cx-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--sx-line);
+}
+
+.cx-form textarea {
+    flex: 1;
+    min-width: 0;
+    max-height: 120px;
+    padding: 11px 16px;
+
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 22px;
+
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    resize: none;
+    outline: none;
+
+    transition: border-color 0.2s ease;
+}
+
+.cx-form textarea:focus { border-color: #000; }
+
+.cx-send {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+
+    background: #000;
+    border: 0;
+    border-radius: 50%;
+
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.cx-send:hover { background: #2a2a2a; }
+
+.cx-send:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+
+
+/* =========================================================
+   PHONES: one panel at a time
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .cx-main { padding: 0; }
+
+    .cx-shell {
+        grid-template-columns: 1fr;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .cx-list-pane { border-right: 0; }
+
+    .cx-thread-pane { display: none; }
+
+    .cx-shell.is-thread .cx-list-pane { display: none; }
+    .cx-shell.is-thread .cx-thread-pane { display: flex; }
+
+    .cx-back { display: inline-flex; align-items: center; justify-content: center; }
+
+    .cx-msg { max-width: 85%; }
+
+    /* inside a conversation the bottom bar steps aside so the message box is not covered */
+    html.cx-thread-open .dock { display: none; }
+
+    html.cx-thread-open .cx-main {
+        height: calc(100vh - var(--nav-h));
+        height: calc(100dvh - var(--nav-h));
+    }
+
+    .cx-form { padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
