@@ -1302,6 +1302,14 @@ body:has(.search-input.search-open) .search-container .search-btn {
     transform: scale(0.9);
 }
 
+/* custom feed icon (inline svg): solid like the Font Awesome icons, scales with the dock-link font-size, takes its color */
+.dock-svg {
+    width: 1.2em;
+    height: 1.2em;
+    display: block;
+    flex: 0 0 auto;
+}
+
 .dock-link:focus-visible,
 .dock-grip:focus-visible {
     outline: 2px solid #ffffff;

@@ -83,14 +83,31 @@
            class="dock-link"
            data-label="Catalogue"
            aria-label="Catalogue">
-            <i class="fas fa-book"></i>
+            <svg class="dock-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <!-- three books: spine + covers (thick stroke), pages (filled bar) -->
+                <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                      d="M20.1 2.5H7.8a2.4 2.4 0 0 0 0 4.8H18.9
+                         M20.6 9.6H5.8a2.4 2.4 0 0 0 0 4.8H19.4
+                         M20.1 16.7H7.8a2.4 2.4 0 0 0 0 4.8H18.9"/>
+                <path d="M7.8 3.9h9.8a1 1 0 0 1 0 2h-9.8a1 1 0 0 1 0-2z
+                         M5.8 11h12.3a1 1 0 0 1 0 2h-12.3a1 1 0 0 1 0-2z
+                         M7.8 18.1h9.8a1 1 0 0 1 0 2h-9.8a1 1 0 0 1 0-2z"/>
+            </svg>
         </a>
 
         <a href="feed.html"
            class="dock-link"
            data-label="Feed"
            aria-label="Feed">
-            <i class="fas fa-images"></i>
+            <svg class="dock-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <!-- top half: avatar + two text lines are cut out (see-through) -->
+                <path fill-rule="evenodd" d="M6 2h12a4 4 0 0 1 4 4v4.5H2V6a4 4 0 0 1 4-4z
+                    M6.6 4.7a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3z
+                    M10.6 4.8h6.8a.6.6 0 0 1 0 1.2h-6.8a.6.6 0 0 1 0-1.2z
+                    M10.6 6.7h6.8a.6.6 0 0 1 0 1.2h-6.8a.6.6 0 0 1 0-1.2z"/>
+                <!-- bottom half -->
+                <path d="M2 12h20v6a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/>
+            </svg>
         </a>
 
         <a href="chat.html"
