@@ -34,6 +34,9 @@
       href="../css/styles.css">
 
 <link rel="stylesheet"
+      href="../css/social.css">
+
+<link rel="stylesheet"
       href="../css/profile.css">
 
 </head>
@@ -163,7 +166,40 @@
 
     </div>
 
+    <!-- =========================================
+         POSTS: the same timeline as the feed page, for one person.
+         feed.js builds it; profile.js moves it into the Posts tab.
+    ========================================= -->
+
+    <div id="profile-feed" class="profile-feed" hidden>
+
+        <!-- your own page only: a small button that opens the write-a-post box -->
+        <div id="profile-post-row" class="profile-post-row" hidden>
+            <button id="profile-post-btn" type="button" class="pill pill-sm"
+                    aria-expanded="false" aria-controls="sx-compose">
+                <i class="fas fa-plus"></i> Post
+            </button>
+        </div>
+
+        <section id="sx-compose" class="sx-compose profile-compose" aria-label="Write a post" hidden></section>
+
+        <p id="sx-error" class="sx-note" role="alert" hidden></p>
+
+        <p id="sx-empty" class="sx-note" hidden></p>
+
+        <div id="sx-feed" class="sx-timeline-list"></div>
+
+        <div class="sx-more">
+            <button id="sx-more" type="button" class="sx-pill sx-pill-ghost" hidden>Load more</button>
+        </div>
+
+    </div>
+
 </main>
+
+
+<!-- a post opened with its comments (filled by feed.js) -->
+<div id="sx-sheet" class="sx-sheet" role="dialog" aria-modal="true" hidden></div>
 
 
 <p class="profile-copyright">
@@ -182,6 +218,8 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
 <script defer src="../js/auth.js"></script>
+<script defer src="../js/social.js"></script>
+<script defer src="../js/feed.js"></script>
 <script defer src="../js/profile.js"></script>
 <script defer src="../js/navbar.js"></script>
 

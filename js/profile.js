@@ -158,17 +158,16 @@
         return loadedScripts[src];
     }
 
-    function fetchPosts(userId) {
-        return db
-            .from("posts")
-            .select("id, body, image_url, media_archived, created_at")
-            .eq("user_id", userId)
-            .order("created_at", { ascending: false })
-            .limit(50);
-    }
+    /* posts use the feed's own timeline (feed.js + social.css), so the post
+       style, likes, comments and delete work exactly like on the feed page */
+    var feedBox = $("profile-feed");
+    var feedFor = null;         /* whose posts the timeline holds right now */
 
-    /* posts are requested at the same moment as the profile, not after it */
-    var postsRequest = null;
+    function startFeed(userId) {
+        if (!window.BeelinxFeed || feedFor === userId) return;
+        feedFor = userId;
+        window.BeelinxFeed.showUser(userId);
+    }
 
     function loadCounts(id) {
         return Promise.all([
@@ -247,49 +246,149 @@
         ui.panel.replaceChildren(content);
     }
 
+    /* the small Post button: opens the feed's write-a-post box right here */
+    var postRow = $("profile-post-row");
+    var postButton = $("profile-post-btn");
+    var composeBox = $("sx-compose");
+
+    function setComposer(open) {
+        if (!postButton || !composeBox) return;
+
+        composeBox.hidden = !open;
+        postButton.setAttribute("aria-expanded", String(open));
+        postButton.classList.toggle("pill-ghost", open);
+        postButton.innerHTML = open
+            ? '<i class="fas fa-xmark"></i> Close'
+            : '<i class="fas fa-plus"></i> Post';
+
+        if (open) {
+            var field = composeBox.querySelector("textarea");
+            if (field) field.focus();
+        }
+    }
+
+    if (postButton) {
+        postButton.addEventListener("click", function () {
+            setComposer(composeBox.hidden);
+        });
+    }
+
     async function buildPosts() {
-        var request = postsRequest && postsRequest.id === target.id
-            ? postsRequest.promise
-            : fetchPosts(target.id);
-        postsRequest = null;
-
-        var result = await request;
-
-        if (result.error) throw result.error;
-
-        var rows = result.data || [];
-        ui.countPosts.textContent = rows.length;
-
-        if (!rows.length) {
-            return note(isOwn ? "You haven't posted anything yet." : "No posts yet.");
+        if (!window.BeelinxFeed || !feedBox) {
+            return note("Posts are unavailable right now. Please try again later.");
         }
 
-        var wrap = el("div", "post-list");
+        startFeed(target.id);
 
-        rows.forEach(function (row) {
-            var post = el("article", "post-card" + (row.image_url || row.media_archived ? "" : " is-text"));
+        /* only on your own page */
+        if (postRow) postRow.hidden = !(isOwn && viewer);
+        if (!isOwn) setComposer(false);
 
-            if (row.image_url) {
-                var image = document.createElement("img");
-                image.className = "post-image";
-                image.src = row.image_url;
-                image.alt = "Post photo";
-                image.loading = "lazy";
-                post.appendChild(image);
+        feedBox.hidden = false;
+        return feedBox;
+    }
+
+    /* a new post: the count goes up and the box folds away */
+    document.addEventListener("beelinx:post-created", function () {
+        var now = parseInt(ui.countPosts.textContent, 10) || 0;
+        ui.countPosts.textContent = now + 1;
+        setComposer(false);
+    });
+
+    /* deleting a post from the timeline lowers the count at the top */
+    document.addEventListener("beelinx:post-deleted", function () {
+        var now = parseInt(ui.countPosts.textContent, 10) || 0;
+        ui.countPosts.textContent = Math.max(0, now - 1);
+    });
+
+    /* ---------- follow buttons inside people lists ---------- */
+
+    var followingRequest = null;    /* the ids the logged-in person follows (asked once) */
+    var followingIds = new Set();
+
+    function loadFollowing() {
+        if (!viewer) return Promise.resolve(followingIds);
+
+        if (!followingRequest) {
+            followingRequest = db
+                .from("follows")
+                .select("following_id")
+                .eq("follower_id", viewer.id)
+                .limit(1000)
+                .then(function (result) {
+                    followingIds = new Set((result.data || []).map(function (row) { return row.following_id; }));
+                    return followingIds;
+                });
+        }
+
+        return followingRequest;
+    }
+
+    function followButton(personId) {
+        var button = el("button", "person-follow");
+        button.type = "button";
+
+        function paint() {
+            var on = followingIds.has(personId);
+            button.textContent = on ? "Following" : "Follow";
+            button.classList.toggle("is-following", on);
+            button.setAttribute("aria-pressed", String(on));
+        }
+
+        paint();
+
+        button.addEventListener("click", async function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!viewer) { goToLogin(); return; }
+            if (button.disabled) return;
+
+            button.disabled = true;
+            await loadFollowing();
+
+            var was = followingIds.has(personId);
+
+            /* update the screen first, undo if the database says no */
+            if (was) followingIds.delete(personId); else followingIds.add(personId);
+            paint();
+            if (isOwn) ui.countFollowing.textContent = followingIds.size;
+
+            var result = was
+                ? await db.from("follows").delete()
+                    .eq("follower_id", viewer.id).eq("following_id", personId)
+                : await db.from("follows")
+                    .insert({ follower_id: viewer.id, following_id: personId });
+
+            /* 23505 = already following, which is fine */
+            if (result.error && result.error.code !== "23505") {
+                console.warn("Beelinx: could not update follow.", result.error);
+                if (was) followingIds.add(personId); else followingIds.delete(personId);
+                paint();
+                if (isOwn) ui.countFollowing.textContent = followingIds.size;
             }
 
-            /* the picture was removed from the feed to save space */
-            if (!row.image_url && row.media_archived) {
-                post.appendChild(el("div", "post-archived", "Media archived"));
-            }
-
-            if (row.body) post.appendChild(el("p", "post-body", row.body));
-            post.appendChild(el("time", "post-time", formatDate(row.created_at)));
-
-            wrap.appendChild(post);
+            button.disabled = false;
         });
 
-        return wrap;
+        return button;
+    }
+
+    /* one row in a people list: the person (opens their profile) + a Follow button */
+    function personRow(id, name, role) {
+        var item = el("div", "person");
+
+        var link = name ? el("a", "person-link") : el("div", "person-link");
+        if (name) link.href = profileHref(name);
+
+        link.appendChild(el("span", "person-avatar", (name || "?").charAt(0).toUpperCase()));
+        link.appendChild(el("span", "person-name", name ? "@" + name : "Unnamed user"));
+        link.appendChild(el("span", "person-type", TYPE_LABELS[role] || ""));
+        item.appendChild(link);
+
+        if (id && (!viewer || id !== viewer.id)) item.appendChild(followButton(id));
+
+        return item;
     }
 
     /* mineColumn = the column that equals this profile's id,
@@ -299,12 +398,16 @@
             ? "follows_follower_id_fkey"
             : "follows_following_id_fkey";
 
-        var result = await db
-            .from("follows")
-            .select("created_at, person:profiles!" + relation + "(username, role)")
-            .eq(mineColumn, target.id)
-            .order("created_at", { ascending: false })
-            .limit(200);
+        var loaded = await Promise.all([
+            db.from("follows")
+                .select("created_at, person:profiles!" + relation + "(id, username, role)")
+                .eq(mineColumn, target.id)
+                .order("created_at", { ascending: false })
+                .limit(200),
+            loadFollowing()
+        ]);
+
+        var result = loaded[0];
 
         if (result.error) throw result.error;
 
@@ -320,30 +423,10 @@
         rows.forEach(function (row) {
             var person = row.person;
             if (!person) return;
-
-            var name = person.username;
-            var item = name ? el("a", "person") : el("div", "person");
-            if (name) item.href = profileHref(name);
-
-            item.appendChild(el("span", "person-avatar", (name || "?").charAt(0).toUpperCase()));
-            item.appendChild(el("span", "person-name", name ? "@" + name : "Unnamed user"));
-            item.appendChild(el("span", "person-type", TYPE_LABELS[person.role] || ""));
-
-            wrap.appendChild(item);
+            wrap.appendChild(personRow(person.id, person.username, person.role));
         });
 
         return wrap;
-    }
-
-    /* one row in a people list (same look as followers / following) */
-    function personRow(name, role) {
-        var item = name ? el("a", "person") : el("div", "person");
-        if (name) item.href = profileHref(name);
-
-        item.appendChild(el("span", "person-avatar", (name || "?").charAt(0).toUpperCase()));
-        item.appendChild(el("span", "person-name", name ? "@" + name : "Unnamed user"));
-        item.appendChild(el("span", "person-type", TYPE_LABELS[role] || ""));
-        return item;
     }
 
     /* People tab: find other members by username.
@@ -385,7 +468,8 @@
             if (query) request = request.ilike("username", "%" + query + "%");
             if (viewer) request = request.neq("id", viewer.id);
 
-            var result = await request;
+            var loaded = await Promise.all([request, loadFollowing()]);
+            var result = loaded[0];
 
             /* a newer search started meanwhile: drop this answer */
             if (mine !== searchToken) return;
@@ -414,7 +498,7 @@
             }
 
             var list = el("div", "people-list");
-            rows.forEach(function (row) { list.appendChild(personRow(row.username, row.role)); });
+            rows.forEach(function (row) { list.appendChild(personRow(row.id, row.username, row.role)); });
 
             results.replaceChildren(
                 el("p", "people-label", query ? "Results" : "Newest members"),
@@ -684,7 +768,7 @@
 
             isOwn = !!viewer && target.id === viewer.id;
 
-            postsRequest = { id: target.id, promise: fetchPosts(target.id) };
+            startFeed(target.id);
 
             var extras = [loadCounts(target.id)];
             if (!isOwn && viewer) {
@@ -713,7 +797,7 @@
         isOwn = true;
 
         /* start every request at once instead of one after another */
-        postsRequest = { id: viewer.id, promise: fetchPosts(viewer.id) };
+        startFeed(viewer.id);
 
         var profileRequest = db
             .from("profiles")

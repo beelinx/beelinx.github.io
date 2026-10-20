@@ -18,6 +18,12 @@
     var sheetEl = document.getElementById("sx-sheet");
     var tabs = document.querySelectorAll(".sx-tab");
 
+    // On a profile page the feed shows only one person's posts, chosen by
+    // profile.js (see BeelinxFeed.showUser). The "write a post" box is there too,
+    // but profile.js keeps it folded away behind a small Post button.
+    var embedded = document.body.classList.contains("profile-page");
+    var scopeUser = null;
+
     if (!B || !listEl) return;
 
     var db = B.db;
@@ -80,9 +86,11 @@
 
     function updateEmpty() {
 
-        emptyEl.textContent = tab === "following"
-            ? "Nothing here yet. Follow people to see their posts."
-            : "No posts yet. Be the first to share something.";
+        emptyEl.textContent = embedded
+            ? "No posts yet."
+            : tab === "following"
+                ? "Nothing here yet. Follow people to see their posts."
+                : "No posts yet. Be the first to share something.";
 
         emptyEl.hidden = posts.size > 0;
 
@@ -206,6 +214,9 @@
         }
 
         posts.delete(post.id);
+
+        // lets a profile page lower its "posts" count
+        document.dispatchEvent(new CustomEvent("beelinx:post-deleted", { detail: { id: post.id } }));
 
         var row = listEl.querySelector('[data-post="' + post.id + '"]');
         if (row) row.remove();
@@ -488,6 +499,8 @@
 
     function renderCompose() {
 
+        if (!composeEl) return;
+
         composeEl.replaceChildren();
 
         if (!user) {
@@ -663,6 +676,9 @@
                     reset();
                     updateEmpty();
 
+                    // lets a profile page raise its "posts" count and fold the box away
+                    document.dispatchEvent(new CustomEvent("beelinx:post-created", { detail: { id: post.id } }));
+
                 } catch (error) {
 
                     if (path) db.storage.from(BUCKET).remove([path]);   // do not leave a stray file
@@ -717,6 +733,8 @@
             .select(POST_SELECT)
             .order("created_at", { ascending: false })
             .range(loadedCount, loadedCount + PAGE - 1);
+
+        if (scopeUser) query = query.eq("user_id", scopeUser);
 
         if (tab === "following") query = query.in("user_id", followingIds);
 
@@ -818,7 +836,7 @@
 
     /* ---------- start ---------- */
 
-    (async function start() {
+    var ready = (async function start() {
 
         user = await B.me();
 
@@ -835,8 +853,19 @@
 
         renderCompose();
 
-        setTab("all");
+        // on the feed page, start right away; on a profile page wait to be told whose posts
+        if (!embedded) setTab("all");
 
     })();
+
+    // used by profile.js: show one person's posts in this same timeline
+    window.BeelinxFeed = {
+        showUser: async function (userId) {
+            await ready;
+            scopeUser = userId;
+            setTab("all");
+        }
+    };
+
 
 })();
