@@ -27,7 +27,6 @@
         kicker: $("profile-kicker"),
         bio: $("profile-bio"),
         follow: $("follow-btn"),
-        message: $("message-btn"),
         logout: $("logout-btn"),
         countPosts: $("count-posts"),
         countFollowers: $("count-followers"),
@@ -37,8 +36,15 @@
         usernameMessage: $("username-message"),
         tabs: document.querySelectorAll(".profile-tabs .tab"),
         listsTab: $("tab-lists"),
-        peopleTab: $("tab-people"),
-        panel: $("profile-panel")
+        productsTab: document.querySelector('[data-tab="products"]'),
+        panel: $("profile-panel"),
+        bioEditBtn: $("bio-edit-btn"),
+        bioRow: $("bio-edit-row"),
+        bioInput: $("bio-input"),
+        bioSave: $("bio-save"),
+        bioCancel: $("bio-cancel"),
+        bioMsg: $("bio-msg"),
+        avatarInput: $("avatar-input")
     };
 
     var TYPE_LABELS = { shopper: "Consumer", brand: "Brand", model: "Model" };
@@ -50,6 +56,11 @@
     var activeTab = "posts";
     var renderToken = 0;
     var followers = 0;
+
+    var B = window.Beelinx || null;
+    var sheetEl = document.getElementById("sx-sheet");
+    var profilePostsById = new Map();
+    var roleChangePop = null;
 
 
     /* ---------- small helpers ---------- */
@@ -86,7 +97,6 @@
 
         ui.login.hidden = !isGuest;
         ui.follow.hidden = true;
-        ui.message.hidden = true;
         ui.logout.hidden = true;
         document.title = (title || "Profile") + " | Beelinx";
     }
@@ -158,16 +168,17 @@
         return loadedScripts[src];
     }
 
-    /* posts use the feed's own timeline (feed.js + social.css), so the post
-       style, likes, comments and delete work exactly like on the feed page */
-    var feedBox = $("profile-feed");
-    var feedFor = null;         /* whose posts the timeline holds right now */
-
-    function startFeed(userId) {
-        if (!window.BeelinxFeed || feedFor === userId) return;
-        feedFor = userId;
-        window.BeelinxFeed.showUser(userId);
+    function fetchPosts(userId) {
+        return db
+            .from("posts")
+            .select("id, user_id, body, image_url, image_path, media_archived, created_at, post_likes(count), post_comments(count)")
+            .eq("user_id", userId)
+            .order("created_at", { ascending: false })
+            .limit(50);
     }
+
+    /* posts are requested at the same moment as the profile, not after it */
+    var postsRequest = null;
 
     function loadCounts(id) {
         return Promise.all([
@@ -186,7 +197,8 @@
     /* ---------- tabs ---------- */
 
     function selectTab(name) {
-        if ((name === "lists" || name === "people") && !isOwn) name = "posts";
+        if (name === "lists" && !isOwn) name = "posts";
+        if (name === "products" && (!target || target.role !== "brand")) name = "posts";
         activeTab = name;
 
         ui.tabs.forEach(function (tab) {
@@ -197,6 +209,133 @@
 
         moveIndicator();
         renderTab();
+    }
+
+    /* People tab: search + newest members (same data as search.html) */
+    var peopleTicket = 0;
+    var peopleFollowing = new Set();
+
+    async function loadPeopleFollowing() {
+        if (!viewer) return;
+        try {
+            var r = await db.from("follows").select("following_id").eq("follower_id", viewer.id).limit(500);
+            peopleFollowing = new Set((r.data || []).map(function (x) { return x.following_id; }));
+        } catch (e) { /* ignore */ }
+    }
+
+    function peopleFollowButton(profile) {
+        var btn = el("button", "sx-pill sx-pill-sm", peopleFollowing.has(profile.id) ? "Following" : "Follow");
+        btn.type = "button";
+        btn.classList.toggle("sx-pill-ghost", peopleFollowing.has(profile.id));
+        btn.setAttribute("aria-pressed", String(peopleFollowing.has(profile.id)));
+        btn.addEventListener("click", async function (e) {
+            e.preventDefault(); e.stopPropagation();
+            if (!viewer) { goToLogin(); return; }
+            var was = peopleFollowing.has(profile.id);
+            if (was) peopleFollowing.delete(profile.id); else peopleFollowing.add(profile.id);
+            btn.textContent = was ? "Follow" : "Following";
+            btn.classList.toggle("sx-pill-ghost", !was);
+            btn.setAttribute("aria-pressed", String(!was));
+            btn.disabled = true;
+            var res = was
+                ? await db.from("follows").delete().eq("follower_id", viewer.id).eq("following_id", profile.id)
+                : await db.from("follows").insert({ follower_id: viewer.id, following_id: profile.id });
+            btn.disabled = false;
+            if (res.error && res.error.code !== "23505") {
+                if (was) peopleFollowing.add(profile.id); else peopleFollowing.delete(profile.id);
+                btn.textContent = was ? "Following" : "Follow";
+                btn.classList.toggle("sx-pill-ghost", was);
+                btn.setAttribute("aria-pressed", String(was));
+            } else if (!was) {
+                setFollowerCount(followers);
+            }
+        });
+        return btn;
+    }
+
+    function peopleRow(profile) {
+        var isMe = viewer && profile.id === viewer.id;
+        var link = document.createElement("a");
+        link.className = "sx-person-link";
+        link.href = profileHref(profile.username);
+        var av = el("span", "sx-avatar is-md", (profile.username || "?").charAt(0).toUpperCase());
+        if (profile.avatar_url) {
+            av.textContent = "";
+            var im = document.createElement("img");
+            im.src = profile.avatar_url; im.alt = ""; im.loading = "lazy";
+            av.appendChild(im);
+        }
+        var txt = el("span", "sx-person-text");
+        var strong = el("strong", null, profile.username ? "@" + profile.username : "Unnamed");
+        var role = el("span", "sx-handle", TYPE_LABELS[profile.role] || "Consumer");
+        txt.append(strong, role);
+        if (profile.bio) txt.appendChild(el("span", "sx-bio", profile.bio));
+        link.append(av, txt);
+        var li = el("li", "sx-person");
+        li.appendChild(link);
+        li.appendChild(isMe ? el("span", "sx-you", "You") : peopleFollowButton(profile));
+        return li;
+    }
+
+    async function buildPeopleTab() {
+        await loadPeopleFollowing();
+        var wrap = el("div");
+        var searchWrap = el("div", "people-searchbar");
+        var input = document.createElement("input");
+        input.type = "search";
+        input.placeholder = "Search people by username";
+        input.setAttribute("aria-label", "Search people");
+        input.autocapitalize = "none"; input.spellcheck = false; input.maxLength = 40;
+        searchWrap.appendChild(input);
+        var heading = el("h2", "people-section-title", "Newest members");
+        var noteEl = el("p", "people-note");
+        noteEl.hidden = true;
+        var list = el("ul", "people-list sx-people");
+
+        function showNote(t) { noteEl.textContent = t || ""; noteEl.hidden = !t; }
+
+        async function run(raw) {
+            var q = raw.trim().replace(/[%,()*\\]/g, " ").trim();
+            var mine = ++peopleTicket;
+            var query = db.from("profiles").select("id,username,display_name,bio,avatar_url,role").not("username", "is", null);
+            if (q) query = query.or("username.ilike.%" + q + "%,display_name.ilike.%" + q + "%").limit(30);
+            else query = query.order("created_at", { ascending: false }).limit(20);
+            showNote("");
+            var res = await query;
+            if (mine !== peopleTicket) return;
+            if (res.error) { list.replaceChildren(); heading.textContent = ""; showNote("Search is not available right now."); return; }
+            var found = res.data || [];
+            if (q) {
+                var lower = q.toLowerCase();
+                found.sort(function (a, b) {
+                    function rank(p) {
+                        var n = (p.username || "").toLowerCase();
+                        if (n === lower) return 0;
+                        if (n.indexOf(lower) === 0) return 1;
+                        if ((p.display_name || "").toLowerCase().indexOf(lower) === 0) return 2;
+                        return 3;
+                    }
+                    return rank(a) - rank(b);
+                });
+            }
+            if (!found.length) { list.replaceChildren(); heading.textContent = ""; showNote(q ? 'No one found for "' + q + '".' : "No accounts yet."); return; }
+            heading.textContent = q ? "Results" : "Newest members";
+            list.replaceChildren();
+            found.forEach(function (p) { list.appendChild(peopleRow(p)); });
+        }
+
+        var tmr = null;
+        input.addEventListener("input", function () {
+            clearTimeout(tmr);
+            tmr = setTimeout(function () { run(input.value); }, 250);
+        });
+        input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); clearTimeout(tmr); run(input.value); } });
+
+        wrap.append(searchWrap, heading, noteEl, list);
+        await run("");
+        // focus helper for the search
+        setTimeout(function () { /* keep empty input focused on desktop */ }, 0);
+        return wrap;
     }
 
     /* the sliding line under the active tab */
@@ -225,9 +364,10 @@
         var content;
         try {
             if (tab === "posts") content = await buildPosts();
+            else if (tab === "products") content = await buildBrandProducts();
+            else if (tab === "people") content = await buildPeopleTab();
             else if (tab === "followers") content = await buildPeople("follower_id", "following_id");
             else if (tab === "following") content = await buildPeople("following_id", "follower_id");
-            else if (tab === "people") content = buildPeopleSearch();
             else content = await buildList();
         } catch (error) {
             console.warn("Beelinx: could not load this tab.", error);
@@ -246,149 +386,321 @@
         ui.panel.replaceChildren(content);
     }
 
-    /* the small Post button: opens the feed's write-a-post box right here */
-    var postRow = $("profile-post-row");
-    var postButton = $("profile-post-btn");
-    var composeBox = $("sx-compose");
+    /* sheet helpers so profile posts can be opened like the feed */
+    function pH(tag, props) {
+        if (B && B.h) return B.h.apply(null, arguments);
+        var e = document.createElement(tag);
+        props = props || {};
+        Object.keys(props).forEach(function (k) {
+            var v = props[k];
+            if (v == null || v === false) return;
+            if (k === "class") e.className = v;
+            else if (k === "text") e.textContent = v;
+            else if (k === "hidden") e.hidden = !!v;
+            else if (k.slice(0, 2) === "on" && typeof v === "function") e.addEventListener(k.slice(2), v);
+            else e.setAttribute(k, v === true ? "" : v);
+        });
+        for (var i = 2; i < arguments.length; i++) {
+            var ch = arguments[i];
+            if (ch == null || ch === false) continue;
+            e.appendChild(typeof ch === "string" ? document.createTextNode(ch) : ch);
+        }
+        return e;
+    }
 
-    function setComposer(open) {
-        if (!postButton || !composeBox) return;
+    function pTimeAgo(iso) {
+        if (B && B.timeAgo) return B.timeAgo(iso);
+        var s = (Date.now() - new Date(iso).getTime()) / 1000;
+        if (s < 60) return "just now";
+        var m = s / 60; if (m < 60) return Math.floor(m) + "m";
+        var h = m / 60; if (h < 24) return Math.floor(h) + "h";
+        var d = h / 24; if (d < 7) return Math.floor(d) + "d";
+        return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+    }
 
-        composeBox.hidden = !open;
-        postButton.setAttribute("aria-expanded", String(open));
-        postButton.classList.toggle("pill-ghost", open);
-        postButton.innerHTML = open
-            ? '<i class="fas fa-xmark"></i> Close'
-            : '<i class="fas fa-plus"></i> Post';
+    function profileAvatarMini() {
+        var sp = pH("span", { class: "sx-avatar is-md" });
+        if (target && target.avatar_url) {
+            var im = document.createElement("img");
+            im.src = target.avatar_url; im.alt = ""; im.loading = "lazy";
+            sp.appendChild(im);
+        } else {
+            sp.textContent = (target && target.username || "?").charAt(0).toUpperCase();
+        }
+        return sp;
+    }
 
-        if (open) {
-            var field = composeBox.querySelector("textarea");
-            if (field) field.focus();
+    function lockSheet(on) { document.documentElement.classList.toggle("sx-lock", !!on); }
+
+    function showSheet(panel) {
+        if (!sheetEl) return;
+        sheetEl.replaceChildren(panel);
+        sheetEl.hidden = false;
+        lockSheet(true);
+    }
+
+    function closeSheet() {
+        if (!sheetEl) return;
+        sheetEl.hidden = true;
+        sheetEl.replaceChildren();
+        lockSheet(false);
+    }
+
+    if (sheetEl) {
+        sheetEl.addEventListener("click", function (e) { if (e.target === sheetEl) closeSheet(); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape" && sheetEl && !sheetEl.hidden) closeSheet(); });
+    }
+
+    function postById(id) { return profilePostsById.get(id) || null; }
+
+    function paintProfileLike(btn, post) {
+        if (!btn) return;
+        btn.classList.toggle("is-liked", !!post.liked);
+        btn.setAttribute("aria-pressed", String(!!post.liked));
+        btn.replaceChildren(
+            pH("i", { class: (post.liked ? "fa-solid" : "fa-regular") + " fa-heart" }),
+            pH("span", { text: String(post.likeCount) })
+        );
+    }
+
+    function repaintProfileLikes(post) {
+        document.querySelectorAll('[data-plike="' + post.id + '"]').forEach(function (b) { paintProfileLike(b, post); });
+    }
+
+    function repaintProfileComments(post) {
+        document.querySelectorAll('[data-pcomments="' + post.id + '"] span').forEach(function (s) { s.textContent = String(post.commentCount); });
+    }
+
+    async function toggleProfileLike(post) {
+        if (!viewer) { window.location.href = "login.html?next=" + encodeURIComponent("profile.html" + window.location.search); return; }
+        var was = !!post.liked;
+        post.liked = !was;
+        post.likeCount += was ? -1 : 1;
+        repaintProfileLikes(post);
+        var r = was
+            ? await db.from("post_likes").delete().eq("user_id", viewer.id).eq("post_id", post.id)
+            : await db.from("post_likes").insert({ user_id: viewer.id, post_id: post.id });
+        if (r.error && r.error.code !== "23505") {
+            post.liked = was;
+            post.likeCount += was ? 1 : -1;
+            repaintProfileLikes(post);
         }
     }
 
-    if (postButton) {
-        postButton.addEventListener("click", function () {
-            setComposer(composeBox.hidden);
+    function commentRowForProfile(post, c) {
+        var prof = c.profiles || {};
+        var body = pH("div", { class: "sx-comment-body" },
+            pH("p", { class: "sx-comment-head" },
+                pH("a", { href: profileHref(prof.username), text: prof.username ? "@" + prof.username : (B ? B.displayName(prof) : "Someone") }),
+                pH("span", { text: pTimeAgo(c.created_at) })),
+            pH("p", { class: "sx-comment-text", text: c.body })
+        );
+        var li = pH("li", { class: "sx-comment" }, (B ? B.avatar(prof, "is-md") : profileAvatarMini()), body);
+        if (viewer && c.user_id === viewer.id) {
+            body.appendChild(pH("button", {
+                type: "button", class: "sx-link", text: "Delete",
+                onclick: async function () {
+                    var rr = await db.from("post_comments").delete().eq("id", c.id);
+                    if (rr.error) return;
+                    li.remove();
+                    post.commentCount = Math.max(0, post.commentCount - 1);
+                    repaintProfileComments(post);
+                }
+            }));
+        }
+        return li;
+    }
+
+    async function deleteProfilePost(post) {
+        if (!window.confirm("Delete this post?")) return;
+        var r = await db.from("posts").delete().eq("id", post.id);
+        if (r.error) { window.alert("Could not delete the post."); return; }
+        if (post.image_path) db.storage.from("post-images").remove([post.image_path]);
+        profilePostsById.delete(post.id);
+        var tile = document.querySelector('[data-post="' + post.id + '"]');
+        if (tile) tile.remove();
+        closeSheet();
+        ui.countPosts.textContent = String(profilePostsById.size);
+        if (!profilePostsById.size && activeTab === "posts" && isOwn) {
+            ui.panel.replaceChildren(note("You haven't posted anything yet."));
+        }
+    }
+
+    function openProfilePost(post) {
+        var hasMedia = !!post.image_url || !!post.media_archived;
+        var media = null;
+        if (post.image_url) media = pH("div", { class: "sx-sheet-media" }, pH("img", { src: post.image_url, alt: "" }));
+        else if (post.media_archived) media = pH("div", { class: "sx-sheet-media" }, pH("div", { class: "sx-post-archived" }, pH("i", { class: "fa-regular fa-image" }), pH("span", { text: "Media archived" })));
+
+        var status = pH("p", { class: "sx-note", text: "Loading comments..." });
+        var list = pH("ul", { class: "sx-comments" });
+        var input = pH("input", { type: "text", placeholder: viewer ? "Add a comment" : "Log in to comment", maxlength: "500", autocomplete: "off", "aria-label": "Add a comment" });
+        var send = pH("button", { type: "submit", class: "sx-pill sx-pill-sm", text: "Post" });
+        var form = pH("form", {
+            class: "sx-comment-form",
+            onsubmit: async function (e) {
+                e.preventDefault();
+                if (!viewer) { window.location.href = "login.html?next=" + encodeURIComponent("profile.html" + window.location.search); return; }
+                var t = input.value.trim();
+                if (!t) return;
+                send.disabled = true;
+                var rr = await db.from("post_comments").insert({ post_id: post.id, user_id: viewer.id, body: t }).select("id,user_id,body,created_at,profiles!post_comments_user_id_fkey(username,display_name,avatar_url)").single();
+                send.disabled = false;
+                if (rr.error) { status.hidden = false; status.textContent = "Could not post your comment."; return; }
+                input.value = ""; status.hidden = true;
+                list.appendChild(commentRowForProfile(post, rr.data));
+                post.commentCount += 1;
+                repaintProfileComments(post);
+            }
+        }, input, send);
+
+        var likeBtn = pH("button", { type: "button", class: "sx-stat", "data-plike": post.id, onclick: function (ev) { ev.stopPropagation(); toggleProfileLike(post); } });
+        paintProfileLike(likeBtn, post);
+        var cStat = pH("span", { class: "sx-stat", "data-pcomments": post.id }, pH("i", { class: "fa-regular fa-comment" }), pH("span", { text: String(post.commentCount) }));
+        var isMine = viewer && post.user_id === viewer.id;
+        var actions = pH("div", { class: "sx-sheet-actions" }, likeBtn, cStat, isMine ? pH("button", { type: "button", class: "sx-link sx-danger", text: "Delete post", onclick: function () { deleteProfilePost(post); } }) : null);
+
+        var closeBtn = pH("button", { type: "button", class: "sx-sheet-close", "aria-label": "Close", onclick: closeSheet }, pH("i", { class: "fas fa-xmark" }));
+        var info = pH("div", { class: "sx-sheet-info" },
+            pH("div", { class: "sx-sheet-scroll" },
+                pH("a", { class: "sx-sheet-author", href: profileHref(target.username) }, profileAvatarMini(), pH("span", {}, pH("strong", { text: target.username ? "@" + target.username : "Someone" }), pH("small", { text: pTimeAgo(post.created_at) }))),
+                post.body ? pH("p", { class: "sx-sheet-body", text: post.body }) : null,
+                actions,
+                pH("h3", { class: "sx-sheet-heading", text: "Comments" }), status, list), form);
+
+        var panel = pH("div", { class: "sx-sheet-panel" + (hasMedia ? "" : " is-narrow") }, closeBtn, media, info);
+        showSheet(panel);
+
+        db.from("post_comments").select("id,user_id,body,created_at,profiles!post_comments_user_id_fkey(username,display_name,avatar_url)").eq("post_id", post.id).order("created_at", { ascending: true }).limit(200).then(function (rr) {
+            if (rr.error) { status.textContent = "Could not load comments."; return; }
+            var rows2 = rr.data || [];
+            status.hidden = rows2.length > 0;
+            if (!rows2.length) status.textContent = "No comments yet.";
+            rows2.forEach(function (r2) { list.appendChild(commentRowForProfile(post, r2)); });
         });
     }
 
     async function buildPosts() {
-        if (!window.BeelinxFeed || !feedBox) {
-            return note("Posts are unavailable right now. Please try again later.");
-        }
+        var request = postsRequest && postsRequest.id === target.id
+            ? postsRequest.promise
+            : fetchPosts(target.id);
+        postsRequest = null;
 
-        startFeed(target.id);
+        var result = await request;
 
-        /* only on your own page */
-        if (postRow) postRow.hidden = !(isOwn && viewer);
-        if (!isOwn) setComposer(false);
+        if (result.error) throw result.error;
 
-        feedBox.hidden = false;
-        return feedBox;
-    }
-
-    /* a new post: the count goes up and the box folds away */
-    document.addEventListener("beelinx:post-created", function () {
-        var now = parseInt(ui.countPosts.textContent, 10) || 0;
-        ui.countPosts.textContent = now + 1;
-        setComposer(false);
-    });
-
-    /* deleting a post from the timeline lowers the count at the top */
-    document.addEventListener("beelinx:post-deleted", function () {
-        var now = parseInt(ui.countPosts.textContent, 10) || 0;
-        ui.countPosts.textContent = Math.max(0, now - 1);
-    });
-
-    /* ---------- follow buttons inside people lists ---------- */
-
-    var followingRequest = null;    /* the ids the logged-in person follows (asked once) */
-    var followingIds = new Set();
-
-    function loadFollowing() {
-        if (!viewer) return Promise.resolve(followingIds);
-
-        if (!followingRequest) {
-            followingRequest = db
-                .from("follows")
-                .select("following_id")
-                .eq("follower_id", viewer.id)
-                .limit(1000)
-                .then(function (result) {
-                    followingIds = new Set((result.data || []).map(function (row) { return row.following_id; }));
-                    return followingIds;
-                });
-        }
-
-        return followingRequest;
-    }
-
-    function followButton(personId) {
-        var button = el("button", "person-follow");
-        button.type = "button";
-
-        function paint() {
-            var on = followingIds.has(personId);
-            button.textContent = on ? "Following" : "Follow";
-            button.classList.toggle("is-following", on);
-            button.setAttribute("aria-pressed", String(on));
-        }
-
-        paint();
-
-        button.addEventListener("click", async function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            if (!viewer) { goToLogin(); return; }
-            if (button.disabled) return;
-
-            button.disabled = true;
-            await loadFollowing();
-
-            var was = followingIds.has(personId);
-
-            /* update the screen first, undo if the database says no */
-            if (was) followingIds.delete(personId); else followingIds.add(personId);
-            paint();
-            if (isOwn) ui.countFollowing.textContent = followingIds.size;
-
-            var result = was
-                ? await db.from("follows").delete()
-                    .eq("follower_id", viewer.id).eq("following_id", personId)
-                : await db.from("follows")
-                    .insert({ follower_id: viewer.id, following_id: personId });
-
-            /* 23505 = already following, which is fine */
-            if (result.error && result.error.code !== "23505") {
-                console.warn("Beelinx: could not update follow.", result.error);
-                if (was) followingIds.add(personId); else followingIds.delete(personId);
-                paint();
-                if (isOwn) ui.countFollowing.textContent = followingIds.size;
-            }
-
-            button.disabled = false;
+        var rows = result.data || [];
+        ui.countPosts.textContent = rows.length;
+        profilePostsById.clear();
+        rows.forEach(function (r) {
+            var cc = (r.post_likes && r.post_likes[0] && r.post_likes[0].count) || 0;
+            var cm = (r.post_comments && r.post_comments[0] && r.post_comments[0].count) || 0;
+            profilePostsById.set(r.id, { id: r.id, user_id: r.user_id, body: r.body || "", image_url: r.image_url, image_path: r.image_path, media_archived: !!r.media_archived, created_at: r.created_at, likeCount: cc, commentCount: cm, liked: false });
         });
 
-        return button;
-    }
+        if (viewer && profilePostsById.size) {
+            try {
+                var ids = Array.from(profilePostsById.keys());
+                var likedRes = await db.from("post_likes").select("post_id").eq("user_id", viewer.id).in("post_id", ids);
+                var likedSet = new Set((likedRes.data || []).map(function (x) { return x.post_id; }));
+                likedSet.forEach(function (id) { var p = profilePostsById.get(id); if (p) p.liked = true; });
+            } catch (e) { /* ignore */ }
+        }
 
-    /* one row in a people list: the person (opens their profile) + a Follow button */
-    function personRow(id, name, role) {
-        var item = el("div", "person");
+        if (!rows.length) {
+            return note(isOwn ? "You haven't posted anything yet." : "No posts yet.");
+        }
 
-        var link = name ? el("a", "person-link") : el("div", "person-link");
-        if (name) link.href = profileHref(name);
+        var wrap = el("div", "post-list");
 
-        link.appendChild(el("span", "person-avatar", (name || "?").charAt(0).toUpperCase()));
-        link.appendChild(el("span", "person-name", name ? "@" + name : "Unnamed user"));
-        link.appendChild(el("span", "person-type", TYPE_LABELS[role] || ""));
-        item.appendChild(link);
+        if (isOwn) {
+            var addBtn = el("button", "pf-post-btn", "+ Post");
+            addBtn.type = "button";
+            addBtn.addEventListener("click", function () { window.location.href = "feed.html?compose=1"; });
+            wrap.appendChild(addBtn);
+        }
 
-        if (id && (!viewer || id !== viewer.id)) item.appendChild(followButton(id));
+        profilePostsById.forEach(function (post) {
+            var label = post.created_at ? pTimeAgo(post.created_at) : "";
+            var article = el("article", "sx-tweet");
+            article.setAttribute("data-post", post.id);
+            article.style.cursor = "pointer";
+            article.addEventListener("click", function () { openProfilePost(post); });
 
-        return item;
+            var avatarLink = document.createElement("a");
+            avatarLink.className = "sx-tweet-avatar";
+            avatarLink.href = profileHref(target.username);
+            var av = el("span", "sx-avatar");
+            if (target.avatar_url) {
+                var avImg = document.createElement("img");
+                avImg.src = target.avatar_url; avImg.alt = ""; avImg.loading = "lazy";
+                av.appendChild(avImg);
+            } else {
+                av.textContent = (target.username || "?").charAt(0).toUpperCase();
+            }
+            avatarLink.appendChild(av);
+            avatarLink.addEventListener("click", function (e) { e.stopPropagation(); });
+
+            var main = el("div", "sx-tweet-main");
+            var head = el("div", "sx-tweet-head");
+            var nameLink = document.createElement("a");
+            nameLink.className = "sx-tweet-name";
+            nameLink.href = profileHref(target.username);
+            nameLink.textContent = "@" + (target.username || "");
+            nameLink.addEventListener("click", function (e) { e.stopPropagation(); });
+            var dot = el("span", "sx-tweet-handle", "·");
+            var tSpan = el("span", "sx-tweet-time", label);
+            head.append(nameLink, dot, tSpan);
+
+            if (isOwn) {
+                var del = document.createElement("button");
+                del.className = "sx-tweet-del";
+                del.type = "button";
+                del.setAttribute("aria-label", "Delete post");
+                del.innerHTML = '<i class="far fa-trash-can"></i>';
+                del.addEventListener("click", async function (e) {
+                    e.stopPropagation();
+                    await deleteProfilePost(post);
+                });
+                head.appendChild(del);
+            }
+
+            var bodyEl = post.body ? el("p", "sx-tweet-body", post.body) : null;
+
+            var media = null;
+            if (post.image_url) {
+                media = el("div", "sx-tweet-media");
+                var mImg = document.createElement("img");
+                mImg.src = post.image_url;
+                mImg.alt = post.body ? post.body.slice(0, 80) : "Post photo";
+                mImg.loading = "lazy";
+                media.appendChild(mImg);
+            } else if (post.media_archived) {
+                media = el("div", "sx-tweet-media");
+                var arch = el("div", "sx-post-archived");
+                var archIcon = document.createElement("i");
+                archIcon.className = "fa-regular fa-image";
+                arch.append(archIcon, el("span", null, "Media archived"));
+                media.appendChild(arch);
+            }
+
+            var actions = el("div", "sx-tweet-actions");
+            var cBtn = pH("span", { class: "sx-stat", "data-pcomments": post.id }, pH("i", { class: "fa-regular fa-comment" }), pH("span", { text: String(post.commentCount) }));
+            var lBtn = pH("button", { type: "button", class: "sx-stat", "data-plike": post.id, onclick: function (ev) { ev.stopPropagation(); toggleProfileLike(post); } });
+            paintProfileLike(lBtn, post);
+            actions.append(cBtn, lBtn);
+
+            main.append(head);
+            if (bodyEl) main.appendChild(bodyEl);
+            if (media) main.appendChild(media);
+            main.appendChild(actions);
+
+            article.append(avatarLink, main);
+            wrap.appendChild(article);
+        });
+
+        return wrap;
     }
 
     /* mineColumn = the column that equals this profile's id,
@@ -398,16 +710,12 @@
             ? "follows_follower_id_fkey"
             : "follows_following_id_fkey";
 
-        var loaded = await Promise.all([
-            db.from("follows")
-                .select("created_at, person:profiles!" + relation + "(id, username, role)")
-                .eq(mineColumn, target.id)
-                .order("created_at", { ascending: false })
-                .limit(200),
-            loadFollowing()
-        ]);
-
-        var result = loaded[0];
+        var result = await db
+            .from("follows")
+            .select("created_at, person:profiles!" + relation + "(username, role)")
+            .eq(mineColumn, target.id)
+            .order("created_at", { ascending: false })
+            .limit(200);
 
         if (result.error) throw result.error;
 
@@ -423,96 +731,19 @@
         rows.forEach(function (row) {
             var person = row.person;
             if (!person) return;
-            wrap.appendChild(personRow(person.id, person.username, person.role));
+
+            var name = person.username;
+            var item = name ? el("a", "person") : el("div", "person");
+            if (name) item.href = profileHref(name);
+
+            item.appendChild(el("span", "person-avatar", (name || "?").charAt(0).toUpperCase()));
+            item.appendChild(el("span", "person-name", name ? "@" + name : "Unnamed user"));
+            item.appendChild(el("span", "person-type", TYPE_LABELS[person.role] || ""));
+
+            wrap.appendChild(item);
         });
 
         return wrap;
-    }
-
-    /* People tab: find other members by username.
-       With nothing typed it shows the newest members. */
-    function buildPeopleSearch() {
-        var box = el("div", "people-search");
-
-        var input = document.createElement("input");
-        input.type = "search";
-        input.className = "people-input";
-        input.placeholder = "Search people by username";
-        input.autocomplete = "off";
-        input.autocapitalize = "none";
-        input.spellcheck = false;
-        input.maxLength = 20;
-        input.setAttribute("aria-label", "Search people by username");
-
-        var results = el("div", "people-results");
-        box.append(input, results);
-
-        var timer = null;
-        var searchToken = 0;
-
-        async function run() {
-            var mine = ++searchToken;
-
-            /* usernames only contain letters, numbers and underscores */
-            var query = input.value.trim().replace(/[^A-Za-z0-9_]/g, "");
-
-            if (query) results.replaceChildren(note("Searching..."));
-
-            var request = db
-                .from("profiles")
-                .select("id, username, role, created_at")
-                .not("username", "is", null)
-                .order("created_at", { ascending: false })
-                .limit(30);
-
-            if (query) request = request.ilike("username", "%" + query + "%");
-            if (viewer) request = request.neq("id", viewer.id);
-
-            var loaded = await Promise.all([request, loadFollowing()]);
-            var result = loaded[0];
-
-            /* a newer search started meanwhile: drop this answer */
-            if (mine !== searchToken) return;
-
-            if (result.error) {
-                console.warn("Beelinx: could not search people.", result.error);
-                results.replaceChildren(note("Search is unavailable right now. Please try again later."));
-                return;
-            }
-
-            var rows = result.data || [];
-
-            if (!rows.length) {
-                results.replaceChildren(note(query ? "No one found." : "No other members yet."));
-                return;
-            }
-
-            /* names that start with what was typed come first */
-            if (query) {
-                var lower = query.toLowerCase();
-                rows.sort(function (a, b) {
-                    var aStarts = a.username.toLowerCase().indexOf(lower) === 0 ? 0 : 1;
-                    var bStarts = b.username.toLowerCase().indexOf(lower) === 0 ? 0 : 1;
-                    return aStarts - bStarts || a.username.localeCompare(b.username);
-                });
-            }
-
-            var list = el("div", "people-list");
-            rows.forEach(function (row) { list.appendChild(personRow(row.id, row.username, row.role)); });
-
-            results.replaceChildren(
-                el("p", "people-label", query ? "Results" : "Newest members"),
-                list
-            );
-        }
-
-        input.addEventListener("input", function () {
-            clearTimeout(timer);
-            timer = setTimeout(run, 250);
-        });
-
-        run();
-        return box;
     }
 
     function money(price) {
@@ -520,6 +751,41 @@
         var number = Number(String(price).replace(/,/g, ""));
         if (!isFinite(number)) return String(price);
         return "\u20A6" + new Intl.NumberFormat("en-NG", { maximumFractionDigits: 2 }).format(number);
+    }
+
+    async function buildBrandProducts() {
+        var brandRes = await db.from("brands").select("id,name").eq("owner_id", target.id).maybeSingle();
+        var brand = brandRes.data;
+        if (!brand) return note("No brand yet.");
+        var prods = await db.from("products").select("id,name,price,image,brand_id").eq("brand_id", brand.id).order("created_at", { ascending: false }).limit(100);
+        if (prods.error) throw prods.error;
+        var rows = prods.data || [];
+        if (!rows.length) return note(isOwn ? "No products yet — add them in Brand tools." : "No products yet.");
+        var engineReady = loadScript("../js/engagement.js").catch(function(){ return null; });
+        await engineReady;
+        var engage = window.BeelinxEngage;
+        var grid = el("div", "products-container");
+        rows.forEach(function (product) {
+            var card = el("div", "products");
+            var imageLink = document.createElement("a");
+            imageLink.href = "product-template.html?id=" + encodeURIComponent(product.id);
+            var image = document.createElement("img");
+            image.className = "clothe-image";
+            image.src = product.image || "";
+            image.alt = product.name || "Product image";
+            image.loading = "lazy";
+            imageLink.appendChild(image);
+            var text = el("div", "clothe-text");
+            var brandLink = document.createElement("a");
+            brandLink.className = "brand-page-link";
+            brandLink.href = "brandpage-template.html?brand=" + encodeURIComponent(brand.name);
+            brandLink.appendChild(el("strong", null, brand.name));
+            text.append(brandLink, document.createElement("br"), document.createTextNode(product.name || ""), el("p", "price", money(product.price)));
+            card.append(imageLink, text);
+            if (engage) card.appendChild(engage.createSaveButton(product.id));
+            grid.appendChild(card);
+        });
+        return grid;
     }
 
     async function buildList() {
@@ -675,7 +941,87 @@
     });
 
 
+    /* ---------- avatar + bio edit (own profile only) ---------- */
+
+    if (ui.avatar) ui.avatar.addEventListener("click", function(){ if (isOwn && ui.avatarInput) ui.avatarInput.click(); });
+
+    function storagePathFromUrl(url){
+        if (!url || typeof url !== "string") return null;
+        var m = url.match(/\/storage\/v1\/object\/public\/avatars\/(.+)$/);
+        return m ? m[1] : null;
+    }
+
+    if (ui.avatarInput) ui.avatarInput.addEventListener("change", async function(){
+        var f = ui.avatarInput.files && ui.avatarInput.files[0]; if (!f || !isOwn) return;
+        var oldUrl = target.avatar_url || null;
+        var oldPath = storagePathFromUrl(oldUrl);
+        ui.avatarInput.disabled = true;
+        if (ui.bioMsg) { ui.bioMsg.textContent = "Uploading..."; ui.bioMsg.className = "profile-bio-msg"; }
+        try {
+            var comp = (B && B.compressImage) ? await B.compressImage(f) : null;
+            if (!comp) throw new Error("Image compression unavailable.");
+            var path = viewer.id + "/avatar-" + Date.now() + "." + comp.ext;
+            var up = await db.storage.from("avatars").upload(path, comp.blob, { contentType: comp.blob.type, upsert: true, cacheControl: "31536000" });
+            if (up.error) throw up.error;
+            var pub = db.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+            var upd = await db.from("profiles").update({ avatar_url: pub }).eq("id", viewer.id).select("avatar_url").maybeSingle();
+            if (upd.error) throw upd.error;
+            target.avatar_url = pub;
+            // bust cache so it shows immediately everywhere (profile + feed header)
+            ui.avatar.replaceChildren();
+            var img = document.createElement("img"); img.src = pub + (pub.indexOf("?")>=0?"&":"?") + "t=" + Date.now(); img.alt = "";
+            ui.avatar.appendChild(img);
+            if (ui.bioMsg) { ui.bioMsg.textContent = "Picture updated."; ui.bioMsg.className = "profile-bio-msg is-ok"; setTimeout(function(){ if(ui.bioMsg) ui.bioMsg.textContent=""; }, 1600); }
+            // delete old file so storage doesn't fill up
+            if (oldPath) db.storage.from("avatars").remove([oldPath]);
+            // also update the hero header if this is the viewer's own profile
+            try { localStorage.removeItem("beelinx_profile_cache"); } catch(e){}
+        } catch (e) {
+            if (ui.bioMsg) { ui.bioMsg.textContent = e.message || "Could not update picture."; ui.bioMsg.className = "profile-bio-msg is-error"; }
+        }
+        ui.avatarInput.value = "";
+        ui.avatarInput.disabled = false;
+    });
+
+    if (ui.bioEditBtn) ui.bioEditBtn.addEventListener("click", function(){
+        if (!isOwn) return;
+        ui.bioRow.hidden = false;
+        ui.bioEditBtn.hidden = true;
+        ui.bio.hidden = true;
+        ui.bioInput.focus();
+    });
+    if (ui.bioCancel) ui.bioCancel.addEventListener("click", function(){
+        ui.bioRow.hidden = true;
+        ui.bioEditBtn.hidden = false;
+        ui.bio.hidden = !target.bio;
+        ui.bioInput.value = target.bio || "";
+        if (ui.bioMsg) { ui.bioMsg.textContent=""; ui.bioMsg.className="profile-bio-msg"; }
+    });
+    if (ui.bioSave) ui.bioSave.addEventListener("click", async function(){
+        var val = ui.bioInput.value.trim();
+        if (val.length > 300) { if(ui.bioMsg){ ui.bioMsg.textContent="About must be 300 characters or less."; ui.bioMsg.className="profile-bio-msg is-error"; } return; }
+        ui.bioSave.disabled = true; ui.bioSave.textContent = "Saving..."; if(ui.bioMsg) ui.bioMsg.textContent="";
+        var r = await db.from("profiles").update({ bio: val || null }).eq("id", viewer.id).select("bio").maybeSingle();
+        ui.bioSave.disabled = false; ui.bioSave.textContent = "Save";
+        if (r.error) { if(ui.bioMsg){ ui.bioMsg.textContent=r.error.message; ui.bioMsg.className="profile-bio-msg is-error"; } return; }
+        target.bio = r.data ? r.data.bio : (val || null);
+        ui.bio.textContent = target.bio || "";
+        ui.bio.hidden = !target.bio;
+        ui.bioRow.hidden = true;
+        ui.bioEditBtn.hidden = false;
+        ui.bioEditBtn.textContent = target.bio ? "Edit about" : "Add about";
+        if(ui.bioMsg){ ui.bioMsg.textContent="Saved."; ui.bioMsg.className="profile-bio-msg is-ok"; setTimeout(function(){ if(ui.bioMsg) ui.bioMsg.textContent=""; }, 1600); }
+    });
+
     /* ---------- tab + stat clicks ---------- */
+
+    ui.kicker.addEventListener("click", function () {
+        if (!isOwn) return;
+        var pop = buildRolePopContent();
+        var isOpen = !pop.hidden;
+        pop.hidden = isOpen;
+        ui.kicker.setAttribute("aria-expanded", String(!isOpen));
+    });
 
     ui.tabs.forEach(function (tab) {
         tab.addEventListener("click", function () { selectTab(tab.dataset.tab); });
@@ -694,6 +1040,71 @@
     var shown = false;
 
     /* everything here is instant: it only uses data already in hand */
+    function canSwitchRole(lastChanged) {
+        if (!lastChanged) return true;
+        var last = new Date(lastChanged).getTime();
+        if (isNaN(last)) return true;
+        return (Date.now() - last) >= 30*24*60*60*1000;
+    }
+
+    function formatRoleChangeNote(lastChanged) {
+        if (!lastChanged || canSwitchRole(lastChanged)) return "You can switch between Consumer and Model. Next switch available in 30 days.";
+        var last = new Date(lastChanged).getTime();
+        var next = last + 30*24*60*60*1000;
+        var days = Math.ceil((next - Date.now()) / (24*60*60*1000));
+        return "Next switch available in " + days + " day(s). Brand requests are reviewed separately.";
+    }
+
+    function ensureRolePop() {
+        if (roleChangePop) return roleChangePop;
+        roleChangePop = el("div", "profile-role-pop");
+        roleChangePop.hidden = true;
+        roleChangePop.setAttribute("role", "menu");
+        (ui.kicker.parentElement || document.body).appendChild(roleChangePop);
+        document.addEventListener("click", function (e) {
+            if (!roleChangePop.hidden && !roleChangePop.contains(e.target) && e.target !== ui.kicker) roleChangePop.hidden = true;
+        });
+        return roleChangePop;
+    }
+
+    function buildRolePopContent() {
+        var pop = ensureRolePop();
+        pop.replaceChildren();
+        var allowed = canSwitchRole(target.role_changed_at);
+        var toConsumer = el("button", null, "Switch to Consumer");
+        toConsumer.type = "button";
+        toConsumer.disabled = !allowed || target.role === "shopper";
+        toConsumer.addEventListener("click", function(){ if(allowed) doRoleSwitch("shopper"); });
+        var toModel = el("button", null, "Switch to Model");
+        toModel.type = "button";
+        toModel.disabled = !allowed || target.role === "model";
+        toModel.addEventListener("click", function(){ if(allowed) doRoleSwitch("model"); });
+        var brandBtn = el("button", null, target.role === "brand" ? "Brand account (active)" : "Request brand account");
+        brandBtn.type = "button";
+        brandBtn.disabled = target.role === "brand";
+        brandBtn.addEventListener("click", function(){
+            roleChangePop.hidden = true;
+            if (target.role === "brand") return;
+            window.location.href = "brand-manage.html";
+        });
+        pop.append(toConsumer, toModel, brandBtn, el("p", "role-note", formatRoleChangeNote(target.role_changed_at)));
+        return pop;
+    }
+
+    async function doRoleSwitch(newRole) {
+        if (!isOwn || target.role === newRole || target.role === "brand") return;
+        if (!canSwitchRole(target.role_changed_at)) return;
+        var pop = ensureRolePop();
+        pop.hidden = true;
+        var r = await db.from("profiles").update({ role: newRole, role_changed_at: new Date().toISOString() }).eq("id", target.id).select("role,role_changed_at").maybeSingle();
+        if (r.error) { window.alert(r.error.message); return; }
+        target.role = r.data.role;
+        target.role_changed_at = r.data.role_changed_at;
+        paintHeader();
+        // refresh tabs visibility
+        if (ui.productsTab) ui.productsTab.hidden = !(target.role === "brand");
+    }
+
     function paintHeader(counts) {
         var name = target.username;
 
@@ -710,20 +1121,38 @@
         var parts = [TYPE_LABELS[target.role] || "Member"];
         if (year) parts.push("since " + year);
         ui.kicker.textContent = parts.join(" \u00b7 ");
+        ui.kicker.hidden = false;
+        ui.kicker.disabled = !isOwn || target.role === "brand";
+        ui.kicker.setAttribute("aria-expanded", "false");
         ui.hero.dataset.role = target.role || "";
+
+        // avatar
+        ui.avatar.replaceChildren();
+        if (target.avatar_url) {
+            var avImg = document.createElement("img");
+            avImg.src = target.avatar_url; avImg.alt = "";
+            ui.avatar.appendChild(avImg);
+        } else {
+            ui.avatar.textContent = (target.username || "?").charAt(0).toUpperCase();
+        }
+        ui.avatar.classList.toggle("is-editable", !!isOwn);
+        ui.avatar.disabled = !isOwn;
 
         ui.bio.textContent = target.bio || "";
         ui.bio.hidden = !target.bio;
+        if (ui.bioEditBtn) {
+            ui.bioEditBtn.hidden = !isOwn;
+            ui.bioEditBtn.textContent = target.bio ? "Edit about" : "Add about";
+        }
+        if (ui.bioRow) { ui.bioRow.hidden = true; }
+        if (ui.bioInput) ui.bioInput.value = target.bio || "";
+        if (ui.bioMsg) { ui.bioMsg.textContent = ""; ui.bioMsg.className = "profile-bio-msg"; }
 
         ui.login.hidden = true;
         ui.logout.hidden = !isOwn;
         ui.follow.hidden = isOwn;
-
-        /* the chat icon: opens a conversation with this person */
-        ui.message.hidden = isOwn || !name;
-        if (name) ui.message.href = "chat.html?with=" + encodeURIComponent(name);
         ui.listsTab.hidden = !isOwn;
-        ui.peopleTab.hidden = !isOwn;
+        if (ui.productsTab) ui.productsTab.hidden = !(target && target.role === "brand");
         ui.usernameForm.hidden = !(isOwn && !name);
 
         if (counts) {
@@ -768,7 +1197,7 @@
 
             isOwn = !!viewer && target.id === viewer.id;
 
-            startFeed(target.id);
+            postsRequest = { id: target.id, promise: fetchPosts(target.id) };
 
             var extras = [loadCounts(target.id)];
             if (!isOwn && viewer) {
@@ -797,7 +1226,7 @@
         isOwn = true;
 
         /* start every request at once instead of one after another */
-        startFeed(viewer.id);
+        postsRequest = { id: viewer.id, promise: fetchPosts(viewer.id) };
 
         var profileRequest = db
             .from("profiles")

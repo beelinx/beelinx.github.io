@@ -712,8 +712,29 @@ body.loading {
 
             </div>
 
+            <div id="brand-request-fields" hidden>
+                <label style="display:block;font-size:13px;color:#ccc;margin:14px 0 6px">Brand name *</label>
+                <input type="text" class="login-input" id="brand-name" placeholder="e.g. Zan Studios" autocomplete="off" maxlength="60">
+                <label style="display:block;font-size:13px;color:#ccc;margin:10px 0 6px">Slogan / tagline</label>
+                <input type="text" class="login-input" id="brand-slogan" placeholder="Short tagline" maxlength="120">
+                <label style="display:block;font-size:13px;color:#ccc;margin:10px 0 6px">Website</label>
+                <input type="url" class="login-input" id="brand-website" placeholder="https://...">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+                    <input type="text" class="login-input" id="brand-instagram" placeholder="Instagram link" autocomplete="off">
+                    <input type="text" class="login-input" id="brand-tiktok" placeholder="TikTok link" autocomplete="off">
+                </div>
+                <input type="text" class="login-input" id="brand-twitter" placeholder="X / Twitter link" autocomplete="off" style="margin-top:10px">
+                <label style="display:block;font-size:13px;color:#ccc;margin:10px 0 6px">About the brand</label>
+                <textarea class="login-input" id="brand-description" placeholder="Tell us about the brand..." maxlength="500" style="height:84px;padding-top:12px;resize:vertical"></textarea>
+                <p class="field-hint" style="margin-top:8px">Submitted for review — you'll be notified once approved. You can skip this and request later from Brand tools on your profile.</p>
+            </div>
+
+            <label id="brand-request-toggle" class="field-hint" style="display:flex;align-items:center;gap:8px;cursor:pointer" hidden>
+                <input type="checkbox" id="brand-request-check"> Request brand account
+            </label>
+
             <p class="field-hint" id="type-note" hidden>
-                Own a brand? Email beelinxnetwork@gmail.com and we'll set up a brand account for you.
+                Own a brand? Tick the box above and fill the brand details — you can also request later from your profile → Brand tools.
             </p>
 
 
@@ -863,6 +884,9 @@ body.loading {
         var usernameHint = document.getElementById("username-hint");
         var typePicker = document.getElementById("type-picker");
         var typeNote = document.getElementById("type-note");
+        var brandFields = document.getElementById("brand-request-fields");
+        var brandCheck = document.getElementById("brand-request-check");
+        var brandToggle = document.getElementById("brand-request-toggle");
         var form = document.getElementById("auth-form");
         var email = document.getElementById("login-email");
         var password = document.getElementById("login-password");
@@ -990,6 +1014,10 @@ body.loading {
             usernameInput.required = isSignup;
             typePicker.hidden = !isSignup;
             typeNote.hidden = !isSignup;
+            brandToggle.hidden = !isSignup;
+            if (!isSignup) { brandCheck.checked = false; brandFields.hidden = true; }
+            if (isSignup && brandCheck.checked) brandFields.hidden = false;
+            else if (isSignup) brandFields.hidden = true;
             if (!isSignup) { usernameInput.value = ""; hint(""); }
 
             forgot.hidden = !isLogin;
@@ -1026,6 +1054,10 @@ body.loading {
                 if (busy) return;
                 setMode(tab.dataset.mode);
             });
+        });
+
+        brandCheck.addEventListener("change", function () {
+            brandFields.hidden = !brandCheck.checked;
         });
 
         /* login.html?mode=signup opens straight on sign up */
@@ -1101,6 +1133,15 @@ body.loading {
                 } else if (mode === "signup") {
 
                     var chosen = form.querySelector('input[name="account_type"]:checked');
+                    var wantBrand = !!brandCheck.checked;
+                    if (wantBrand) {
+                        var _bn = document.getElementById("brand-name").value.trim();
+                        var _ab = document.getElementById("brand-description").value.trim();
+                        var _hasLink = !!(document.getElementById("brand-website").value.trim() || document.getElementById("brand-instagram").value.trim() || document.getElementById("brand-tiktok").value.trim() || document.getElementById("brand-twitter").value.trim());
+                        if (!_bn) { say("Brand name is required.", "error"); document.getElementById("brand-name").focus(); setBusy(false); return; }
+                        if (!_ab) { say("About is required — tell us about the brand.", "error"); document.getElementById("brand-description").focus(); setBusy(false); return; }
+                        if (!_hasLink) { say("Add at least one: Website, Instagram, TikTok or X / Twitter.", "error"); setBusy(false); return; }
+                    }
                 var signup = await Auth.signUp(
                     emailValue,
                     passwordValue,
@@ -1110,10 +1151,32 @@ body.loading {
 
                     if (signup.error) { say(signup.error, "error"); return; }
 
-                    if (signup.loggedIn) { goHome(); return; }
+                    if (wantBrand) {
+                        try {
+                            var u = await Auth.getUser();
+                            if (u) {
+                                await Auth.client.from("brand_requests").insert({
+                                    user_id: u.id,
+                                    brand_name: document.getElementById("brand-name").value.trim(),
+                                    slogan: document.getElementById("brand-slogan").value.trim() || null,
+                                    website: document.getElementById("brand-website").value.trim() || null,
+                                    instagram: document.getElementById("brand-instagram").value.trim() || null,
+                                    tiktok: document.getElementById("brand-tiktok").value.trim() || null,
+                                    twitter: document.getElementById("brand-twitter").value.trim() || null,
+                                    description: document.getElementById("brand-description").value.trim() || null,
+                                    status: "pending"
+                                });
+                            }
+                        } catch (e) { /* request save failed but account is created */ }
+                    }
+
+                    if (signup.loggedIn) {
+                        if (wantBrand) say("Account created — brand request submitted for review.", "success");
+                        setTimeout(goHome, 900); return;
+                    }
 
                     setMode("login");
-                    say("Account created. Check your email to confirm it, then log in.", "success");
+                    say(wantBrand ? "Account created — brand request submitted. Check your email to confirm, then log in." : "Account created. Check your email to confirm it, then log in.", "success");
 
                 } else if (mode === "reset") {
 

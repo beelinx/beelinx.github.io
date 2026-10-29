@@ -87,21 +87,10 @@
             profile.bio ? h("span", { class: "sx-bio", text: profile.bio }) : null
         );
 
-        var actions = isMe
-            ? h("span", { class: "sx-you", text: "You" })
-            : h("span", { class: "sx-person-actions" },
-                h("a", {
-                    class: "sx-icon-link",
-                    href: "chat.html?with=" + encodeURIComponent(profile.username),
-                    "aria-label": "Message " + B.displayName(profile),
-                    title: "Message"
-                }, h("i", { class: "far fa-comment-dots" })),
-                followButton(profile));
-
         return h("li", { class: "sx-person" },
             h("a", { class: "sx-person-link", href: B.profileUrl(profile) },
                 B.avatar(profile), text),
-            actions
+            isMe ? h("span", { class: "sx-you", text: "You" }) : followButton(profile)
         );
 
     }

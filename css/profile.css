@@ -115,9 +115,31 @@
     font-size: 40px;
 }
 
+.profile-avatar { overflow: hidden; position: relative; border: none; padding: 0; }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .profile-avatar i { font-size: 0.65em; color: #bdbdbd; }
 
+.profile-avatar.is-editable { cursor: pointer; }
+.profile-avatar.is-editable::after {
+    content: "Change";
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.55);
+    color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    opacity: 0; transition: opacity 0.2s ease;
+}
+.profile-avatar.is-editable:hover::after { opacity: 1; }
+
 .profile-info { flex: 1; min-width: 0; }
+
+.profile-bio-row { margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
+.profile-bio-row[hidden] { display: none !important; }
+.profile-bio-edit { flex: 1; min-height: 72px; padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 12px; font: inherit; font-size: 13px; resize: vertical; }
+.profile-bio-edit:focus { outline: none; border-color: #000; }
+.profile-bio-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.profile-bio-msg { font-size: 12px; }
+.profile-bio-msg.is-error { color: #c0392b; }
+.profile-bio-msg.is-ok { color: #1a7a3a; }
 
 .profile-username {
     margin: 0;
@@ -139,6 +161,56 @@
 
 .profile-kicker:empty { display: none; }
 
+.profile-kicker-btn {
+    padding: 0;
+    background: none;
+    border: none;
+    font: inherit;
+    color: #000;
+    cursor: pointer;
+    text-align: left;
+}
+
+.profile-kicker-btn[hidden] { display: none !important; }
+
+.profile-role-pop {
+    position: absolute;
+    z-index: 40;
+    min-width: 220px;
+    margin-top: 8px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid var(--pf-line);
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.profile-role-pop[hidden] { display: none !important; }
+
+.profile-role-pop button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.profile-role-pop button:hover { background: #f5f5f5; }
+
+.profile-role-pop .role-note {
+    padding: 6px 12px 2px;
+    font-size: 11px;
+    color: var(--pf-grey);
+    line-height: 1.4;
+}
+
+.profile-info { position: relative; }
+
 .profile-bio {
     max-width: 440px;
     margin: 8px 0 0;
@@ -151,6 +223,22 @@
 }
 
 .profile-bio:empty { display: none; }
+
+/* brand request status on your own profile */
+.profile-notice {
+    max-width: 440px;
+    margin: 10px 0 0;
+    padding: 10px 14px;
+
+    background: #f5f5f5;
+    border-radius: 14px;
+
+    font-size: 12px;
+    line-height: 1.5;
+    color: #444;
+}
+
+.profile-notice a { color: #000; text-decoration: underline; }
 
 
 /* ---------- counts: "0 posts · 0 followers · 0 following" ---------- */
@@ -385,100 +473,304 @@
 }
 
 
-/* ---------- posts: the feed page's own post style (social.css) ---------- */
+/* ---------- posts: Twitter timeline (same as feed page) ---------- */
 
-.profile-feed { margin-top: -6px; }
-
-/* the small Post button (your own page) */
-.profile-post-row { margin: 0 0 16px; }
-
-.pill.pill-sm { padding: 9px 18px; font-size: 10.5px; }
-.pill.pill-sm i { margin-right: 6px; font-size: 10px; }
-
-/* the write-a-post box, opened by that button */
-.profile-compose {
-    margin: 0 0 22px;
-    border: 1px solid var(--pf-line);
-    border-radius: 20px;
-}
-
-.profile-compose:not([hidden]) { animation: pf-open 0.25s ease; }
-
-@keyframes pf-open {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.profile-feed .sx-tweet-media { max-width: 720px; }
-.profile-feed .sx-note { text-align: left; }
-
-
-/* ---------- people lists (followers, following, People tab) ---------- */
-
-.people-list { display: flex; flex-direction: column; max-width: 620px; }
-
-.person {
+.profile-panel .post-list,
+.profile-panel .pf-timeline {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    column-count: unset;
+    max-width: 720px;
+    border-top: 1px solid var(--pf-line);
+}
+
+.profile-panel .post-list .sx-tweet { align-self: stretch; width: 100%; }
+
+.profile-panel .sx-tweet {
+    display: flex;
     gap: 12px;
-
-    padding: 12px 10px;
-
+    padding: 14px 0;
     border-bottom: 1px solid var(--pf-line);
-
-    transition: background-color 0.2s ease;
+    cursor: default;
 }
 
-.person:hover { background: #f7f7f7; }
+.profile-panel .sx-tweet:hover { background: #fafafa; }
 
-/* the avatar + name: opens that person's profile */
-.person-link {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.profile-panel .sx-tweet-avatar { flex-shrink: 0; text-decoration: none; }
 
-    flex: 1;
-    min-width: 0;
-
-    color: inherit;
-    text-decoration: none;
-}
-
-a.person-link:hover .person-name { text-decoration: underline; }
-
-/* Follow / Following, same pill look as the rest of the page */
-.person-follow {
+.profile-panel .sx-avatar {
     flex-shrink: 0;
-
-    padding: 10px 20px;
-
-    background: #000;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 35% 30%, #2a2a2a, #000 70%);
     color: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 800;
+}
 
-    border: 1px solid #000;
-    border-radius: 999px;
+.profile-panel .sx-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
-    font-weight: 700;
-    font-size: 10.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+.profile-panel .sx-tweet-main { flex: 1; min-width: 0; }
 
+.profile-panel .sx-tweet-head {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    font-size: 14px;
+}
+
+.profile-panel .sx-tweet-name {
+    min-width: 0;
+    font-weight: 800;
+    color: #000;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-panel .sx-tweet-name:hover { text-decoration: underline; }
+
+.profile-panel .sx-tweet-handle,
+.profile-panel .sx-tweet-time {
+    flex-shrink: 0;
+    color: var(--pf-grey);
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.profile-panel .sx-tweet-del {
+    flex-shrink: 0;
+    align-self: center;
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    font-size: 13px;
+    color: var(--pf-grey);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.person-follow:hover { background: #2a2a2a; }
+.profile-panel .sx-tweet-del:hover { background: var(--pf-soft); color: #c0392b; }
 
-.person-follow.is-following {
-    background: var(--pf-soft);
-    color: #000;
-    border-color: var(--pf-soft);
+.profile-panel .sx-tweet-body {
+    margin: 3px 0 0;
+    font-family: var(--pf-serif);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
-.person-follow.is-following:hover { background: #e0e0e0; }
+.profile-panel .sx-tweet-media {
+    margin-top: 10px;
+    border: 1px solid var(--pf-line);
+    border-radius: 16px;
+    background: var(--pf-soft);
+    overflow: hidden;
+    max-width: 100%;
+}
 
-.person-follow:disabled { opacity: 0.6; cursor: default; }
+.profile-panel .sx-tweet-media img {
+    display: block;
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+}
+
+.profile-panel .sx-post-archived {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 140px;
+    background: var(--pf-soft);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pf-grey);
+}
+
+.profile-panel .sx-post-archived i { font-size: 22px; }
+
+.profile-panel .sx-tweet-actions {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin: 6px 0 0 -6px;
+}
+
+.profile-panel .sx-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    background: none;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--pf-grey);
+}
+
+.profile-panel button.sx-stat { cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+.profile-panel button.sx-stat:hover { background: var(--pf-soft); color: #000; }
+
+.profile-panel .pf-post-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    width: auto;
+    padding: 12px 24px;
+    margin: 16px 0 0;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 999px;
+    font-family: var(--pf-serif);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.profile-panel .pf-post-btn:hover { background: #2a2a2a; }
+
+/* ---------- People tab (search + newest members) ---------- */
+
+.people-searchbar {
+    position: relative;
+    max-width: 640px;
+    margin: 0 0 18px;
+}
+
+.people-searchbar input {
+    width: 100%;
+    height: 48px;
+    padding: 0 18px;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 14px;
+    color: #000;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.2s ease;
+}
+
+.people-searchbar input::placeholder { color: var(--pf-grey); }
+.people-searchbar input:focus { border-color: #000; }
+
+.people-section-title {
+    margin: 6px 0 10px;
+    font-family: var(--pf-serif);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pf-grey);
+}
+
+.people-note {
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--pf-grey);
+}
+
+.people-note:empty { display: none; }
+
+.people-list.sx-people {
+    max-width: 640px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.people-list .sx-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--pf-line);
+}
+
+.people-list .sx-person-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.people-list .sx-person-link:hover strong { text-decoration: underline; }
+
+.people-list .sx-person-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+}
+
+.people-list .sx-person-text strong { font-size: 15px; font-weight: 800; }
+.people-list .sx-handle { font-size: 13px; color: var(--pf-grey); }
+.people-list .sx-bio { font-size: 13px; line-height: 1.4; color: #444; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.people-list .sx-you { font-size: 12px; color: var(--pf-grey); }
+
+.people-list .sx-pill { padding: 9px 18px; font-size: 10px; }
+
+
+/* ---------- followers / following ---------- */
+
+.people-list { display: flex; flex-direction: column; max-width: 620px; }
+
+.person {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 14px 10px;
+
+    border-bottom: 1px solid var(--pf-line);
+
+    color: inherit;
+    text-decoration: none;
+
+    transition: background-color 0.2s ease;
+}
+
+a.person:hover { background: #f7f7f7; }
+
+a.person::after {
+    content: "\2192";
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+a.person:hover::after { opacity: 1; }
 
 .person-avatar {
     flex-shrink: 0;
@@ -502,39 +794,6 @@ a.person-link:hover .person-name { text-decoration: underline; }
 .person-type { font-size: 13px; color: var(--pf-grey); }
 
 .profile-panel .products-container { margin: 0; }
-
-
-/* ---------- People tab: search box + list ---------- */
-
-.people-input {
-    display: block;
-    width: 100%;
-    max-width: 620px;
-    height: 46px;
-    padding: 0 20px;
-
-    background: #fff;
-    border: 1px solid #c9c9c9;
-    border-radius: 999px;
-
-    font: inherit;
-    font-size: 14px;
-    color: #000;
-}
-
-.people-input::placeholder { color: var(--pf-grey); }
-.people-input:focus { outline: none; border-color: #000; }
-
-.people-results { margin-top: 22px; }
-
-.people-label {
-    margin: 0 0 6px;
-
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--pf-grey);
-}
 
 
 /* ---------- footer: just the copyright line ---------- */
@@ -610,6 +869,7 @@ a.person-link:hover .person-name { text-decoration: underline; }
     .stat { font-size: clamp(8px, 2.3vw, 14px); gap: 3px; }
 
     .profile-bio { font-size: clamp(8px, 2.2vw, 12px); margin-top: 6px; }
+    .profile-notice { font-size: clamp(8px, 2.2vw, 12px); padding: 8px 10px; }
 
     .pill { padding: 0.9em 1.6em; font-size: clamp(8px, 2.1vw, 11px); }
 
@@ -625,6 +885,5 @@ a.person-link:hover .person-name { text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) {
 
     .tab-indicator { transition: none; }
-    .profile-compose:not([hidden]) { animation: none; }
 
 }

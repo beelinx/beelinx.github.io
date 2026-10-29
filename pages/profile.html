@@ -34,10 +34,10 @@
       href="../css/styles.css">
 
 <link rel="stylesheet"
-      href="../css/social.css">
+      href="../css/profile.css">
 
 <link rel="stylesheet"
-      href="../css/profile.css">
+      href="../css/social.css">
 
 </head>
 
@@ -73,6 +73,10 @@
 
                 <a id="guest-login" class="pill" href="login.html?next=profile.html" hidden>Log in</a>
 
+                <a id="brand-link" class="pill pill-ghost" href="brandpage-template.html" hidden>Brand page</a>
+
+                <a id="manage-btn" class="pill" href="brand-manage.html" hidden>Brand tools</a>
+
                 <a id="message-btn" class="pill pill-ghost pill-icon" href="chat.html"
                    aria-label="Send a message" title="Send a message" hidden>
                     <i class="far fa-comment-dots"></i>
@@ -89,13 +93,14 @@
         <!-- left: the person -->
         <div class="profile-card rise" style="--d: 1">
 
-            <div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div>
+            <button type="button" id="profile-avatar" class="profile-avatar" aria-label="Change profile picture"></button>
+            <input type="file" id="avatar-input" accept="image/*" hidden>
 
             <div class="profile-info">
 
                 <p id="profile-username" class="profile-username"></p>
 
-                <p id="profile-kicker" class="profile-kicker"></p>
+                <button type="button" id="profile-kicker" class="profile-kicker profile-kicker-btn" aria-label="Change account type"></button>
 
                 <!-- tap one to open that list -->
                 <div class="profile-stats">
@@ -115,6 +120,18 @@
                 </div>
 
                 <p id="profile-bio" class="profile-bio"></p>
+                <div id="bio-edit-row" class="profile-bio-row" hidden>
+                    <textarea id="bio-input" class="profile-bio-edit" placeholder="Add a short about you..." maxlength="300" rows="3"></textarea>
+                    <div class="profile-bio-actions">
+                        <button type="button" id="bio-save" class="pill" style="padding:10px 18px">Save</button>
+                        <button type="button" id="bio-cancel" class="pill pill-ghost" style="padding:10px 18px">Cancel</button>
+                        <span id="bio-msg" class="profile-bio-msg"></span>
+                    </div>
+                </div>
+                <button type="button" id="bio-edit-btn" class="pill pill-ghost" style="padding:8px 14px;font-size:10px;margin-top:8px" hidden>Edit about</button>
+
+                <!-- brand request status (your own profile only) -->
+                <p id="profile-notice" class="profile-notice" hidden></p>
 
             </div>
 
@@ -155,8 +172,9 @@
         <div class="profile-tabs" role="tablist">
 
             <button type="button" class="tab active" role="tab" data-tab="posts">Posts</button>
+            <button type="button" class="tab" role="tab" data-tab="people" id="tab-people">People</button>
             <button type="button" class="tab" role="tab" data-tab="lists" id="tab-lists" hidden>My List</button>
-            <button type="button" class="tab" role="tab" data-tab="people" id="tab-people" hidden>People</button>
+            <button type="button" class="tab" role="tab" data-tab="products" id="tab-products" hidden>Products</button>
 
             <span class="tab-indicator" aria-hidden="true"></span>
 
@@ -166,40 +184,7 @@
 
     </div>
 
-    <!-- =========================================
-         POSTS: the same timeline as the feed page, for one person.
-         feed.js builds it; profile.js moves it into the Posts tab.
-    ========================================= -->
-
-    <div id="profile-feed" class="profile-feed" hidden>
-
-        <!-- your own page only: a small button that opens the write-a-post box -->
-        <div id="profile-post-row" class="profile-post-row" hidden>
-            <button id="profile-post-btn" type="button" class="pill pill-sm"
-                    aria-expanded="false" aria-controls="sx-compose">
-                <i class="fas fa-plus"></i> Post
-            </button>
-        </div>
-
-        <section id="sx-compose" class="sx-compose profile-compose" aria-label="Write a post" hidden></section>
-
-        <p id="sx-error" class="sx-note" role="alert" hidden></p>
-
-        <p id="sx-empty" class="sx-note" hidden></p>
-
-        <div id="sx-feed" class="sx-timeline-list"></div>
-
-        <div class="sx-more">
-            <button id="sx-more" type="button" class="sx-pill sx-pill-ghost" hidden>Load more</button>
-        </div>
-
-    </div>
-
 </main>
-
-
-<!-- a post opened with its comments (filled by feed.js) -->
-<div id="sx-sheet" class="sx-sheet" role="dialog" aria-modal="true" hidden></div>
 
 
 <p class="profile-copyright">
@@ -219,9 +204,11 @@
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
 <script defer src="../js/auth.js"></script>
 <script defer src="../js/social.js"></script>
-<script defer src="../js/feed.js"></script>
 <script defer src="../js/profile.js"></script>
 <script defer src="../js/navbar.js"></script>
+
+<!-- post sheet (same as feed.html) so profile posts are tappable -->
+<div id="sx-sheet" class="sx-sheet" role="dialog" aria-modal="true" hidden></div>
 
 </body>
 

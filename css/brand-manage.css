@@ -1,0 +1,192 @@
+/* =========================================================
+   BRAND TOOLS (brand-manage.html)
+   Loaded after styles.css and social.css.
+========================================================= */
+
+.bm-main { max-width: 900px; }
+
+.bm-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.bm-state { margin-top: 26px; }
+
+.bm-message {
+    max-width: 560px;
+    padding: 24px;
+    background: var(--sx-soft);
+    border-radius: 20px;
+}
+
+.bm-message h2 { margin: 0 0 8px; padding: 0; font-size: 16px; text-align: left; }
+.bm-message p { margin: 0 0 14px; font-size: 14px; line-height: 1.6; color: #444; }
+.bm-message p:last-child { margin-bottom: 0; }
+
+
+/* ---------- cards ---------- */
+
+.bm-card {
+    margin-top: 26px;
+    padding: 24px;
+    border: 1px solid var(--sx-line);
+    border-radius: 24px;
+    background: #fff;
+}
+
+.bm-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.bm-title {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 16px;
+    font-weight: var(--weight-display, 800);
+}
+
+.bm-card > .bm-title { margin-bottom: 18px; }
+
+.bm-count { font-size: 12px; font-weight: 500; color: var(--sx-grey); }
+
+
+/* ---------- forms ---------- */
+
+.bm-form { display: grid; gap: 16px; }
+
+.bm-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.bm-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+.bm-field label,
+.bm-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sx-grey);
+}
+
+.bm-field input,
+.bm-field textarea {
+    width: 100%;
+    padding: 12px 16px;
+
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 14px;
+
+    font: inherit;
+    font-size: 16px;
+    color: #000;
+    outline: none;
+
+    transition: border-color 0.2s ease;
+}
+
+.bm-field textarea { min-height: 90px; resize: vertical; }
+
+.bm-field input:focus,
+.bm-field textarea:focus { border-color: #000; }
+
+.bm-hint { font-size: 12px; color: var(--sx-grey); }
+
+.bm-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+.bm-saved { font-size: 13px; color: var(--sx-grey); }
+
+
+/* ---------- logo ---------- */
+
+.bm-logo-row { display: flex; align-items: center; gap: 18px; }
+
+.bm-logo {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #000;
+    object-fit: cover;
+}
+
+.bm-logo-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+
+/* ---------- products ---------- */
+
+.bm-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 14px;
+}
+
+.bm-product {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--sx-line);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.bm-product-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: var(--sx-soft);
+}
+
+.bm-product-body { padding: 12px 14px 14px; }
+
+.bm-product-name {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bm-product-price { margin: 3px 0 0; font-size: 12px; color: var(--sx-grey); }
+
+.bm-product-actions { display: flex; gap: 12px; margin-top: 10px; }
+
+
+/* ---------- pop-up form ---------- */
+
+.bm-sheet-title {
+    margin: 0 0 16px;
+    padding: 0;
+    text-align: left;
+    font-size: 16px;
+    font-weight: var(--weight-display, 800);
+}
+
+.bm-photo { display: flex; align-items: center; gap: 14px; }
+
+.bm-photo-preview {
+    width: 84px;
+    height: 84px;
+    border-radius: 14px;
+    background: var(--sx-soft);
+    object-fit: cover;
+}
+
+@media (max-width: 600px) {
+
+    .bm-card { padding: 18px; border-radius: 20px; }
+
+    .bm-row2 { grid-template-columns: 1fr; }
+
+    .bm-products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}

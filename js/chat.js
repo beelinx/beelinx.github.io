@@ -570,11 +570,6 @@
         // 23505 = this message is already queued, which is fine
         message.status = result.error && result.error.code !== "23505" ? "failed" : "sent";
 
-        // show WHY it failed (open the browser console with F12 to read it)
-        if (message.status === "failed") {
-            console.warn("Beelinx chat: could not send.", result.error);
-        }
-
         await local.saveMessage(message);
         refreshBubble(message);
 

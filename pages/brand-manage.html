@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Brand tools | Beelinx</title>
+
+<link rel="preconnect" href="https://zjzygjflcjqvouitblne.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      media="print" onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</noscript>
+
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/social.css">
+<link rel="stylesheet" href="../css/brand-manage.css">
+
+</head>
+
+<body class="social-page bm-page">
+
+<!-- SHARED HEADER -->
+
+<header>
+    <div id="navbar-placeholder"></div>
+</header>
+
+
+<main class="sx-main bm-main">
+
+    <section class="sx-head">
+
+        <div>
+            <h1 class="sx-title">Brand tools</h1>
+            <p id="bm-sub" class="sx-sub"></p>
+        </div>
+
+        <div class="bm-links">
+            <a id="bm-view" class="sx-pill sx-pill-ghost sx-pill-sm" href="brandpage-template.html" hidden>View brand page</a>
+            <a id="bm-profile" class="sx-pill sx-pill-ghost sx-pill-sm" href="profile.html">My profile</a>
+        </div>
+
+    </section>
+
+    <!-- login prompt / request form / waiting message (built by brand-manage.js) -->
+    <section id="bm-state" class="bm-state"></section>
+
+    <!-- shown once the brand is approved -->
+    <div id="bm-tools" hidden>
+
+        <section class="bm-card">
+            <h2 class="bm-title">Brand details</h2>
+            <div id="bm-details"></div>
+        </section>
+
+        <section class="bm-card">
+
+            <div class="bm-card-head">
+                <h2 class="bm-title">Products <span id="bm-count" class="bm-count"></span></h2>
+                <button id="bm-add" type="button" class="sx-pill sx-pill-sm">Add product</button>
+            </div>
+
+            <p id="bm-products-note" class="sx-note" hidden></p>
+
+            <div id="bm-products" class="bm-products"></div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- add / edit product pop-up (filled by brand-manage.js) -->
+<div id="sx-sheet" class="sx-sheet" role="dialog" aria-modal="true" hidden></div>
+
+
+<footer class="sx-footer">
+    <p>© 2026 Beelinx — Fashion Worth Discovering</p>
+</footer>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.4/dist/umd/supabase.js"></script>
+<script defer src="../js/auth.js"></script>
+<script defer src="../js/social.js"></script>
+<script defer src="../js/brand-manage.js"></script>
+<script defer src="../js/navbar.js"></script>
+
+</body>
+
+</html>

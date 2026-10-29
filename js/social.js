@@ -181,12 +181,46 @@
     var TARGET_BYTES = 500 * 1024;
     var MAX_SIDE = 1200;
 
+    /* brand products: higher quality - 1400px, ~900KB, hard cap 1 MB */
+    var BRAND_MAX_BYTES = 1 * 1024 * 1024;
+    var BRAND_TARGET_BYTES = 900 * 1024;
+    var BRAND_MAX_SIDE = 1400;
+
     function canvasToBlob(canvas, type, quality) {
 
         return new Promise(function (resolve) {
             canvas.toBlob(resolve, type, quality);
         });
 
+    }
+
+    async function compressImageWith(opts, file) {
+        var maxSide = (opts && opts.maxSide) || MAX_SIDE;
+        var targetBytes = (opts && opts.targetBytes) || TARGET_BYTES;
+        var maxBytes = (opts && opts.maxBytes) || MAX_BYTES;
+        if (!file || !/^image\//.test(file.type)) throw new Error("Please choose a photo.");
+        var bitmap;
+        try { bitmap = await createImageBitmap(file, { imageOrientation: "from-image" }); }
+        catch (error) { throw new Error("That photo format is not supported here. Try a JPG or PNG."); }
+        var scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+        canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        if (bitmap.close) bitmap.close();
+        var quality = 0.82;
+        var blob = await canvasToBlob(canvas, "image/webp", quality);
+        if (!blob || blob.type !== "image/webp") blob = await canvasToBlob(canvas, "image/jpeg", quality);
+        while (blob && blob.size > targetBytes && quality > 0.5) { quality -= 0.08; blob = await canvasToBlob(canvas, blob.type, quality); }
+        if (!blob) throw new Error("Could not prepare that photo.");
+        if (blob.size > maxBytes) throw new Error("That photo is too large even after shrinking. Try another one.");
+        return { blob: blob, ext: blob.type === "image/webp" ? "webp" : "jpg" };
+    }
+
+    async function compressImageBrand(file) {
+        return compressImageWith({ maxSide: BRAND_MAX_SIDE, targetBytes: BRAND_TARGET_BYTES, maxBytes: BRAND_MAX_BYTES }, file);
     }
 
     async function compressImage(file) {
@@ -250,7 +284,9 @@
         avatar: avatar,
         timeAgo: timeAgo,
         debounce: debounce,
-        compressImage: compressImage
+        compressImage: compressImage,
+        compressImageBrand: compressImageBrand,
+        compressImageWith: compressImageWith
     };
 
 })();

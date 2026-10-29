@@ -99,7 +99,22 @@ function initializeNavbar() {
     initializeNavbarScroll();
     initializeDock();
     initializeRail();
+    initializeBrandToolsLink();
 
+}
+
+async function initializeBrandToolsLink() {
+    var link = document.getElementById("brandToolsLink");
+    if (!link) return;
+    try {
+        var Auth = window.BeelinxAuth;
+        if (!Auth || !Auth.client) return;
+        var ures = await Auth.client.auth.getSession();
+        var user = ures.data && ures.data.session ? ures.data.session.user : null;
+        if (!user) return;
+        var pres = await Auth.client.from("profiles").select("role").eq("id", user.id).maybeSingle();
+        if (pres.data && pres.data.role === "brand") link.hidden = false;
+    } catch (e) { /* ignore */ }
 }
 
 

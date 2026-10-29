@@ -1,8 +1,7 @@
 /* =========================================================
-   BEELINX FEED (feed.html), timeline layout
-   - write a post: text only, a photo only, or both
-   - "For you" (everyone) and "Following" tabs
-   - like, comment, delete your own posts and comments
+   BEELINX FEED (feed.html)
+   Posts in columns, like, comment, post a photo + text,
+   delete your own posts and comments.
 ========================================================= */
 
 (function () {
@@ -10,34 +9,21 @@
 
     var B = window.Beelinx;
 
-    var listEl = document.getElementById("sx-feed");
-    var composeEl = document.getElementById("sx-compose");
+    var feedEl = document.getElementById("sx-feed");
     var emptyEl = document.getElementById("sx-empty");
     var moreButton = document.getElementById("sx-more");
     var errorEl = document.getElementById("sx-error");
+    var newButton = document.getElementById("sx-new");
+    var composeEl = document.getElementById("sx-compose");
     var sheetEl = document.getElementById("sx-sheet");
-    var tabs = document.querySelectorAll(".sx-tab");
 
-    // On a profile page the feed shows only one person's posts, chosen by
-    // profile.js (see BeelinxFeed.showUser). The "write a post" box is there too,
-    // but profile.js keeps it folded away behind a small Post button.
-    var embedded = document.body.classList.contains("profile-page");
-    var scopeUser = null;
-
-    if (!B || !listEl) return;
+    if (!B || !feedEl) return;
 
     var db = B.db;
     var h = B.h;
 
-    var PAGE = 20;
+    var PAGE = 24;
     var BUCKET = "post-images";
-    var MAX_TEXT = 500;
-
-    // short readable reason, e.g. "42703: column posts.image_path does not exist"
-    function why(error) {
-        if (!error) return "";
-        return (error.code ? error.code + ": " : "") + (error.message || String(error));
-    }
 
     var POST_SELECT =
         "id,user_id,body,image_url,image_path,media_archived,created_at," +
@@ -45,16 +31,12 @@
         "post_likes(count),post_comments(count)";
 
     var COMMENT_SELECT =
-        "id,user_id,body,created_at,profiles(username,display_name,avatar_url)";
+        "id,user_id,body,created_at,profiles!post_comments_user_id_fkey(username,display_name,avatar_url)";
 
     var user = null;
-    var myProfile = null;
-    var tab = "all";
-    var followingIds = [];
     var posts = new Map();
     var loadedCount = 0;
     var busy = false;
-    var token = 0;              // changes when the tab changes, so late answers are ignored
 
 
     /* ---------- data shape ---------- */
@@ -85,19 +67,8 @@
     }
 
     function updateEmpty() {
-
-        emptyEl.textContent = embedded
-            ? "No posts yet."
-            : tab === "following"
-                ? "Nothing here yet. Follow people to see their posts."
-                : "No posts yet. Be the first to share something.";
-
         emptyEl.hidden = posts.size > 0;
-
     }
-
-    // clicks on links and buttons inside a post should not also open the post
-    function stop(event) { event.stopPropagation(); }
 
 
     /* ---------- likes and comment counts (kept in step everywhere) ---------- */
@@ -145,29 +116,17 @@
 
     }
 
-    // a button when it opens the post, a plain label inside the open post
-    function commentStat(post, onOpen) {
-
-        var inner = [
-            h("i", { class: "fa-regular fa-comment" }),
-            h("span", { text: String(post.commentCount) })
-        ];
-
-        if (!onOpen) {
-            return h("span", { class: "sx-stat", "data-comments": post.id }, inner[0], inner[1]);
-        }
-
+    function commentStat(post) {
         return h("button", {
             type: "button",
             class: "sx-stat",
             "data-comments": post.id,
-            "aria-label": "Comments",
-            onclick: function (event) {
-                event.stopPropagation();
-                onOpen();
-            }
-        }, inner[0], inner[1]);
-
+            "aria-label": "Open comments",
+            onclick: function (event) { event.stopPropagation(); openPost(post); }
+        },
+            h("i", { class: "fa-regular fa-comment" }),
+            h("span", { text: String(post.commentCount) })
+        );
     }
 
     async function toggleLike(post) {
@@ -196,117 +155,62 @@
     }
 
 
-    /* ---------- deleting ---------- */
+    /* ---------- one tile in the feed (same timeline as profile) ---------- */
 
-    async function deletePost(post) {
-
-        if (!window.confirm("Delete this post?")) return;
-
-        var result = await db.from("posts").delete().eq("id", post.id);
-
-        if (result.error) {
-            window.alert("Could not delete the post. Please try again.");
-            return;
-        }
-
-        if (post.image_path) {
-            db.storage.from(BUCKET).remove([post.image_path]);     // free the space too
-        }
-
-        posts.delete(post.id);
-
-        // lets a profile page lower its "posts" count
-        document.dispatchEvent(new CustomEvent("beelinx:post-deleted", { detail: { id: post.id } }));
-
-        var row = listEl.querySelector('[data-post="' + post.id + '"]');
-        if (row) row.remove();
-
-        closeSheet();
-        updateEmpty();
-
-    }
-
-
-    /* ---------- one post in the timeline ---------- */
-
-    function mediaFor(post) {
-
-        if (post.image_url) {
-            return h("div", { class: "sx-tweet-media" },
-                h("img", {
-                    src: post.image_url,
-                    alt: post.body ? post.body.slice(0, 80) : "Post photo",
-                    loading: "lazy"
-                }));
-        }
-
-        if (post.media_archived) {
-            return h("div", { class: "sx-tweet-media" },
-                h("div", { class: "sx-post-archived" },
-                    h("i", { class: "fa-regular fa-image" }),
-                    h("span", { text: "Media archived" })));
-        }
-
-        return null;
-
-    }
-
-    function buildPost(post) {
+    function buildTile(post) {
 
         var author = post.author;
-        var mine = user && post.user_id === user.id;
+
+        var article = h("article", { class: "sx-tweet", "data-post": post.id });
+        article.style.cursor = "pointer";
+        article.addEventListener("click", function () { openPost(post); });
+
+        var avatarLink = h("a", { class: "sx-tweet-avatar", href: B.profileUrl(author) }, B.avatar(author, "is-md"));
+        avatarLink.addEventListener("click", function (e) { e.stopPropagation(); });
+
+        var main = h("div", { class: "sx-tweet-main" });
 
         var head = h("div", { class: "sx-tweet-head" },
-            h("a", {
-                class: "sx-tweet-name",
-                href: B.profileUrl(author),
-                text: B.displayName(author),
-                onclick: stop
-            }),
-            author.display_name && author.username
-                ? h("span", { class: "sx-tweet-handle", text: "@" + author.username })
-                : null,
-            h("span", { class: "sx-tweet-time", text: "\u00b7 " + B.timeAgo(post.created_at) }),
-            mine ? h("button", {
+            h("a", { class: "sx-tweet-name", href: B.profileUrl(author), text: author.username ? "@" + author.username : B.displayName(author),
+                onclick: function (e) { e.stopPropagation(); } }),
+            h("span", { class: "sx-tweet-handle", text: "·" }),
+            h("span", { class: "sx-tweet-time", text: B.timeAgo(post.created_at) })
+        );
+
+        if (user && post.user_id === user.id) {
+            head.appendChild(h("button", {
                 type: "button",
                 class: "sx-tweet-del",
                 "aria-label": "Delete post",
-                title: "Delete post",
-                onclick: function (event) { event.stopPropagation(); deletePost(post); }
-            }, h("i", { class: "far fa-trash-can" })) : null
-        );
+                onclick: function (e) { e.stopPropagation(); deletePost(post); }
+            }, h("i", { class: "far fa-trash-can" })));
+        }
 
-        var main = h("div", { class: "sx-tweet-main" },
-            head,
-            post.body ? h("p", { class: "sx-tweet-body", text: post.body }) : null,
-            mediaFor(post),
-            h("div", { class: "sx-tweet-actions" },
-                commentStat(post, function () { openPost(post); }),
-                likeButton(post))
-        );
+        var body = post.body ? h("p", { class: "sx-tweet-body", text: post.body }) : null;
 
-        var article = h("article", {
-            class: "sx-tweet",
-            "data-post": post.id,
-            tabindex: "0"
-        },
-            h("a", { class: "sx-tweet-avatar", href: B.profileUrl(author), onclick: stop, tabindex: "-1" },
-                B.avatar(author)),
-            main
-        );
+        var media = null;
+        if (post.image_url) {
+            media = h("div", { class: "sx-tweet-media" },
+                h("img", { src: post.image_url, alt: post.body ? post.body.slice(0, 80) : "Post photo", loading: "lazy" }));
+        } else if (post.media_archived) {
+            media = h("div", { class: "sx-tweet-media" },
+                h("div", { class: "sx-post-archived" }, h("i", { class: "fa-regular fa-image" }), h("span", { text: "Media archived" })));
+        }
 
-        article.addEventListener("click", function () { openPost(post); });
+        var actions = h("div", { class: "sx-tweet-actions" }, likeButton(post), commentStat(post));
 
-        article.addEventListener("keydown", function (event) {
-            if (event.key === "Enter" && event.target === article) openPost(post);
-        });
+        main.appendChild(head);
+        if (body) main.appendChild(body);
+        if (media) main.appendChild(media);
+        main.appendChild(actions);
 
+        article.append(avatarLink, main);
         return article;
 
     }
 
 
-    /* ---------- the pop-up sheet (a post with its comments) ---------- */
+    /* ---------- the pop-up sheet ---------- */
 
     function lockPage(on) {
         document.documentElement.classList.toggle("sx-lock", on);
@@ -341,13 +245,19 @@
         }, h("i", { class: "fas fa-xmark" }));
     }
 
+
+    /* ---------- a post, opened ---------- */
+
     function commentRow(post, comment) {
 
         var profile = comment.profiles || {};
 
         var body = h("div", { class: "sx-comment-body" },
             h("p", { class: "sx-comment-head" },
-                h("a", { href: B.profileUrl(profile), text: B.displayName(profile) }),
+                h("a", {
+                    href: B.profileUrl(profile),
+                    text: profile.username ? "@" + profile.username : B.displayName(profile)
+                }),
                 h("span", { text: B.timeAgo(comment.created_at) })),
             h("p", { class: "sx-comment-text", text: comment.body })
         );
@@ -379,23 +289,60 @@
 
     }
 
+    async function deletePost(post) {
+
+        if (!window.confirm("Delete this post?")) return;
+
+        var result = await db.from("posts").delete().eq("id", post.id);
+
+        if (result.error) {
+            window.alert("Could not delete the post. Please try again.");
+            return;
+        }
+
+        if (post.image_path) {
+            db.storage.from(BUCKET).remove([post.image_path]);     // free the space too
+        }
+
+        posts.delete(post.id);
+
+        var tile = feedEl.querySelector('[data-post="' + post.id + '"]');
+        if (tile) tile.remove();
+
+        closeSheet();
+        updateEmpty();
+
+    }
+
     function openPost(post) {
 
         var author = post.author;
-        var mine = user && post.user_id === user.id;
+        var hasMedia = !!post.image_url || post.media_archived;
+
+        var media = null;
+
+        if (post.image_url) {
+            media = h("div", { class: "sx-sheet-media" },
+                h("img", { src: post.image_url, alt: "" }));
+        } else if (post.media_archived) {
+            media = h("div", { class: "sx-sheet-media" },
+                h("div", { class: "sx-post-archived" },
+                    h("i", { class: "fa-regular fa-image" }),
+                    h("span", { text: "Media archived" })));
+        }
 
         var status = h("p", { class: "sx-note", text: "Loading comments..." });
         var list = h("ul", { class: "sx-comments" });
 
         var input = h("input", {
             type: "text",
-            placeholder: user ? "Post your reply" : "Log in to reply",
+            placeholder: user ? "Add a comment" : "Log in to comment",
             maxlength: "500",
             autocomplete: "off",
-            "aria-label": "Your reply"
+            "aria-label": "Add a comment"
         });
 
-        var send = h("button", { type: "submit", class: "sx-pill sx-pill-sm", text: "Reply" });
+        var send = h("button", { type: "submit", class: "sx-pill sx-pill-sm", text: "Post" });
 
         var form = h("form", {
             class: "sx-comment-form",
@@ -420,7 +367,7 @@
 
                 if (result.error) {
                     status.hidden = false;
-                    status.textContent = "Could not post your reply.";
+                    status.textContent = "Could not post your comment.";
                     return;
                 }
 
@@ -433,41 +380,37 @@
             }
         }, input, send);
 
-        var media = post.image_url
-            ? h("div", { class: "sx-sheet-media" }, h("img", { src: post.image_url, alt: "" }))
-            : post.media_archived
-                ? h("div", { class: "sx-sheet-media" },
-                    h("div", { class: "sx-post-archived" },
-                        h("i", { class: "fa-regular fa-image" }),
-                        h("span", { text: "Media archived" })))
-                : null;
+        var isMine = user && post.user_id === user.id;
 
-        var panel = h("div", { class: "sx-sheet-panel is-narrow" },
-            closeButton(),
-            h("h3", { class: "sx-sheet-heading", text: "Post" }),
-            h("a", { class: "sx-sheet-author", href: B.profileUrl(author) },
-                B.avatar(author, "is-md"),
-                h("span", {},
-                    h("strong", { text: B.displayName(author) }),
-                    author.display_name && author.username
-                        ? h("small", { text: "@" + author.username })
-                        : null)),
-            post.body ? h("p", { class: "sx-sheet-body", text: post.body }) : null,
-            media,
-            h("p", { class: "sx-sheet-time", text: new Date(post.created_at).toLocaleString() }),
-            h("div", { class: "sx-sheet-actions" },
-                likeButton(post),
-                commentStat(post),
-                mine ? h("button", {
-                    type: "button",
-                    class: "sx-link sx-danger",
-                    text: "Delete post",
-                    onclick: function () { deletePost(post); }
-                }) : null),
-            form,
-            status,
-            list
+        var actions = h("div", { class: "sx-sheet-actions" },
+            likeButton(post),
+            commentStat(post),
+            isMine ? h("button", {
+                type: "button",
+                class: "sx-link sx-danger",
+                text: "Delete post",
+                onclick: function () { deletePost(post); }
+            }) : null
         );
+
+        var info = h("div", { class: "sx-sheet-info" },
+            h("div", { class: "sx-sheet-scroll" },
+                h("a", { class: "sx-sheet-author", href: B.profileUrl(author) },
+                    B.avatar(author, "is-md"),
+                    h("span", {},
+                        h("strong", { text: B.displayName(author) }),
+                        h("small", { text: B.timeAgo(post.created_at) }))),
+                post.body ? h("p", { class: "sx-sheet-body", text: post.body }) : null,
+                actions,
+                h("h3", { class: "sx-sheet-heading", text: "Comments" }),
+                status,
+                list
+            ),
+            form
+        );
+
+        var panel = h("div", { class: "sx-sheet-panel" + (hasMedia ? "" : " is-narrow") },
+            closeButton(), media, info);
 
         showSheet(panel);
 
@@ -486,7 +429,7 @@
                 var rows = result.data || [];
 
                 status.hidden = rows.length > 0;
-                if (!rows.length) status.textContent = "No replies yet.";
+                if (!rows.length) status.textContent = "No comments yet.";
 
                 rows.forEach(function (row) { list.appendChild(commentRow(post, row)); });
 
@@ -495,83 +438,45 @@
     }
 
 
-    /* ---------- write a post ---------- */
+    /* ---------- new post ---------- */
 
-    function renderCompose() {
+    function openComposer() {
 
-        if (!composeEl) return;
+        if (!user) { B.goLogin(); return; }
 
-        composeEl.replaceChildren();
-
-        if (!user) {
-
-            composeEl.appendChild(h("div", { class: "sx-compose-guest" },
-                h("p", { text: "Log in to post, like and reply." }),
-                h("a", { class: "sx-pill sx-pill-sm", href: "login.html?next=feed.html", text: "Log in" })));
-
-            return;
-
-        }
-
-        var chosen = null;          // the compressed photo, once it is ready
-        var posting = false;
+        var chosen = null;      // the compressed photo, once ready
 
         var text = h("textarea", {
-            class: "sx-compose-text",
-            placeholder: "What's happening?",
-            maxlength: String(MAX_TEXT),
-            rows: "1",
+            class: "sx-textarea",
+            placeholder: "What's on your mind?",
+            maxlength: "500",
+            rows: "4",
             "aria-label": "Post text"
         });
 
-        var counter = h("span", { class: "sx-counter" });
+        var counter = h("span", { class: "sx-counter", text: "0 / 500" });
+
         var preview = h("div", { class: "sx-preview", hidden: true });
         var problem = h("p", { class: "sx-note sx-problem", hidden: true });
+
         var file = h("input", { type: "file", accept: "image/*", hidden: true });
 
         var photoButton = h("button", {
             type: "button",
-            class: "sx-compose-icon",
-            "aria-label": "Add a photo",
-            title: "Add a photo",
+            class: "sx-pill sx-pill-ghost sx-pill-sm",
             onclick: function () { file.click(); }
-        }, h("i", { class: "far fa-image" }));
+        }, h("i", { class: "fa-regular fa-image" }), "Add photo");
 
-        var submit = h("button", { type: "submit", class: "sx-pill sx-pill-sm", text: "Post" });
+        var submit = h("button", { type: "submit", class: "sx-pill", text: "Post" });
 
         function fail(message) {
             problem.textContent = message || "";
             problem.hidden = !message;
         }
 
-        // the Post button works with text, a photo, or both
-        function refresh() {
-
-            var length = text.value.length;
-
-            counter.textContent = length > MAX_TEXT - 100 ? String(MAX_TEXT - length) : "";
-
-            submit.disabled = posting || (!text.value.trim() && !chosen);
-
-        }
-
-        function autosize() {
-            text.style.height = "auto";
-            text.style.height = Math.min(text.scrollHeight, 260) + "px";
-        }
-
-        function reset() {
-            text.value = "";
-            chosen = null;
-            file.value = "";
-            preview.hidden = true;
-            preview.replaceChildren();
-            fail("");
-            autosize();
-            refresh();
-        }
-
-        text.addEventListener("input", function () { autosize(); refresh(); });
+        text.addEventListener("input", function () {
+            counter.textContent = text.value.length + " / 500";
+        });
 
         file.addEventListener("change", async function () {
 
@@ -581,6 +486,7 @@
 
             fail("");
             photoButton.disabled = true;
+            photoButton.lastChild.textContent = "Preparing...";
 
             try {
 
@@ -600,7 +506,6 @@
                             file.value = "";
                             preview.hidden = true;
                             preview.replaceChildren();
-                            refresh();
                         }
                     }, h("i", { class: "fas fa-xmark" }))
                 );
@@ -614,23 +519,25 @@
             }
 
             photoButton.disabled = false;
-            refresh();
+            photoButton.lastChild.textContent = "Add photo";
 
         });
 
         var form = h("form", {
-            class: "sx-compose-form",
+            class: "sx-composer",
             onsubmit: async function (event) {
 
                 event.preventDefault();
 
                 var body = text.value.trim();
 
-                if (!body && !chosen) return;
+                if (!body && !chosen) {
+                    fail("Write something or add a photo.");
+                    return;
+                }
 
-                posting = true;
                 fail("");
-                refresh();
+                submit.disabled = true;
                 submit.textContent = "Posting...";
 
                 var path = null;
@@ -671,82 +578,60 @@
                     var post = normalize(result.data);
 
                     posts.set(post.id, post);
-                    listEl.prepend(buildPost(post));
+                    feedEl.prepend(buildTile(post));
 
-                    reset();
+                    closeSheet();
                     updateEmpty();
-
-                    // lets a profile page raise its "posts" count and fold the box away
-                    document.dispatchEvent(new CustomEvent("beelinx:post-created", { detail: { id: post.id } }));
 
                 } catch (error) {
 
                     if (path) db.storage.from(BUCKET).remove([path]);   // do not leave a stray file
 
-                    // the real reason (open the browser console with F12)
-                    console.warn("Beelinx feed: could not post. " + why(error), error);
-
-                    fail("Could not post. Please try again. (" + why(error) + ")");
+                    fail("Could not post. Please try again.");
+                    submit.disabled = false;
+                    submit.textContent = "Post";
 
                 }
 
-                posting = false;
-                submit.textContent = "Post";
-                refresh();
-
             }
         },
+            h("h3", { class: "sx-sheet-heading", text: "New post" }),
             text,
+            h("div", { class: "sx-composer-row" }, photoButton, counter),
+            file,
             preview,
             problem,
-            file,
-            h("div", { class: "sx-compose-bar" },
-                photoButton,
-                h("span", { class: "sx-compose-spacer" }),
-                counter,
-                submit)
+            h("div", { class: "sx-composer-actions" }, submit)
         );
 
-        composeEl.appendChild(h("div", { class: "sx-compose-row" },
-            B.avatar(myProfile || { username: "?" }),
-            form));
+        showSheet(h("div", { class: "sx-sheet-panel is-narrow" }, closeButton(), form));
 
-        refresh();
+        text.focus();
 
     }
 
 
-    /* ---------- loading the timeline ---------- */
+    /* ---------- loading the feed ---------- */
 
     async function loadMore() {
 
         if (busy) return;
 
         busy = true;
-
-        var mine = token;
-
         moreButton.disabled = true;
         showError("");
 
-        var query = db.from("posts")
+        var result = await db.from("posts")
             .select(POST_SELECT)
             .order("created_at", { ascending: false })
             .range(loadedCount, loadedCount + PAGE - 1);
 
-        if (scopeUser) query = query.eq("user_id", scopeUser);
-
-        if (tab === "following") query = query.in("user_id", followingIds);
-
-        var result = await query;
-
-        if (mine !== token) return;         // the tab changed while we waited
+        busy = false;
+        moreButton.disabled = false;
 
         if (result.error) {
-            console.warn("Beelinx feed: could not load. " + why(result.error), result.error);
-            busy = false;
-            moreButton.disabled = false;
-            showError("The feed could not be loaded. Please try again. (" + why(result.error) + ")");
+            showError(result.error.message || "The feed could not be loaded. Please try again.");
+            console.warn("Beelinx feed error:", result.error);
             return;
         }
 
@@ -759,8 +644,6 @@
                 .eq("user_id", user.id)
                 .in("post_id", rows.map(function (post) { return post.id; }));
 
-            if (mine !== token) return;
-
             var likedIds = new Set((likedResult.data || []).map(function (r) { return r.post_id; }));
 
             rows.forEach(function (post) { post.liked = likedIds.has(post.id); });
@@ -770,102 +653,66 @@
         rows.forEach(function (post) {
             if (posts.has(post.id)) return;
             posts.set(post.id, post);
-            listEl.appendChild(buildPost(post));
+            feedEl.appendChild(buildTile(post));
         });
 
         loadedCount += rows.length;
 
-        busy = false;
-        moreButton.disabled = false;
         moreButton.hidden = rows.length < PAGE;
 
         updateEmpty();
 
     }
 
-    async function setTab(name) {
-
-        if (name === "following" && !user) { B.goLogin(); return; }
-
-        tab = name;
-
-        tabs.forEach(function (button) {
-            var on = button.dataset.tab === name;
-            button.classList.toggle("active", on);
-            button.setAttribute("aria-selected", String(on));
-        });
-
-        token += 1;                         // forget anything still loading
-        busy = false;
-        posts.clear();
-        loadedCount = 0;
-        listEl.replaceChildren();
-        moreButton.hidden = true;
-        emptyEl.hidden = true;
-        showError("");
-
-        if (name === "following") {
-
-            var mine = token;
-
-            var follows = await db.from("follows")
-                .select("following_id")
-                .eq("follower_id", user.id);
-
-            if (mine !== token) return;
-
-            // people I follow, plus my own posts
-            followingIds = (follows.data || [])
-                .map(function (r) { return r.following_id; })
-                .concat(user.id);
-
+    function renderComposer() {
+        if (!composeEl) return;
+        if (!user) {
+            composeEl.replaceChildren(
+                h("div", { class: "sx-compose-guest" },
+                    h("p", { text: "Log in to share a post" }),
+                    h("a", { class: "sx-pill sx-pill-sm", href: B.goLoginHref ? B.goLoginHref() : "login.html?next=feed.html", text: "Log in" }))
+            );
+            return;
         }
-
-        loadMore();
-
+        var row = h("div", { class: "sx-compose-row" },
+            B.avatar({ username: user.email || "You", avatar_url: null }, "is-md"),
+            h("div", { class: "sx-compose-form" },
+                h("button", { type: "button", class: "sx-compose-text", text: "What's on your mind?", onclick: openComposer,
+                    style: "text-align:left;color:var(--sx-grey);cursor:pointer;" }),
+                h("div", { class: "sx-compose-bar" },
+                    h("button", { type: "button", class: "sx-compose-icon", "aria-label": "Add photo", onclick: openComposer }, h("i", { class: "fa-regular fa-image" })),
+                    h("span", { class: "sx-compose-spacer" }),
+                    h("button", { type: "button", class: "sx-pill sx-pill-sm", text: "Post", onclick: openComposer }))
+            )
+        );
+        composeEl.replaceChildren(row);
     }
 
-    tabs.forEach(function (button) {
-        button.addEventListener("click", function () {
-            if (button.dataset.tab !== tab) setTab(button.dataset.tab);
-        });
-    });
+    if (moreButton) moreButton.addEventListener("click", loadMore);
 
-    moreButton.addEventListener("click", loadMore);
+    if (newButton) newButton.addEventListener("click", openComposer);
 
 
     /* ---------- start ---------- */
 
-    var ready = (async function start() {
+    (async function start() {
 
         user = await B.me();
 
-        if (user) {
+        if (newButton) newButton.textContent = user ? "New post" : "Log in to post";
 
-            var mine = await db.from("profiles")
-                .select("id,username,display_name,avatar_url")
-                .eq("id", user.id)
-                .maybeSingle();
+        renderComposer();
+        // auto-open composer if coming from profile + POST
+        try {
+            var qp = new URLSearchParams(window.location.search);
+            if (qp.get("compose") === "1" && user) {
+                openComposer();
+                window.history.replaceState(null, "", window.location.pathname);
+            }
+        } catch (e) { /* ignore */ }
 
-            myProfile = mine.data || null;
-
-        }
-
-        renderCompose();
-
-        // on the feed page, start right away; on a profile page wait to be told whose posts
-        if (!embedded) setTab("all");
+        loadMore();
 
     })();
-
-    // used by profile.js: show one person's posts in this same timeline
-    window.BeelinxFeed = {
-        showUser: async function (userId) {
-            await ready;
-            scopeUser = userId;
-            setTab("all");
-        }
-    };
-
 
 })();
