@@ -8,11 +8,22 @@
 
     <title>Log In | Beelinx</title>
 
+    <!-- Syne loads straight from the page so the splash text has its font right away -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap" rel="stylesheet">
+
     <style>
 
         /* =========================================
            BEELINX LOGIN PAGE
         ========================================= */
+
+        /* SITE FONT
+           Replace the first font below with the body font used in ../css/styles.css */
+        :root {
+            --site-font: Arial, sans-serif;
+        }
 
         /* GLOBAL RESET */
 
@@ -32,7 +43,7 @@
             background-color: #000;
             color: #fff;
 
-            font-family: Arial, sans-serif;
+            font-family: var(--site-font);
 
             display: flex;
             justify-content: center;
@@ -212,6 +223,7 @@
 
             padding: 0 16px;
 
+            font-family: inherit;
             font-size: 15px;
 
             outline: none;
@@ -335,6 +347,7 @@
             border: 1px solid #fff;
             border-radius: 5px;
 
+            font-family: inherit;
             font-size: 15px;
             font-weight: 600;
 
@@ -498,76 +511,90 @@
         }
 
 
-/* =========================================
-   SPLASH SCREEN
-========================================= */
+        /* =========================================
+           SPLASH SCREEN
+           (same style as the homepage splash)
+        ========================================= */
 
-#splash-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
 
-    background: #000;
+            background: #000;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-    transition: opacity 0.4s ease,
-                visibility 0.4s ease;
-}
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
 
-.splash-logo {
-    width: 180px;
-    max-width: 70%;
-    height: auto;
-    object-fit: contain;
+        #splash-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-    margin-bottom: 30px;
-}
+        .splash-text {
+            font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #fff;
+            text-align: center;
+            line-height: 1.05;
 
-.loading-track {
-    width: 150px;
-    height: 2px;
+            opacity: 0;
+            animation: splashTextFade 1.7s ease forwards;
+        }
 
-    background: #333;
+        .splash-small {
+            display: block;
+            font-size: clamp(18px, 5vw, 26px);
+            letter-spacing: 0.08em;
+        }
 
-    overflow: hidden;
-}
+        .splash-big {
+            display: block;
+            font-size: clamp(30px, 9vw, 46px);
+            letter-spacing: 0.08em;
+        }
 
-#loading-bar {
-    width: 0;
-    height: 100%;
+        @keyframes splashTextFade {
+            0%   { opacity: 0; }
+            35%  { opacity: 1; }
+            70%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
 
-    background: #fff;
+        .loading-track {
+            width: 150px;
+            height: 2px;
+            margin-top: 22px;
 
-    animation: fill-loading 0.8s ease-in-out forwards;
-}
+            background: #333;
+            overflow: hidden;
+        }
 
-@keyframes fill-loading {
-    from {
-        width: 0;
-    }
+        #loading-bar {
+            width: 0;
+            height: 100%;
+            background: #fff;
 
-    to {
-        width: 100%;
-    }
-}
+            animation: fill-loading 1.5s ease-in-out forwards;
+        }
 
-/* HIDE SPLASH SCREEN */
+        @keyframes fill-loading {
+            from { width: 0; }
+            to   { width: 100%; }
+        }
 
-#splash-screen.hide {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
+        /* PREVENT PAGE SCROLL DURING SPLASH */
 
-/* PREVENT PAGE SCROLL DURING SPLASH */
-
-body.loading {
-    overflow: hidden;
-}
+        body.loading {
+            overflow: hidden;
+        }
 
 
         /* MOBILE ADJUSTMENTS */
@@ -606,12 +633,12 @@ body.loading {
          BEELINX SPLASH SCREEN
     ========================================= -->
 
-    <div id="splash-screen">
+    <div id="splash-screen" role="img" aria-label="Login to Beelinx">
 
-        <img
-            src="../beelinx_logo.png"
-            alt="Beelinx Logo"
-            class="splash-logo">
+        <div class="splash-text" aria-hidden="true">
+            <span class="splash-small">Login to</span>
+            <span class="splash-big">Beelinx</span>
+        </div>
 
         <div class="loading-track">
             <div id="loading-bar"></div>
@@ -702,7 +729,7 @@ body.loading {
 
                 <label class="type-option">
                     <input type="radio" name="account_type" value="shopper" checked>
-                    <span><strong>Consumer</strong><small>Discover and save fashion</small></span>
+                    <span><strong>Shopper</strong><small>Discover and save fashion</small></span>
                 </label>
 
                 <label class="type-option">
@@ -857,7 +884,7 @@ body.loading {
             splash.classList.add("hide");
             document.body.classList.remove("loading");
 
-        }, 850);
+        }, 1700);
 
     });
 </script>

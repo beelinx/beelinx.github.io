@@ -98,7 +98,30 @@
 
             <div class="profile-info">
 
-                <p id="profile-username" class="profile-username"></p>
+                <p
+                    id="profile-username"
+                    class="profile-username username-edit-trigger"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Change username">
+                </p>
+
+                <form id="username-edit-form" class="username-edit-form" hidden>
+                    <div class="username-edit-row">
+                        <span>@</span>
+                            <input
+                            id="username-edit-input"
+                            type="text"
+                            maxlength="20"
+                            autocomplete="username"
+                            autocapitalize="none"
+                            spellcheck="false"
+                            placeholder="New username">
+                        <button type="submit" class="pill pill-dark">Save</button>
+                        <button type="button" id="username-edit-cancel" class="pill pill-ghost">Cancel</button>
+                    </div>
+                    <p id="username-edit-message" class="profile-message" role="status"></p>
+                    </form>
 
                 <button type="button" id="profile-kicker" class="profile-kicker profile-kicker-btn" aria-label="Change account type"></button>
 
@@ -149,7 +172,7 @@
         <!-- Choose a username (only for older accounts without one) -->
         <form id="username-form" class="username-form" hidden>
 
-            <p>Pick a username so you can comment and be found. You can't change it later.</p>
+            <p>Pick a username so people can find you. You can change it once every 14 days.</p>
 
             <div class="username-row">
                 <input id="username-input"

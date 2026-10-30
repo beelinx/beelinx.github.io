@@ -34,6 +34,10 @@
         usernameForm: $("username-form"),
         usernameInput: $("username-input"),
         usernameMessage: $("username-message"),
+        usernameEditForm: $("username-edit-form"),
+        usernameEditInput: $("username-edit-input"),
+        usernameEditMessage: $("username-edit-message"),
+        usernameEditCancel: $("username-edit-cancel"),
         tabs: document.querySelectorAll(".profile-tabs .tab"),
         listsTab: $("tab-lists"),
         productsTab: document.querySelector('[data-tab="products"]'),
@@ -47,7 +51,7 @@
         avatarInput: $("avatar-input")
     };
 
-    var TYPE_LABELS = { shopper: "Consumer", brand: "Brand", model: "Model" };
+    var TYPE_LABELS = { shopper: "Shopper", brand: "Brand", model: "Model" };
 
     var viewer = null;          /* logged-in user, or null */
     var target = null;          /* the profile being shown */
@@ -267,7 +271,7 @@
         }
         var txt = el("span", "sx-person-text");
         var strong = el("strong", null, profile.username ? "@" + profile.username : "Unnamed");
-        var role = el("span", "sx-handle", TYPE_LABELS[profile.role] || "Consumer");
+        var role = el("span", "sx-handle", TYPE_LABELS[profile.role] || "Shopper");
         txt.append(strong, role);
         if (profile.bio) txt.appendChild(el("span", "sx-bio", profile.bio));
         link.append(av, txt);
@@ -922,6 +926,126 @@
 
     /* ---------- choose a username (older accounts) ---------- */
 
+    
+/* ---------- edit existing username ---------- */
+
+function usernameDaysRemaining() {
+    if (!target || !target.username_changed_at) return 0;
+
+    var last = new Date(target.username_changed_at).getTime();
+
+    if (isNaN(last)) return 0;
+
+    var remaining = (14 * 24 * 60 * 60 * 1000) - (Date.now() - last);
+
+    return remaining > 0 ? Math.ceil(remaining / (24 * 60 * 60 * 1000)) : 0;
+}
+
+if (ui.username) {
+    ui.username.addEventListener("click", function () {
+        if (!isOwn || !target || !target.username) return;
+
+        ui.usernameEditForm.hidden = false;
+        ui.usernameEditInput.value = target.username;
+        ui.usernameEditMessage.textContent = "";
+
+        var days = usernameDaysRemaining();
+        var submit = ui.usernameEditForm.querySelector('button[type="submit"]');
+
+        if (days > 0) {
+            ui.usernameEditMessage.textContent =
+                "You can change your username again in " + days + " day(s).";
+            submit.disabled = true;
+        } else {
+            ui.usernameEditMessage.textContent =
+                "You can change your username once every 14 days.";
+            submit.disabled = false;
+        }
+
+        ui.usernameEditInput.focus();
+    });
+}
+
+ui.username.addEventListener("keydown", function (event) {
+    if ((event.key === "Enter" || event.key === " ") && isOwn && target && target.username) {
+        event.preventDefault();
+        ui.username.click();
+    }
+});
+
+ui.usernameEditCancel.addEventListener("click", function () {
+    ui.usernameEditForm.hidden = true;
+    ui.usernameEditMessage.textContent = "";
+});
+
+ui.usernameEditForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!isOwn || !target) return;
+
+    var submit = ui.usernameEditForm.querySelector('button[type="submit"]');
+    var name = Auth.cleanUsername(ui.usernameEditInput.value);
+
+    ui.usernameEditMessage.textContent = "";
+
+    var days = usernameDaysRemaining();
+
+    if (days > 0) {
+        ui.usernameEditMessage.textContent =
+            "You can change your username again in " + days + " day(s).";
+        return;
+    }
+
+    var problem = Auth.validateUsername(name);
+
+    if (problem) {
+        ui.usernameEditMessage.textContent = problem;
+        return;
+    }
+
+    if (name === target.username) {
+        ui.usernameEditMessage.textContent = "That's already your username.";
+        return;
+    }
+
+    submit.disabled = true;
+    submit.textContent = "Saving...";
+
+    var available = await Auth.usernameAvailable(name);
+
+    if (available === false) {
+        ui.usernameEditMessage.textContent =
+            "That username is already taken. Please choose another.";
+        submit.disabled = false;
+        submit.textContent = "Save";
+        return;
+    }
+
+    if (available === null) {
+        ui.usernameEditMessage.textContent =
+            "Couldn't check username availability. Please try again.";
+        submit.disabled = false;
+        submit.textContent = "Save";
+        return;
+    }
+
+    var result = await Auth.setUsername(name);
+
+    if (result.error) {
+        ui.usernameEditMessage.textContent = result.error;
+        submit.disabled = false;
+        submit.textContent = "Save";
+        return;
+    }
+
+    clearCache();
+
+    // Return to the normal profile URL because the old username may
+    // have been part of the current profile URL.
+    window.location.href = "profile.html";
+});
+
+
     ui.usernameForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
@@ -1048,7 +1172,7 @@
     }
 
     function formatRoleChangeNote(lastChanged) {
-        if (!lastChanged || canSwitchRole(lastChanged)) return "You can switch between Consumer and Model. Next switch available in 30 days.";
+        if (!lastChanged || canSwitchRole(lastChanged)) return "You can switch between Shopper and Model. Next switch available in 30 days.";
         var last = new Date(lastChanged).getTime();
         var next = last + 30*24*60*60*1000;
         var days = Math.ceil((next - Date.now()) / (24*60*60*1000));
@@ -1071,10 +1195,10 @@
         var pop = ensureRolePop();
         pop.replaceChildren();
         var allowed = canSwitchRole(target.role_changed_at);
-        var toConsumer = el("button", null, "Switch to Consumer");
-        toConsumer.type = "button";
-        toConsumer.disabled = !allowed || target.role === "shopper";
-        toConsumer.addEventListener("click", function(){ if(allowed) doRoleSwitch("shopper"); });
+        var toShopper = el("button", null, "Switch to Shopper");
+        toShopper.type = "button";
+        toShopper.disabled = !allowed || target.role === "shopper";
+        toShopper.addEventListener("click", function(){ if(allowed) doRoleSwitch("shopper"); });
         var toModel = el("button", null, "Switch to Model");
         toModel.type = "button";
         toModel.disabled = !allowed || target.role === "model";
@@ -1087,7 +1211,7 @@
             if (target.role === "brand") return;
             window.location.href = "brand-manage.html";
         });
-        pop.append(toConsumer, toModel, brandBtn, el("p", "role-note", formatRoleChangeNote(target.role_changed_at)));
+        pop.append(toShopper, toModel, brandBtn, el("p", "role-note", formatRoleChangeNote(target.role_changed_at)));
         return pop;
     }
 
@@ -1113,6 +1237,12 @@
         ui.avatar.textContent = (name || "?").charAt(0).toUpperCase();
         ui.title.textContent = isOwn ? "Your profile" : "Profile";
         ui.username.textContent = name ? "@" + name : "No username yet";
+        ui.username.setAttribute("aria-disabled", String(!isOwn || !name));
+        ui.username.tabIndex = isOwn && name ? 0 : -1;
+        ui.username.setAttribute(
+        "aria-label",
+        isOwn ? "Click to change your username" : "Username"
+        );
 
         var ghostText = (name || "BEELINX").toUpperCase();
         ui.ghost.textContent = ghostText;
@@ -1230,7 +1360,7 @@
 
         var profileRequest = db
             .from("profiles")
-            .select("id, username, role, display_name, bio, avatar_url, created_at")
+            .select("id, username, role, display_name, bio, avatar_url, created_at, username_changed_at")
             .eq("id", viewer.id)
             .maybeSingle();
 

@@ -59,6 +59,9 @@
 
         var message = String(error.message || "");
         var lower = message.toLowerCase();
+        if (lower.includes("username_change_cooldown")) {
+        return "You can only change your username once every 14 days.";
+        }
 
         if (error.status === 429 || lower.includes("rate limit")) {
             return "Too many attempts. Please wait a few minutes and try again.";
@@ -184,7 +187,7 @@
 
     /* ---------- profiles ---------- */
 
-    var PROFILE_FIELDS = "id, username, role, display_name, bio, avatar_url, created_at";
+    var PROFILE_FIELDS = "id, username, role, display_name, bio, avatar_url, created_at, username_changed_at";
 
     /* the logged-in person's profile (null if logged out) */
     async function getProfile() {
