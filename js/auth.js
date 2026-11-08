@@ -187,7 +187,7 @@
 
     /* ---------- profiles ---------- */
 
-    var PROFILE_FIELDS = "id, username, role, display_name, bio, avatar_url, created_at, username_changed_at";
+    var PROFILE_FIELDS = "id, username, role, display_name, bio, avatar_url, created_at, username_changed_at, role_changed_at";
 
     /* the logged-in person's profile (null if logged out) */
     async function getProfile() {

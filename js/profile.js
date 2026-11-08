@@ -1409,7 +1409,7 @@ ui.usernameEditForm.addEventListener("submit", async function (event) {
 
         var profileRequest = db
             .from("profiles")
-            .select("id, username, role, display_name, bio, avatar_url, created_at, username_changed_at")
+            .select("id, username, role, display_name, bio, avatar_url, created_at, username_changed_at, role_changed_at")
             .eq("id", viewer.id)
             .maybeSingle();
 

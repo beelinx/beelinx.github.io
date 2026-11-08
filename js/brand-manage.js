@@ -319,7 +319,7 @@ function openProductSheet(existing) {
         imageUrl = db.storage.from("brand-products").getPublicUrl(path).data.publicUrl;
         imagePath = path;
       }
-      var payload = { brand_id: myBrand.id, name: name, price: priceI.value.trim() || null, image: imageUrl, order_link: linkI.value.trim() || null };
+      var payload = { brand_id: myBrand.id, name: name, price: priceI.value.replace(/[^0-9.]/g, "") ? Number(priceI.value.replace(/[^0-9.]/g, "")) : null, image: imageUrl, order_link: linkI.value.trim() || null };
       var r;
       if (isEdit) r = await db.from("products").update(payload).eq("id", existing.id).select("id").maybeSingle();
       else r = await db.from("products").insert(payload).select("id").single();
