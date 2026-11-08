@@ -887,31 +887,139 @@ a.person:hover::after { opacity: 1; }
 
 
 /* =========================================================
+   PEOPLE TAB LIST
+   Text about 30% smaller on every screen size;
+   on big screens the search bar + list also use the whole width
+========================================================= */
+
+.people-list .sx-person-text strong { font-size: 10.5px; }
+.people-list .sx-handle { font-size: 9px; }
+.people-list .sx-bio { font-size: 9px; }
+.people-list .sx-you { font-size: 8.5px; }
+.people-list .sx-pill { padding: 6px 13px; font-size: 7px; }
+
+@media (min-width: 1101px) {
+
+    .people-searchbar,
+    .people-list.sx-people { max-width: none; }
+
+    /* big screens: the smaller sizes above, made 30% bigger */
+    .people-list .sx-person-text strong { font-size: 13.65px; }
+    .people-list .sx-handle { font-size: 11.7px; }
+    .people-list .sx-bio { font-size: 11.7px; }
+    .people-list .sx-you { font-size: 11px; }
+    .people-list .sx-pill { padding: 8px 17px; font-size: 9px; }
+
+}
+
+
+/* =========================================================
    SMALLER SCREENS
 ========================================================= */
 
 @media (max-width: 1100px) {
 
-    /* same layout as the big screen: person on the left, title + button on the right */
-    .profile-hero { flex-wrap: nowrap; align-items: center; gap: 16px; padding-top: 30px; }
+    /* ---- layout (CSS only): avatar + details on top, "Edit about" and "Log out" side by side underneath ----
+       The hero becomes a 2-column grid. The card and info wrappers are "display: contents" so their
+       children (avatar, name, stats, bio, Edit about button) sit directly on the grid next to the buttons. */
+    .profile-hero {
+        --pf-av: 80px;       /* avatar size */
+        --pf-cgap: 16px;     /* gap between avatar and details, and between the two buttons */
+        --pf-title: 13px;    /* "YOUR PROFILE" font size */
 
-    .profile-card { margin-right: 0; gap: 16px; }
-    .profile-side { flex-shrink: 0; gap: 12px; }
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: var(--pf-cgap);
+        row-gap: 0;
+        align-items: start;
+        position: relative;
+        padding-top: 30px;
+    }
 
-    .profile-hero .profile-title { font-size: 13px; }
+    .profile-card,
+    .profile-info,
+    .profile-side { display: contents; }
 
-    .profile-avatar { --av: 80px; font-size: 32px; }
+    .profile-avatar { --av: var(--pf-av); font-size: 32px; grid-column: 1; grid-row: 1 / 7; align-self: center; justify-self: start; }
+
+    /* details: full width, pushed right of the avatar */
+    .profile-username,
+    .username-edit-form,
+    .profile-kicker,
+    .profile-stats,
+    .profile-bio,
+    .profile-bio-row,
+    .profile-notice,
+    .profile-role-pop {
+        grid-column: 1 / -1;
+        margin-left: calc(var(--pf-av) + var(--pf-cgap));
+    }
+
+    /* keep the first rows clear of the "YOUR PROFILE" title on the right */
+    .profile-username,
+    .username-edit-form,
+    .profile-kicker,
+    .profile-stats { margin-right: calc(var(--pf-title) * 13 + var(--pf-cgap)); }
+
+    .profile-username { grid-row: 1; }
+    .username-edit-form { grid-row: 2; }
+    .profile-kicker { grid-row: 3; justify-self: start; }
+    .profile-stats { grid-row: 4; }
+    .profile-role-pop { grid-row: 4; }
+    .profile-bio,
+    .profile-bio-row { grid-row: 5; }
+    .profile-notice { grid-row: 6; }
+
+    /* button row: Edit about (left) and Log out (right) */
+    #bio-edit-btn { grid-column: 1; grid-row: 7; align-self: end; margin-top: 18px !important; padding: 10px 18px !important; font-size: 10px !important; }
+
+    .profile-actions { grid-column: 2; grid-row: 7; align-self: end; margin-top: 18px; }
+
+    /* no Edit about button (someone else's profile, logged out): the buttons use the whole row */
+    .profile-hero:not(:has(#bio-edit-btn:not([hidden]))) .profile-actions { grid-column: 1 / -1; }
+
+    /* "YOUR PROFILE": on the right, beside the profile details (same as the big screen) */
+    .profile-hero .profile-title {
+        grid-column: 1 / -1;
+        grid-row: 1 / 5;
+        align-self: center;
+        justify-self: end;
+        font-size: var(--pf-title);
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    /* buttons share their space equally (the round icon button keeps its size) */
+    .profile-actions { flex-wrap: nowrap; justify-content: stretch; }
+    .profile-actions .pill:not(.pill-icon) { flex: 1 1 0; }
 
     .profile-username { font-size: 15px; }
     .profile-kicker { font-size: 11px; }
 
-    .profile-stats { column-gap: 14px; row-gap: 2px; }
-    .stat { font-size: 12px; }
+    .profile-stats { column-gap: 24px; row-gap: 6px; }
+    .stat { font-size: 12px; flex-direction: column; align-items: flex-start; gap: 2px; }
     .stat:not(:last-child)::after { content: none; }
 
     .profile-bio { font-size: 12px; }
 
     .pill { padding: 10px 18px; font-size: 10px; }
+
+    /* bio editor only: textarea on its own line, Save / Cancel under it */
+    .profile-bio-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .profile-bio-edit {
+        flex: none;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .profile-bio-actions {
+        flex-wrap: nowrap;
+    }
 
 }
 
@@ -924,18 +1032,15 @@ a.person:hover::after { opacity: 1; }
 /* phones: everything scales with the screen width so the same layout fits */
 @media (max-width: 560px) {
 
-    .profile-hero { gap: 3vw; padding-top: 24px; }
-
-    .profile-card { gap: 3vw; }
-    .profile-side { gap: 8px; }
+    .profile-hero { --pf-av: clamp(40px, 12.5vw, 64px); --pf-cgap: 3vw; --pf-title: clamp(7px, 1.9vw, 13px); padding-top: 24px; }
 
     .profile-hero .profile-title {
-        font-size: clamp(8px, 2.25vw, 13px);
+        font-size: var(--pf-title);
         letter-spacing: 0.04em;
     }
 
     .profile-avatar {
-        --av: clamp(40px, 12.5vw, 64px);
+        --av: var(--pf-av);
         font-size: calc(var(--av) * 0.4);
     }
 
@@ -949,6 +1054,7 @@ a.person:hover::after { opacity: 1; }
     .profile-notice { font-size: clamp(8px, 2.2vw, 12px); padding: 8px 10px; }
 
     .pill { padding: 0.9em 1.6em; font-size: clamp(8px, 2.1vw, 11px); }
+    #bio-edit-btn { padding: 0.9em 1.6em !important; font-size: clamp(8px, 2.1vw, 11px) !important; }
 
     .pill.pill-icon {
         width: clamp(30px, 8.5vw, 40px);

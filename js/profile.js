@@ -67,6 +67,42 @@
     var roleChangePop = null;
 
 
+        /* ---------- remember where you were, so Back returns to the same spot ---------- */
+
+    var STATE_KEY = "beelinx_profile_state:" + window.location.search;
+    var savedState = null;
+    var peopleQuery = "";
+    var pendingScroll = null;
+
+    (function () {
+        var nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+        var cameBack = !!nav && nav.type === "back_forward";
+        if (cameBack) {
+            try { savedState = JSON.parse(sessionStorage.getItem(STATE_KEY) || "null"); } catch (e) { savedState = null; }
+            if (savedState) {
+                peopleQuery = savedState.query || "";
+                pendingScroll = typeof savedState.scrollY === "number" ? savedState.scrollY : null;
+            }
+        }
+        if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    })();
+
+    function saveState() {
+        try {
+            sessionStorage.setItem(STATE_KEY, JSON.stringify({
+                tab: activeTab,
+                scrollY: window.pageYOffset || document.documentElement.scrollTop || 0,
+                query: peopleQuery
+            }));
+        } catch (e) { /* storage blocked: fine */ }
+    }
+
+    window.addEventListener("pagehide", saveState);
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "hidden") saveState();
+    });
+
+
     /* ---------- small helpers ---------- */
 
     function el(tag, className, text) {
@@ -329,14 +365,17 @@
         }
 
         var tmr = null;
-        input.addEventListener("input", function () {
+            input.addEventListener("input", function () {
             clearTimeout(tmr);
+            peopleQuery = input.value;
             tmr = setTimeout(function () { run(input.value); }, 250);
         });
         input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); clearTimeout(tmr); run(input.value); } });
 
         wrap.append(searchWrap, heading, noteEl, list);
-        await run("");
+
+        input.value = peopleQuery;
+        await run(peopleQuery);
         // focus helper for the search
         setTimeout(function () { /* keep empty input focused on desktop */ }, 0);
         return wrap;
@@ -387,7 +426,17 @@
             content = box;
         }
 
-        ui.panel.replaceChildren(content);
+                ui.panel.replaceChildren(content);
+
+        if (pendingScroll !== null) {
+            var restoreY = pendingScroll;
+            pendingScroll = null;
+            requestAnimationFrame(function () { window.scrollTo(0, restoreY); });
+            /* second try, in case images or rows finished loading and made the page taller */
+            setTimeout(function () {
+                if (Math.abs((window.pageYOffset || 0) - restoreY) > 2) window.scrollTo(0, restoreY);
+            }, 300);
+        }
     }
 
     /* sheet helpers so profile posts can be opened like the feed */
@@ -1298,7 +1347,7 @@ ui.usernameEditForm.addEventListener("submit", async function (event) {
         if (shown) { moveIndicator(); return; }
         shown = true;
         showOnly("view");
-        selectTab("posts");
+        selectTab(savedState && savedState.tab ? savedState.tab : "posts");
     }
 
     async function start() {
